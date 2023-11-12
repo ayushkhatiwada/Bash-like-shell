@@ -14,5 +14,5 @@ class AbstractApplication(ABC):
 
 
     @abstractmethod
-    def exec():
+    def exec(self):
         pass

@@ -12,6 +12,10 @@ class Pwd(AbstractApplication):
     """
 
     # out seems to be a double ended queue containing the current output
+
+    # run functions of commands don't need to return anything I think
+    # instead they either modify the output deque
+    # or in the case of cd, they use os.chdir
     def exec(self, out: deque[str]) -> None:
         current_directory = os.getcwd()
         out.append(current_directory)

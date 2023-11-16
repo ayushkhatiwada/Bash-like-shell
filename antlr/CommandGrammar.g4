@@ -14,10 +14,12 @@ grammar CommandGrammar;
 <seq>  ::= <command> ";" <command>
 <call> ::= ( <non-keyword> | <quoted> ) *
  */
-command:
-pipe:;
-seq:;
-call:;
+command: pipe | seq | call;
+pipe: (call PIPE call) | (pipe PIPE call);
+seq: command SEMI_COLON command;
+
+// two call commands in read me? 
+call: (NON_KEYWORD | quoted)*;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////    
 
@@ -86,6 +88,17 @@ NEWLINE: '\n';
 
 WHITESPACE: [ \t];
 
+/* 
+A non-keyword character is any character except for newlines, single quotes,
+double quotes, backquotes, semicolons ; and vertical bars | 
+*/
+NON_KEYWORD: ~[\n'"`;|];
+
+
+/*
+The <unquoted> part of an <argument> can include any characters except
+for whitespace characters, quotes, newlines, semicolons ;, vertical bar |, less than < and greater than >.
+ */
 // remove \t from unquoted?
 // this is used in argument in Parser rules
 UNQUOTED: ~[ "'`\n;|<>\t]+;

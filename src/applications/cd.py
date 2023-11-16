@@ -15,11 +15,10 @@ class Cd(AbstractApplication):
         try:
             os.chdir(directory_path)
         except FileNotFoundError:
-            raise FileNotFoundError(f""""{directory_path}" directory does not exist""")
+            raise FileNotFoundError(f"{directory_path} directory does not exist")
         except PermissionError:
             raise PermissionError(f"Permission denied to access: {directory_path}")
-        except:
-            # if directory_path is not a directory, e.g. is a file name instead
-            # not sure what error to catch / raise here, could use a custom error
-            if not os.path.isdir(directory_path):
-                raise
+        except NotADirectoryError:
+            raise NotADirectoryError(f"{directory_path} Not a directory")
+
+            # if not os.path.isdir(directory_path):

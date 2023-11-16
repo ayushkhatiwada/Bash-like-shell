@@ -17,6 +17,8 @@ grammar CommandGrammar;
 command: pipe | seq | call;
 pipe: (call PIPE call) | (pipe PIPE call);
 seq: command SEMI_COLON command;
+
+// two call commands in read me? 
 call: (NON_KEYWORD | quoted)*;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////    

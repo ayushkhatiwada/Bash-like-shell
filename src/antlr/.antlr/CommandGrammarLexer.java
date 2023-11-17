@@ -1,4 +1,4 @@
-// Generated from /home/ayush/comp0010-shell-python-p22/antlr/CommandGrammar.g4 by ANTLR 4.13.1
+// Generated from /home/ayush/comp0010-shell-python-p22/src/antlr/CommandGrammar.g4 by ANTLR 4.13.1
 import org.antlr.v4.runtime.Lexer;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.Token;

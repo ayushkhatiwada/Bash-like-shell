@@ -14,12 +14,12 @@ grammar CommandGrammar;
 <seq>  ::= <command> ";" <command>
 <call> ::= ( <non-keyword> | <quoted> ) *
  */
-command: pipe | seq | call;
-pipe: (call PIPE call) | (pipe PIPE call);
-seq: command SEMI_COLON command;
+command : pipe | seq | call;
+pipe : (call PIPE call) | (pipe PIPE call);
+seq : command SEMI_COLON command;
 
 // two call commands in read me? 
-call: (NON_KEYWORD | quoted)*;
+call : (NON_KEYWORD | quoted)*;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////    
 
@@ -30,19 +30,19 @@ call: (NON_KEYWORD | quoted)*;
 <backquoted> ::= "`" <non-newline and non-backquote> "`"
 <double-quoted> ::= """ ( <backquoted> | <double-quote-content> ) * """
  */
-quoted: singleQuoted | doubleQuoted | backQuoted;
+quoted : singleQuoted | doubleQuoted | backQuoted;
 
 //<single-quoted> ::= "'" <non-newline and non-single-quote> "'"
 // non-newline and non-single-quote
 // ~p /\ ~ q = ~(p \/ q)
 // non-newline and non-single-quote = non (new-line or single-quote)
-singleQuoted: SINGLE_QUOTE ~(NEWLINE | SINGLE_QUOTE)* SINGLE_QUOTE;
+singleQuoted : SINGLE_QUOTE ~(NEWLINE | SINGLE_QUOTE)* SINGLE_QUOTE;
 
-backQuoted: BACKQUOTE ~(NEWLINE | BACKQUOTE)* BACKQUOTE;
+backQuoted : BACKQUOTE ~(NEWLINE | BACKQUOTE)* BACKQUOTE;
 
 // master shell code differs, does not include DOUBLE_QUOTE in ~(... "doubleQuoted: DOUBLE_QUOTE (backQuoted | ~(NEWLINE | BACKTICK))* DOUBLE_QUOTE;"
 // think SP has made mistake here
-doubleQuoted: DOUBLE_QUOTE ( backQuoted | ~(NEWLINE | DOUBLE_QUOTE | BACKQUOTE) )* DOUBLE_QUOTE;
+doubleQuoted : DOUBLE_QUOTE ( backQuoted | ~(NEWLINE | DOUBLE_QUOTE | BACKQUOTE) )* DOUBLE_QUOTE;
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -57,14 +57,14 @@ doubleQuoted: DOUBLE_QUOTE ( backQuoted | ~(NEWLINE | DOUBLE_QUOTE | BACKQUOTE) 
 
 // master shell code differs: "call: WHITESPACE? (redirection WHITESPACE?)* argument (WHITESPACE? argument)* (WHITESPACE? redirection)* WHITESPACE?;"
 // not sure whta SP is doing. Code below agrees with README from sergey and XLow 
-call: WHITESPACE? (redirection WHITESPACE)* argument (redirection WHITESPACE)* WHITESPACE;
+call : WHITESPACE? (redirection WHITESPACE)* argument (redirection WHITESPACE)* WHITESPACE;
 
 
-atom: redirection | argument;
-argument: (quoted | UNQUOTED)+;
+atom : redirection | argument;
+argument : (quoted | UNQUOTED)+;
 
 // redirection could be simplified to: (LESS_THAN | GREATER_THAN) WHITESPACE? argument;
-redirection: LESS_THAN WHITESPACE? argument | GREATER_THAN WHITESPACE? argument;
+redirection : LESS_THAN WHITESPACE? argument | GREATER_THAN WHITESPACE? argument;
 
 
 
@@ -74,25 +74,25 @@ redirection: LESS_THAN WHITESPACE? argument | GREATER_THAN WHITESPACE? argument;
  * Lexer Rules
  */
 
-PIPE: '|';
-SINGLE_QUOTE: '\'';
-DOUBLE_QUOTE: '"';
-SEMI_COLON: ';';
-LESS_THAN: '<';     // Change to REDIRECT_INPUT: '<'; ?
-GREATER_THAN: '>';  // Change to REDIRECT_OUTPUT: '>'; ?
+PIPE : '|';
+SINGLE_QUOTE : '\'';
+DOUBLE_QUOTE : '"';
+SEMI_COLON : ';';
+LESS_THAN : '<';     // Change to REDIRECT_INPUT: '<'; ?
+GREATER_THAN : '>';  // Change to REDIRECT_OUTPUT: '>'; ?
 
 // name this BACTICK OR BACKQUOTE?
-BACKQUOTE: '`';
+BACKQUOTE : '`';
 
-NEWLINE: '\n';
+NEWLINE : '\n';
 
-WHITESPACE: [ \t];
+WHITESPACE : [ \t\r]+;
 
 /* 
 A non-keyword character is any character except for newlines, single quotes,
 double quotes, backquotes, semicolons ; and vertical bars | 
 */
-NON_KEYWORD: ~[\n'"`;|];
+NON_KEYWORD : ~[\n'"`;|];
 
 
 /*
@@ -101,4 +101,4 @@ for whitespace characters, quotes, newlines, semicolons ;, vertical bar |, less 
  */
 // remove \t from unquoted?
 // this is used in argument in Parser rules
-UNQUOTED: ~[ "'`\n;|<>\t]+;
+UNQUOTED : ~[ "'`\n;|<>\t]+;

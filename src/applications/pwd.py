@@ -19,3 +19,4 @@ class Pwd(AbstractApplication):
     def exec(self, args: list[str], input: list[str], out: deque[str]) -> None:
         current_directory = os.getcwd()
         out.append(current_directory + "\n")
+

@@ -1,7 +1,9 @@
 import os
 import fnmatch
 from collections import deque
+
 from abstract_application import AbstractApplication
+
 
 class Find(AbstractApplication):
 

@@ -1,5 +1,4 @@
 grammar CommandGrammar;
-// could also use Lark instead of Antlr
 // These parsers allow you to use the visitor pattern
 
 
@@ -56,7 +55,7 @@ doubleQuoted : DOUBLE_QUOTE ( backQuoted | ~(NEWLINE | DOUBLE_QUOTE | BACKQUOTE)
  */
 
 // master shell code differs: "call: WHITESPACE? (redirection WHITESPACE?)* argument (WHITESPACE? argument)* (WHITESPACE? redirection)* WHITESPACE?;"
-// not sure whta SP is doing. Code below agrees with README from sergey and XLow 
+// not sure what SP is doing. Code below agrees with README from sergey and code from XLow 
 call : WHITESPACE? (redirection WHITESPACE)* argument (redirection WHITESPACE)* WHITESPACE;
 
 
@@ -86,7 +85,7 @@ BACKQUOTE : '`';
 
 NEWLINE : '\n';
 
-WHITESPACE : [ \t\r]+;
+WHITESPACE : [ \t\r]+ -> skip;
 
 /* 
 A non-keyword character is any character except for newlines, single quotes,

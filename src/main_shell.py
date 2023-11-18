@@ -1,6 +1,6 @@
 """
 This file will replace shell.py 
-This is start of where everything will be run from 
+This is start, where everything will be run from 
 """
 
 import os

@@ -12,6 +12,9 @@ class Cd(AbstractApplication):
         
         directory_path = args[0]
 
+        # print error messages and carry on running shell instead of raising errors and terminating the shell? 
+        # probably not, this is low priority
+
         try:
             os.chdir(directory_path)
         except FileNotFoundError:

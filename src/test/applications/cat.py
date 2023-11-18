@@ -2,22 +2,18 @@ from abstract_application import AbstractApplication
 from collections import deque
 import os
 
-class Cat(AbstractApplication):
+class Cat():
     def exec(self, args: list[str], input: list[str], out: deque[str]) -> None:
         if args:
             # Process each file in the args
             for filename in args:
-                # Check if the file exists
-                if os.path.exists(filename):
-                    # Open and read the file
+                try:
                     with open(filename, 'r') as file:
-                        # Read each line from the file and append to out
                         for line in file:
                             out.append(line)
-                else:
-                    # If the file does not exist, add an error message to out
+                except FileNotFoundError:
                     out.append(f"Error: File '{filename}' not found.\n")
-        else:
-            # If there are no args, process the input list
-            for line in input:
-                out.append(line)
+            else:
+                # If there are no args, process the input list
+                for line in input:
+                    out.append(line)

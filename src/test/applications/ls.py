@@ -1,8 +1,6 @@
 import os
 from collections import deque
-
 from abstract_application import AbstractApplication
-
 
 class Ls(AbstractApplication):
     def exec(self, args: list[str], input: list[str], out: deque[str]) -> None:

@@ -85,6 +85,7 @@ BACKQUOTE : '`';
 
 NEWLINE : '\n';
 
+// not sure about "-> skip"
 WHITESPACE : [ \t\r]+ -> skip;
 
 /* 

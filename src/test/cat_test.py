@@ -1,5 +1,7 @@
 import unittest
 from collections import deque
+import sys
+sys.path.append('/com.docker.devenvironments.code/src')
 from applications.cat import Cat
 
 

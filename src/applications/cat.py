@@ -1,6 +1,7 @@
-from abstract_application import AbstractApplication
 import os
-
+import sys
+sys.path.append('/com.docker.devenvironments.code/src')
+from applications.abstract_application import AbstractApplication
 from collections import deque
 
 

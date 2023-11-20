@@ -6,6 +6,11 @@ from abstract_application import AbstractApplication
 
 class Head(AbstractApplication):
     
+    name = "head"
+
+    def __init__(self) -> None:
+        super().__init__()
+
     def exec(self, args: list[str], input: list[str], out: deque[str]) -> None:
         num_lines = 10  # Default number of lines
         file_name = None

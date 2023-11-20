@@ -5,6 +5,11 @@ from abstract_application import AbstractApplication
 
 class Uniq(AbstractApplication):
 
+    name = "uniq"
+
+    def __init__(self) -> None:
+        super().__init__()
+
     def exec(self, args: list[str], input: list[str], out: deque[str]) -> None:
         ignore_case = '-i' in args
         file_name = None

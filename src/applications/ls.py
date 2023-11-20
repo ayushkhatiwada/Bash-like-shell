@@ -5,6 +5,12 @@ from abstract_application import AbstractApplication
 
 
 class Ls(AbstractApplication):
+    
+    name = "ls"
+
+    def __init__(self) -> None:
+        super().__init__()
+
     def exec(self, args: list[str], input: list[str], out: deque[str]) -> None:
         # Determine the directory to list
         directory_path = args[0] if args else os.getcwd()

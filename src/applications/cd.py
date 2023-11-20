@@ -5,6 +5,12 @@ from abstract_application import AbstractApplication
 
 
 class Cd(AbstractApplication):
+    
+    name = "cd"
+
+    def __init__(self) -> None:
+        super().__init__()
+
     def exec(self, args: list[str], input: list[str], out: deque[str]) -> None:
         if len(args) != 1:
             raise ValueError("Wrong number of command line arguments. cd takes exactly 1 argument.")

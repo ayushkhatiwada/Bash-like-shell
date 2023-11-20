@@ -6,6 +6,11 @@ from abstract_application import AbstractApplication
 
 class Cut(AbstractApplication):
 
+    name = "cut"
+
+    def __init__(self) -> None:
+        super().__init__()
+
     def exec(self, args: list[str], input: list[str], out: deque[str]) -> None:
         if not args or args[0] != '-b':
             raise ValueError("Invalid or missing -b option for cut command")

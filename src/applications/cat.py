@@ -7,6 +7,9 @@ from abstract_application import AbstractApplication
 
 
 class Cat(AbstractApplication):
+
+    name = "cat"
+
     def __init__(self) -> None:
         super().__init__()
 

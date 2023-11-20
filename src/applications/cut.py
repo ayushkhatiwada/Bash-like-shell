@@ -1,7 +1,7 @@
 import os
 from collections import deque
 
-from abstract_application import AbstractApplication
+from new_folder.abstract_application import AbstractApplication
 
 
 class Cut(AbstractApplication):

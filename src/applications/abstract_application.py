@@ -16,3 +16,7 @@ class AbstractApplication(ABC):
     @abstractmethod
     def exec(self):
         pass
+
+
+class ApplicationError(Exception):
+    """Raised when an error occurs when calling an application"""

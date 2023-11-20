@@ -17,3 +17,6 @@ file.txt is the input of grep
 2. Note from Sergey you can use AI to generat the command fucntions
 How you implement the commands aren't important
 What is important is design, code quality, readability, and integration 
+
+
+3. Include decorator pattern somewhere

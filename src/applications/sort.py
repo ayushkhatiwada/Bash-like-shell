@@ -5,6 +5,11 @@ from abstract_application import AbstractApplication
 
 class Sort(AbstractApplication):
 
+    name = "sort"
+
+    def __init__(self) -> None:
+        super().__init__()
+
     def exec(self, args: list[str], input: list[str], out: deque[str]) -> None:
         reverse_order = '-r' in args
         file_name = None

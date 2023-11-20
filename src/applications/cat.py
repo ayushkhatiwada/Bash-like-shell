@@ -1,11 +1,18 @@
 import os
 import sys
 sys.path.append('/com.docker.devenvironments.code/src')
-from applications.abstract_application import AbstractApplication
 from collections import deque
+
+from abstract_application import AbstractApplication
 
 
 class Cat(AbstractApplication):
+
+    name = "cat"
+
+    def __init__(self) -> None:
+        super().__init__()
+
     def exec(self, args: list[str], input: list[str], out: deque[str]) -> None:
         if args:
             # Process each file in the args

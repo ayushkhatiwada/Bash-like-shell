@@ -9,6 +9,11 @@ class Pwd(AbstractApplication):
     Prints the full filename of the current working directory
     """
 
+    name = "pwd"
+
+    def __init__(self) -> None:
+        super().__init__()
+
     # out seems to be a double ended queue containing the current output
 
     # exec functions of commands don't need to return anything I think

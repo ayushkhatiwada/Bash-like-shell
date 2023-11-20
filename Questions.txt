@@ -1,0 +1,8 @@
+1. When you parse cmdline, do you check for certain words e.g. echo
+or do you just get the first word and assume it is a command?
+
+e.g. cmdline> echo hello
+do you just get echo and assume it is a command? 
+- assume it is a command SP
+
+

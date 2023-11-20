@@ -7,6 +7,11 @@ from abstract_application import AbstractApplication
 
 class Grep(AbstractApplication):
     
+    name = "grep"
+
+    def __init__(self) -> None:
+        super().__init__()
+
     def exec(self, args: list[str], input: list[str], out: deque[str]) -> None:
         if len(args) == 0:
             raise ValueError("No pattern provided for grep command")

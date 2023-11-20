@@ -1,10 +1,16 @@
 import os
-from abstract_application import AbstractApplication
-
 from collections import deque
+
+from abstract_application import AbstractApplication
 
 
 class Cd(AbstractApplication):
+    
+    name = "cd"
+
+    def __init__(self) -> None:
+        super().__init__()
+
     def exec(self, args: list[str], input: list[str], out: deque[str]) -> None:
         if len(args) != 1:
             raise ValueError("Wrong number of command line arguments. cd takes exactly 1 argument.")
@@ -15,6 +21,8 @@ class Cd(AbstractApplication):
         if not os.path.isdir(directory_path):
             raise NotADirectoryError(f"{directory_path} is not a directory.")
 
+
+        # Errors need to be changed for custom Application error
         try:
             os.chdir(directory_path)
         except FileNotFoundError:

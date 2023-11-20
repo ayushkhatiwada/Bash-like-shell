@@ -7,6 +7,11 @@ from abstract_application import AbstractApplication
 
 class Find(AbstractApplication):
 
+    name = "find"
+
+    def __init__(self) -> None:
+        super().__init__()
+
     def exec(self, args: list[str], input: list[str], out: deque[str]) -> None:
         # Parse arguments
         if '-name' not in args:

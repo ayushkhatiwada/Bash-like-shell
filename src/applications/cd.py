@@ -1,7 +1,7 @@
 import os
-from abstract_application import AbstractApplication
-
 from collections import deque
+
+from abstract_application import AbstractApplication
 
 
 class Cd(AbstractApplication):

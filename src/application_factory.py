@@ -1,3 +1,5 @@
+from applications.abstract_application import AbstractApplication
+
 from applications.cat import Cat
 from applications.cd import Cd
 from applications.cut import Cut
@@ -12,8 +14,6 @@ from applications.uniq import Uniq
 from applications.tail import Tail
 
 
-class ApplicatoinFactory:
 
-
-    
+class ApplicationFactory:
     pass

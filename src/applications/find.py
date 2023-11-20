@@ -2,7 +2,7 @@ import os
 import fnmatch
 from collections import deque
 
-from applications.new_folder.abstract_application import AbstractApplication
+from abstract_application import AbstractApplication
 
 
 class Find(AbstractApplication):

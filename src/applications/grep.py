@@ -2,7 +2,7 @@ import os   # imported but not used? Max pls check
 import re
 from collections import deque
 
-from applications.new_folder.abstract_application import AbstractApplication
+from abstract_application import AbstractApplication
 
 
 class Grep(AbstractApplication):

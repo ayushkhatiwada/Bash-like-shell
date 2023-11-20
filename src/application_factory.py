@@ -1,5 +1,3 @@
-from applications.new_folder.abstract_application import AbstractApplication
-
 from applications.cat import Cat
 from applications.cd import Cd
 from applications.cut import Cut
@@ -19,5 +17,4 @@ class ApplicationFactory:
     pass
 
 
-# include decorator 
-# 
+# include decorator design pattern

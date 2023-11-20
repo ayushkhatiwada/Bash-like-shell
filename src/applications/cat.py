@@ -1,9 +1,9 @@
 import os
-# import sys
-# sys.path.append('/com.docker.devenvironments.code/src')
+import sys
+sys.path.append('/com.docker.devenvironments.code/src')
 from collections import deque
 
-from new_folder.abstract_application import AbstractApplication
+from abstract_application import AbstractApplication
 
 
 class Cat(AbstractApplication):

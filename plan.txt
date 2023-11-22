@@ -16,3 +16,6 @@ This allows the shell to skip the current cmdline if an error occurs and start t
 
 8. Find out a way to implement flags. Will the parser handle this?
 Or will the parser just separate the commands and args. Then manually clean the args to separate flags and actual args
+
+
+Add antipatterns in code - Uzair

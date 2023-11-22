@@ -21,3 +21,6 @@ What is important is design, code quality, readability, and integration
 
 3. USE decorator design pattern for unsafe application e.g. _ls, _grep
 Discover how unsafe applications work and implement them
+
+
+Read ANTLR docs

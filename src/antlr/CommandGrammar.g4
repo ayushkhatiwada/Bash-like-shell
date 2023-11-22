@@ -12,15 +12,17 @@ grammar CommandGrammar;
 <seq>  ::= <command> ";" <command>
 <call> ::= ( <non-keyword> | <quoted> ) *
  */
-command : pipe | seq | call;
-
+command : (pipe | seq | call)?;
+pipe : call PIPE call | pipe PIPE call;
 // Error: The following sets of rules are mutually left-recursive [pipe] and [command, seq] ???
-pipe : (call PIPE call) | (pipe PIPE call);
-seq : command SEMI_COLON command;
+seq : (pipe | call) SEMI_COLON (pipe | seq | call)?;
 
 // two call commands in read me? 
 // * means it can appear 0 or more times
-call : (NON_KEYWORD | quoted)*;
+//call : (NON_KEYWORD | quoted)*;
+call: WHITESPACE* (redirection WHITESPACE*)* argument (WHITESPACE* atom)* WHITESPACE*;
+
+
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////    
 
@@ -57,9 +59,8 @@ doubleQuoted : DOUBLE_QUOTE ( backQuoted | ~(NEWLINE | DOUBLE_QUOTE | BACKQUOTE)
 
 // master shell code differs: "call: WHITESPACE? (redirection WHITESPACE?)* argument (WHITESPACE? argument)* (WHITESPACE? redirection)* WHITESPACE?;"
 // not sure what SP is doing. Code below agrees with README from sergey and code from XLow 
-call2 : WHITESPACE? (redirection WHITESPACE)* argument (redirection WHITESPACE)* WHITESPACE;
 
-
+//call: WHITESPACE? (redirection WHITESPACE?)* argument (WHITESPACE? atom)* WHITESPACE?;
 atom : redirection | argument;
 // + means it can appear 1 or more times
 argument : (quoted | UNQUOTED)+;

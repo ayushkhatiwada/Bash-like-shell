@@ -1,6 +1,8 @@
-1. Fix parser rules in CommadGrammar.g4 - ask Uzair 
+1. Fix parser rules in CommadGrammar.g4 - ask Uzair ####### Done
 
-2. Find out how to generate lexer.py, listener.py, and parser.py from ANTLR
+2. Find out how to generate lexer.py, listener.py, and parser.py from ANTLR ########## Done
+
+
 
 3. Create parser.py which deals with output from parser
 

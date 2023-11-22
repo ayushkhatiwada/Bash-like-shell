@@ -1,5 +1,37 @@
 grammar CommandGrammar;
-// These parsers allow you to use the visitor pattern
+
+// antlr4 -Dlanguage=Python3 CommandGrammar.g4 - Generates lexer, parser, and listener files
+
+/*
+ * Lexer Rules
+ */
+
+PIPE : '|';
+SINGLE_QUOTE : '\'';
+DOUBLE_QUOTE : '"';
+SEMI_COLON : ';';
+LESS_THAN : '<';     // Change to REDIRECT_INPUT: '<'; ?
+GREATER_THAN : '>';  // Change to REDIRECT_OUTPUT: '>'; ?
+
+// name this BACTICK OR BACKQUOTE?
+BACKQUOTE : '`';
+
+NEWLINE : '\n';
+WHITESPACE : [ \t\r]+;
+
+/* 
+A non-keyword character is any character except for newlines, single quotes,
+double quotes, backquotes, semicolons ; and vertical bars | 
+*/
+NON_KEYWORD : ~[\n'"`;|];
+
+/*
+The <unquoted> part of an <argument> can include any characters except
+for whitespace characters, quotes, newlines, semicolons ;, vertical bar |, less than < and greater than >.
+ */
+// remove \t from unquoted?
+// this is used in argument in Parser rules
+UNQUOTED : ~[ "'`\n;|<>\t]+;
 
 
 /*
@@ -10,10 +42,12 @@ grammar CommandGrammar;
 <command> ::= <pipe> | <seq> | <call>
 <pipe> ::= <call> "|" <call> | <pipe> "|" <call>
 <seq>  ::= <command> ";" <command>
-<call> ::= ( <non-keyword> | <quoted> ) *
+<call> ::= ( <non-keyword> | <quoted> ) * - ignore this call, use other call
  */
-command : (pipe | seq | call)?;
-pipe : call PIPE call | pipe PIPE call;
+// might not need EOF
+command : (pipe | seq | call)? EOF;
+pipe : call PIPE call | call PIPE pipe;
+
 // Error: The following sets of rules are mutually left-recursive [pipe] and [command, seq] ???
 seq : (pipe | call) SEMI_COLON (pipe | seq | call)?;
 
@@ -39,11 +73,12 @@ quoted : singleQuoted | doubleQuoted | backQuoted;
 // non-newline and non-single-quote
 // ~p /\ ~ q = ~(p \/ q)
 // non-newline and non-single-quote = non (new-line or single-quote)
-singleQuoted : SINGLE_QUOTE (~(NEWLINE | SINGLE_QUOTE))* SINGLE_QUOTE;
-backQuoted : BACKQUOTE (~(NEWLINE | BACKQUOTE))* BACKQUOTE;
+singleQuoted : SINGLE_QUOTE (~(NEWLINE | SINGLE_QUOTE))+ SINGLE_QUOTE;
+backQuoted : BACKQUOTE (~(NEWLINE | BACKQUOTE))+ BACKQUOTE;
 
 // master shell code differs, does not include DOUBLE_QUOTE in ~(... "doubleQuoted: DOUBLE_QUOTE (backQuoted | ~(NEWLINE | BACKTICK))* DOUBLE_QUOTE;"
 // think SP has made mistake here
+// UZK code differs from this - doubleQuoted : '"' (((~[`"\n]) | '\\"')+ | backQuoted)* '"'; 
 doubleQuoted : DOUBLE_QUOTE ( backQuoted | ~(NEWLINE | DOUBLE_QUOTE | BACKQUOTE) )* DOUBLE_QUOTE;
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -67,42 +102,4 @@ argument : (quoted | UNQUOTED)+;
 
 // redirection could be simplified to: (LESS_THAN | GREATER_THAN) WHITESPACE? argument;
 // ? means it can appear 0 times or once
-redirection : LESS_THAN WHITESPACE? argument | GREATER_THAN WHITESPACE? argument;
-
-
-
-
-
-/*
- * Lexer Rules
- */
-
-PIPE : '|';
-SINGLE_QUOTE : '\'';
-DOUBLE_QUOTE : '"';
-SEMI_COLON : ';';
-LESS_THAN : '<';     // Change to REDIRECT_INPUT: '<'; ?
-GREATER_THAN : '>';  // Change to REDIRECT_OUTPUT: '>'; ?
-
-// name this BACTICK OR BACKQUOTE?
-BACKQUOTE : '`';
-
-NEWLINE : '\n';
-
-// not sure about "-> skip"
-WHITESPACE : [ \t\r]+ -> skip;
-
-/* 
-A non-keyword character is any character except for newlines, single quotes,
-double quotes, backquotes, semicolons ; and vertical bars | 
-*/
-NON_KEYWORD : ~[\n'"`;|];
-
-
-/*
-The <unquoted> part of an <argument> can include any characters except
-for whitespace characters, quotes, newlines, semicolons ;, vertical bar |, less than < and greater than >.
- */
-// remove \t from unquoted?
-// this is used in argument in Parser rules
-UNQUOTED : ~[ "'`\n;|<>\t]+;
+redirection : LESS_THAN WHITESPACE* argument | GREATER_THAN WHITESPACE* argument;

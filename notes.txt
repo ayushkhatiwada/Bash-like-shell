@@ -24,3 +24,5 @@ Discover how unsafe applications work and implement them
 
 
 Read ANTLR docs
+
+# dont worry about static analysis on antlr files - Uzair

@@ -1,0 +1,18 @@
+1. Fix parser rules in CommadGrammar.g4 - ask Uzair 
+
+2. Find out how to generate lexer.py, listener.py, and parser.py from ANTLR
+
+3. Create parser.py which deals with output from parser
+
+4. Create command.py which implements command, pipe, seq and call from parser rules
+
+5. Finish Application Factory 
+
+6. Putting application_factory.py, parser.py, and command.py together should mark the shell work
+Flags will not work yet
+
+7. Add custom exceptions? such as ApplicationError, ArgumentError, ParsingError to catch errors in main_shell.py
+This allows the shell to skip the current cmdline if an error occurs and start the REPL again
+
+8. Find out a way to implement flags. Will the parser handle this?
+Or will the parser just separate the commands and args. Then manually clean the args to separate flags and actual args

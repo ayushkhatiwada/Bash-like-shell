@@ -6,7 +6,6 @@ grammar CommandGrammar;
  * Parser Rules
  */
 
-
 /*
 <command> ::= <pipe> | <seq> | <call>
 <pipe> ::= <call> "|" <call> | <pipe> "|" <call>
@@ -14,10 +13,13 @@ grammar CommandGrammar;
 <call> ::= ( <non-keyword> | <quoted> ) *
  */
 command : pipe | seq | call;
+
+// Error: The following sets of rules are mutually left-recursive [pipe] and [command, seq] ???
 pipe : (call PIPE call) | (pipe PIPE call);
 seq : command SEMI_COLON command;
 
 // two call commands in read me? 
+// * means it can appear 0 or more times
 call : (NON_KEYWORD | quoted)*;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////    
@@ -35,9 +37,8 @@ quoted : singleQuoted | doubleQuoted | backQuoted;
 // non-newline and non-single-quote
 // ~p /\ ~ q = ~(p \/ q)
 // non-newline and non-single-quote = non (new-line or single-quote)
-singleQuoted : SINGLE_QUOTE ~(NEWLINE | SINGLE_QUOTE)* SINGLE_QUOTE;
-
-backQuoted : BACKQUOTE ~(NEWLINE | BACKQUOTE)* BACKQUOTE;
+singleQuoted : SINGLE_QUOTE (~(NEWLINE | SINGLE_QUOTE))* SINGLE_QUOTE;
+backQuoted : BACKQUOTE (~(NEWLINE | BACKQUOTE))* BACKQUOTE;
 
 // master shell code differs, does not include DOUBLE_QUOTE in ~(... "doubleQuoted: DOUBLE_QUOTE (backQuoted | ~(NEWLINE | BACKTICK))* DOUBLE_QUOTE;"
 // think SP has made mistake here
@@ -56,13 +57,15 @@ doubleQuoted : DOUBLE_QUOTE ( backQuoted | ~(NEWLINE | DOUBLE_QUOTE | BACKQUOTE)
 
 // master shell code differs: "call: WHITESPACE? (redirection WHITESPACE?)* argument (WHITESPACE? argument)* (WHITESPACE? redirection)* WHITESPACE?;"
 // not sure what SP is doing. Code below agrees with README from sergey and code from XLow 
-call : WHITESPACE? (redirection WHITESPACE)* argument (redirection WHITESPACE)* WHITESPACE;
+call2 : WHITESPACE? (redirection WHITESPACE)* argument (redirection WHITESPACE)* WHITESPACE;
 
 
 atom : redirection | argument;
+// + means it can appear 1 or more times
 argument : (quoted | UNQUOTED)+;
 
 // redirection could be simplified to: (LESS_THAN | GREATER_THAN) WHITESPACE? argument;
+// ? means it can appear 0 times or once
 redirection : LESS_THAN WHITESPACE? argument | GREATER_THAN WHITESPACE? argument;
 
 

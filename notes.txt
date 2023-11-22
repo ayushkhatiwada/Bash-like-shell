@@ -19,4 +19,5 @@ How you implement the commands aren't important
 What is important is design, code quality, readability, and integration 
 
 
-3. Include decorator pattern somewhere
+3. USE decorator design pattern for unsafe application e.g. _ls, _grep
+Discover how unsafe applications work and implement them

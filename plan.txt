@@ -20,4 +20,10 @@ This allows the shell to skip the current cmdline if an error occurs and start t
 Or will the parser just separate the commands and args. Then manually clean the args to separate flags and actual args
 
 
+9. Static analysis violations (automated) -5..0
+Code has to follow certain requirements such as formatting (lines cannot be too long)
+Has to follow flake 8
+Open project in virtual environment (venv)
+
+
 Add antipatterns in code - Uzair

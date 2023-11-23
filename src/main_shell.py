@@ -53,7 +53,7 @@ def process_input(cmd_line: str) -> None:
         print(stdout.popleft(), end="")
 
 
-def eval(cmd_line: str, stdout: deque[str]):
+def eval(cmd_line: str, stdout: deque[str]) -> None:
     # call the parsing and executing commands here
 
     pass

@@ -1,6 +1,7 @@
 grammar CommandGrammar;
 
 // antlr4 -Dlanguage=Python3 CommandGrammar.g4 - Generates lexer, parser, and listener files
+// antlr4 -Dlanguage=Python3 -visitor CommandGrammar.g4 - Generates same things as above but with CommandGrammarVisitor.py
 
 /*
  * Lexer Rules

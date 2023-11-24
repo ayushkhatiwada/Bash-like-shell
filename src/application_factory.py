@@ -1,5 +1,5 @@
 from singleton import Singleton
-from applications.abstract_application import AbstractApplication, ApplicationError
+from applications.abstract_application import AbstractApplication
 
 from applications.cat import Cat
 from applications.cd import Cd
@@ -16,6 +16,7 @@ from applications.tail import Tail
 
 
 # dictionary used to avoid if/ swtich statements, see below 
+# change to {"cat" : Cat, ...}
 APPLICATION_DICT = { application.name: application for application in [Cat, Cd, Cut, Echo, Find, Grep, Head, Ls, Pwd, Sort, Uniq, Tail] }
 
 class ApplicationFactory(Singleton):
@@ -37,4 +38,4 @@ class ApplicationFactory(Singleton):
         if application_name in APPLICATION_DICT:
             return APPLICATION_DICT[application_name]
         
-        raise ApplicationError(f"Invalid application `{application_name}`")
+        #raise ApplicationError(f"Invalid application `{application_name}`")

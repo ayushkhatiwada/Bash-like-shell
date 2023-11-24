@@ -1,40 +1,33 @@
-# First example from lecture 4, this has issues and should not be used
+"""
+Derivation of visitor pattern part 1:
+The goal here is to remove the eval() function from the classes and move them outside
+We can do this using the visitor pattern
+"""
+
 
 class Add:
+    def __init__(self, left, right):
+        self.left = left
+        self.right = right
+
     def eval(self):
         return self.left.eval() + self.right.eval()
 
-
-class Sub:
-    def eval(self):
-        return self.left.eval() - self.right.eval()
-
-
 class Mult:
+    def __init__(self, left, right):
+        self.left = left
+        self.right = right
+
     def eval(self):
         return self.left.eval() * self.right.eval()
 
+class Num():
+    def __init__(self, value):
+        self.value = value
 
-expr = Add(Mult(2, 4), 5) # (2*4) + 5
-expr.eval()
+    def eval(self):
+        return self.value
 
-
-def eval(a: Add):
-    return eval(a.left) + eval(a.right)
-
-def eval(a: Mult):
-    return eval(a.left) * eval(a.right)
-
-def evalAdd(a):
-    return eval(a.left) + eval(a.right)
-
-
-# This is bad, uses if else statements 
-def evalMult(a):
-    if isinstance(a.left, Mult):
-        left = evalMult(a.left)
-    if isinstance(a.left, Add):
-        left = evalAdd(a.left)
-        ...
-    # return left * right
-
+expr = Add(Mult(Num(2), Num(4)), Num(5)) # (2 * 4) + 5
+ans = expr.eval()
+print(ans)

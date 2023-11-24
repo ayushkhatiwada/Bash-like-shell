@@ -1,6 +1,8 @@
-1. Fix parser rules in CommadGrammar.g4 - ask Uzair 
+1. Fix parser rules in CommadGrammar.g4 - ask Uzair ####### Done
 
-2. Find out how to generate lexer.py, listener.py, and parser.py from ANTLR
+2. Find out how to generate lexer.py, listener.py, and parser.py from ANTLR ########## Done
+
+
 
 3. Create parser.py which deals with output from parser
 
@@ -16,3 +18,12 @@ This allows the shell to skip the current cmdline if an error occurs and start t
 
 8. Find out a way to implement flags. Will the parser handle this?
 Or will the parser just separate the commands and args. Then manually clean the args to separate flags and actual args
+
+
+9. Static analysis violations (automated) -5..0
+Code has to follow certain requirements such as formatting (lines cannot be too long)
+Has to follow flake 8
+Open project in virtual environment (venv)
+
+
+Add antipatterns in code - Uzair

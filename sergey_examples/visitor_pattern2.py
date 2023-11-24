@@ -1,45 +1,47 @@
 """
-Improved method using visitor pattern
-Use vistor pattern structure for shell commands in cwk
+Derivation of visitor pattern part 2:
+Here we are trying to move the eval function out of the classes
 
-4 * 5 + 1 -> Add(Mult(4, 5), 1)
-
-cat file.txt | grep abc; echo hello ->
-    Seq(   Pipe(  Call( "cat", ["file.txt"] ), Call( "grep", ["abc"] )  ), Call( "echo", ["hello"] )   )
+Notice how to the eval function has to check the type of the objects passed in
+So it then knows what operator to use (+, *)
+This is not good code
 """
 
-
-class Expr:
-    def accept(self, visitor):
-        pass
+from abc import ABC, abstractmethod
 
 
-class Add(Expr):
-    def accept(self, visitor):
-        return visitor.visitAdd(self)
+class AbstractOperator(ABC):
+    pass
+
+class Add(AbstractOperator):
+    def __init__(self, left, right):
+        self.left = left
+        self.right = right
+
+    #   def eval(self):
+    #     return self.left.eval() + self.right.eval()
+
+class Mult(AbstractOperator):
+    def __init__(self, left, right):
+        self.left = left
+        self.right = right
+
+    # def eval(self):
+    #     return self.left.eval() * self.right.eval()
 
 
-class Sub(Expr):
-    def accept(self, visitor):
-        return visitor.visitSub(self)
+# Trying to extract eval function out of the classes
+def eval(op: AbstractOperator):
 
-
-class Mult(Expr):
-    def accept(self, visitor):
-        return visitor.visitMult(self)
-
-
-class EvalVisitor:
-    def visit_add(self, a):
-        return a.left.accept(self) + a.right.accpet(self)
-
-    def visit_sub(self, a):
-        return a.left.accept(self) - a.right.accept(self)
+    if isinstance(op, int):
+        return op
     
-    def visit_mult(self, a):
-        return a.left.accept(self) * a.right.accept(self)
+    elif isinstance(op, Add):
+        return eval(op.left) + eval(op.right)
+    
+    elif isinstance(op, Mult):
+        return eval(op.left) * eval(op.right)
 
 
-expr = None
-evaluator = EvalVisitor()
-print(expr.accept(evaluator))
+ans = eval(Mult(Add(3, 5), 4))
+print(ans)

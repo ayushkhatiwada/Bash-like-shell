@@ -1,7 +1,7 @@
 """
 Use visitor pattern and implement commands in CommandGrammar Parser Rules
 """
-from antlr.CommandGrammarLexer import C
+# from antlr.ShellGrammarLexer
 
 class Visitor(CommandGrammarVisitor):
     def visitCommand(ctx):

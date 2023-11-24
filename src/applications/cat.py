@@ -1,6 +1,6 @@
 import os
 import sys
-sys.path.append('/com.docker.devenvironments.code/src')
+# sys.path.append('/com.docker.devenvironments.code/src')
 from collections import deque
 
 from abstract_application import AbstractApplication
@@ -31,3 +31,5 @@ class Cat(AbstractApplication):
             # If there are no args, process the input list
             for line in input:
                 out.append(line)
+
+c = Cat()

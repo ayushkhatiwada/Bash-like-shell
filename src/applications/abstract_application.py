@@ -18,5 +18,5 @@ class AbstractApplication(ABC):
         pass
 
 
-class ApplicationError(Exception):
-    """Raised when an error occurs when calling an application"""
+# class ApplicationError(Exception):
+#     """Raised when an error occurs when calling an application"""

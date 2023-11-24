@@ -1,5 +1,5 @@
 from singleton import Singleton
-from applications.abstract_application import AbstractApplication, ApplicationError
+from applications.abstract_application import AbstractApplication
 
 from applications.cat import Cat
 from applications.cd import Cd
@@ -38,4 +38,4 @@ class ApplicationFactory(Singleton):
         if application_name in APPLICATION_DICT:
             return APPLICATION_DICT[application_name]
         
-        raise ApplicationError(f"Invalid application `{application_name}`")
+        #raise ApplicationError(f"Invalid application `{application_name}`")

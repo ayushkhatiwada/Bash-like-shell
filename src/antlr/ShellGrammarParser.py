@@ -1,4 +1,4 @@
-# Generated from CommandGrammar.g4 by ANTLR 4.13.1
+# Generated from ShellGrammar.g4 by ANTLR 4.13.1
 # encoding: utf-8
 from antlr4 import *
 from io import StringIO
@@ -63,9 +63,9 @@ def serializedATN():
         125,131,139,143
     ]
 
-class CommandGrammarParser ( Parser ):
+class ShellGrammarParser ( Parser ):
 
-    grammarFileName = "CommandGrammar.g4"
+    grammarFileName = "ShellGrammar.g4"
 
     atn = ATNDeserializer().deserialize(serializedATN())
 
@@ -125,22 +125,22 @@ class CommandGrammarParser ( Parser ):
             self.parser = parser
 
         def EOF(self):
-            return self.getToken(CommandGrammarParser.EOF, 0)
+            return self.getToken(ShellGrammarParser.EOF, 0)
 
         def pipe(self):
-            return self.getTypedRuleContext(CommandGrammarParser.PipeContext,0)
+            return self.getTypedRuleContext(ShellGrammarParser.PipeContext,0)
 
 
         def seq(self):
-            return self.getTypedRuleContext(CommandGrammarParser.SeqContext,0)
+            return self.getTypedRuleContext(ShellGrammarParser.SeqContext,0)
 
 
         def call(self):
-            return self.getTypedRuleContext(CommandGrammarParser.CallContext,0)
+            return self.getTypedRuleContext(ShellGrammarParser.CallContext,0)
 
 
         def getRuleIndex(self):
-            return CommandGrammarParser.RULE_command
+            return ShellGrammarParser.RULE_command
 
         def enterRule(self, listener:ParseTreeListener):
             if hasattr( listener, "enterCommand" ):
@@ -161,7 +161,7 @@ class CommandGrammarParser ( Parser ):
 
     def command(self):
 
-        localctx = CommandGrammarParser.CommandContext(self, self._ctx, self.state)
+        localctx = ShellGrammarParser.CommandContext(self, self._ctx, self.state)
         self.enterRule(localctx, 0, self.RULE_command)
         try:
             self.enterOuterAlt(localctx, 1)
@@ -182,7 +182,7 @@ class CommandGrammarParser ( Parser ):
 
 
             self.state = 27
-            self.match(CommandGrammarParser.EOF)
+            self.match(ShellGrammarParser.EOF)
         except RecognitionException as re:
             localctx.exception = re
             self._errHandler.reportError(self, re)
@@ -201,20 +201,20 @@ class CommandGrammarParser ( Parser ):
 
         def call(self, i:int=None):
             if i is None:
-                return self.getTypedRuleContexts(CommandGrammarParser.CallContext)
+                return self.getTypedRuleContexts(ShellGrammarParser.CallContext)
             else:
-                return self.getTypedRuleContext(CommandGrammarParser.CallContext,i)
+                return self.getTypedRuleContext(ShellGrammarParser.CallContext,i)
 
 
         def PIPE(self):
-            return self.getToken(CommandGrammarParser.PIPE, 0)
+            return self.getToken(ShellGrammarParser.PIPE, 0)
 
         def pipe(self):
-            return self.getTypedRuleContext(CommandGrammarParser.PipeContext,0)
+            return self.getTypedRuleContext(ShellGrammarParser.PipeContext,0)
 
 
         def getRuleIndex(self):
-            return CommandGrammarParser.RULE_pipe
+            return ShellGrammarParser.RULE_pipe
 
         def enterRule(self, listener:ParseTreeListener):
             if hasattr( listener, "enterPipe" ):
@@ -235,7 +235,7 @@ class CommandGrammarParser ( Parser ):
 
     def pipe(self):
 
-        localctx = CommandGrammarParser.PipeContext(self, self._ctx, self.state)
+        localctx = ShellGrammarParser.PipeContext(self, self._ctx, self.state)
         self.enterRule(localctx, 2, self.RULE_pipe)
         try:
             self.state = 37
@@ -246,7 +246,7 @@ class CommandGrammarParser ( Parser ):
                 self.state = 29
                 self.call()
                 self.state = 30
-                self.match(CommandGrammarParser.PIPE)
+                self.match(ShellGrammarParser.PIPE)
                 self.state = 31
                 self.call()
                 pass
@@ -256,7 +256,7 @@ class CommandGrammarParser ( Parser ):
                 self.state = 33
                 self.call()
                 self.state = 34
-                self.match(CommandGrammarParser.PIPE)
+                self.match(ShellGrammarParser.PIPE)
                 self.state = 35
                 self.pipe()
                 pass
@@ -279,28 +279,28 @@ class CommandGrammarParser ( Parser ):
             self.parser = parser
 
         def SEMI_COLON(self):
-            return self.getToken(CommandGrammarParser.SEMI_COLON, 0)
+            return self.getToken(ShellGrammarParser.SEMI_COLON, 0)
 
         def pipe(self, i:int=None):
             if i is None:
-                return self.getTypedRuleContexts(CommandGrammarParser.PipeContext)
+                return self.getTypedRuleContexts(ShellGrammarParser.PipeContext)
             else:
-                return self.getTypedRuleContext(CommandGrammarParser.PipeContext,i)
+                return self.getTypedRuleContext(ShellGrammarParser.PipeContext,i)
 
 
         def call(self, i:int=None):
             if i is None:
-                return self.getTypedRuleContexts(CommandGrammarParser.CallContext)
+                return self.getTypedRuleContexts(ShellGrammarParser.CallContext)
             else:
-                return self.getTypedRuleContext(CommandGrammarParser.CallContext,i)
+                return self.getTypedRuleContext(ShellGrammarParser.CallContext,i)
 
 
         def seq(self):
-            return self.getTypedRuleContext(CommandGrammarParser.SeqContext,0)
+            return self.getTypedRuleContext(ShellGrammarParser.SeqContext,0)
 
 
         def getRuleIndex(self):
-            return CommandGrammarParser.RULE_seq
+            return ShellGrammarParser.RULE_seq
 
         def enterRule(self, listener:ParseTreeListener):
             if hasattr( listener, "enterSeq" ):
@@ -321,7 +321,7 @@ class CommandGrammarParser ( Parser ):
 
     def seq(self):
 
-        localctx = CommandGrammarParser.SeqContext(self, self._ctx, self.state)
+        localctx = ShellGrammarParser.SeqContext(self, self._ctx, self.state)
         self.enterRule(localctx, 4, self.RULE_seq)
         try:
             self.enterOuterAlt(localctx, 1)
@@ -340,7 +340,7 @@ class CommandGrammarParser ( Parser ):
 
 
             self.state = 43
-            self.match(CommandGrammarParser.SEMI_COLON)
+            self.match(ShellGrammarParser.SEMI_COLON)
             self.state = 47
             self._errHandler.sync(self)
             la_ = self._interp.adaptivePredict(self._input,3,self._ctx)
@@ -374,31 +374,31 @@ class CommandGrammarParser ( Parser ):
             self.parser = parser
 
         def argument(self):
-            return self.getTypedRuleContext(CommandGrammarParser.ArgumentContext,0)
+            return self.getTypedRuleContext(ShellGrammarParser.ArgumentContext,0)
 
 
         def WHITESPACE(self, i:int=None):
             if i is None:
-                return self.getTokens(CommandGrammarParser.WHITESPACE)
+                return self.getTokens(ShellGrammarParser.WHITESPACE)
             else:
-                return self.getToken(CommandGrammarParser.WHITESPACE, i)
+                return self.getToken(ShellGrammarParser.WHITESPACE, i)
 
         def redirection(self, i:int=None):
             if i is None:
-                return self.getTypedRuleContexts(CommandGrammarParser.RedirectionContext)
+                return self.getTypedRuleContexts(ShellGrammarParser.RedirectionContext)
             else:
-                return self.getTypedRuleContext(CommandGrammarParser.RedirectionContext,i)
+                return self.getTypedRuleContext(ShellGrammarParser.RedirectionContext,i)
 
 
         def atom(self, i:int=None):
             if i is None:
-                return self.getTypedRuleContexts(CommandGrammarParser.AtomContext)
+                return self.getTypedRuleContexts(ShellGrammarParser.AtomContext)
             else:
-                return self.getTypedRuleContext(CommandGrammarParser.AtomContext,i)
+                return self.getTypedRuleContext(ShellGrammarParser.AtomContext,i)
 
 
         def getRuleIndex(self):
-            return CommandGrammarParser.RULE_call
+            return ShellGrammarParser.RULE_call
 
         def enterRule(self, listener:ParseTreeListener):
             if hasattr( listener, "enterCall" ):
@@ -419,7 +419,7 @@ class CommandGrammarParser ( Parser ):
 
     def call(self):
 
-        localctx = CommandGrammarParser.CallContext(self, self._ctx, self.state)
+        localctx = ShellGrammarParser.CallContext(self, self._ctx, self.state)
         self.enterRule(localctx, 6, self.RULE_call)
         self._la = 0 # Token type
         try:
@@ -429,7 +429,7 @@ class CommandGrammarParser ( Parser ):
             _la = self._input.LA(1)
             while _la==9:
                 self.state = 49
-                self.match(CommandGrammarParser.WHITESPACE)
+                self.match(ShellGrammarParser.WHITESPACE)
                 self.state = 54
                 self._errHandler.sync(self)
                 _la = self._input.LA(1)
@@ -445,7 +445,7 @@ class CommandGrammarParser ( Parser ):
                 _la = self._input.LA(1)
                 while _la==9:
                     self.state = 56
-                    self.match(CommandGrammarParser.WHITESPACE)
+                    self.match(ShellGrammarParser.WHITESPACE)
                     self.state = 61
                     self._errHandler.sync(self)
                     _la = self._input.LA(1)
@@ -466,7 +466,7 @@ class CommandGrammarParser ( Parser ):
                     _la = self._input.LA(1)
                     while _la==9:
                         self.state = 68
-                        self.match(CommandGrammarParser.WHITESPACE)
+                        self.match(ShellGrammarParser.WHITESPACE)
                         self.state = 73
                         self._errHandler.sync(self)
                         _la = self._input.LA(1)
@@ -482,7 +482,7 @@ class CommandGrammarParser ( Parser ):
             _la = self._input.LA(1)
             while _la==9:
                 self.state = 80
-                self.match(CommandGrammarParser.WHITESPACE)
+                self.match(ShellGrammarParser.WHITESPACE)
                 self.state = 85
                 self._errHandler.sync(self)
                 _la = self._input.LA(1)
@@ -504,19 +504,19 @@ class CommandGrammarParser ( Parser ):
             self.parser = parser
 
         def singleQuoted(self):
-            return self.getTypedRuleContext(CommandGrammarParser.SingleQuotedContext,0)
+            return self.getTypedRuleContext(ShellGrammarParser.SingleQuotedContext,0)
 
 
         def doubleQuoted(self):
-            return self.getTypedRuleContext(CommandGrammarParser.DoubleQuotedContext,0)
+            return self.getTypedRuleContext(ShellGrammarParser.DoubleQuotedContext,0)
 
 
         def backQuoted(self):
-            return self.getTypedRuleContext(CommandGrammarParser.BackQuotedContext,0)
+            return self.getTypedRuleContext(ShellGrammarParser.BackQuotedContext,0)
 
 
         def getRuleIndex(self):
-            return CommandGrammarParser.RULE_quoted
+            return ShellGrammarParser.RULE_quoted
 
         def enterRule(self, listener:ParseTreeListener):
             if hasattr( listener, "enterQuoted" ):
@@ -537,7 +537,7 @@ class CommandGrammarParser ( Parser ):
 
     def quoted(self):
 
-        localctx = CommandGrammarParser.QuotedContext(self, self._ctx, self.state)
+        localctx = ShellGrammarParser.QuotedContext(self, self._ctx, self.state)
         self.enterRule(localctx, 8, self.RULE_quoted)
         try:
             self.state = 89
@@ -579,18 +579,18 @@ class CommandGrammarParser ( Parser ):
 
         def SINGLE_QUOTE(self, i:int=None):
             if i is None:
-                return self.getTokens(CommandGrammarParser.SINGLE_QUOTE)
+                return self.getTokens(ShellGrammarParser.SINGLE_QUOTE)
             else:
-                return self.getToken(CommandGrammarParser.SINGLE_QUOTE, i)
+                return self.getToken(ShellGrammarParser.SINGLE_QUOTE, i)
 
         def NEWLINE(self, i:int=None):
             if i is None:
-                return self.getTokens(CommandGrammarParser.NEWLINE)
+                return self.getTokens(ShellGrammarParser.NEWLINE)
             else:
-                return self.getToken(CommandGrammarParser.NEWLINE, i)
+                return self.getToken(ShellGrammarParser.NEWLINE, i)
 
         def getRuleIndex(self):
-            return CommandGrammarParser.RULE_singleQuoted
+            return ShellGrammarParser.RULE_singleQuoted
 
         def enterRule(self, listener:ParseTreeListener):
             if hasattr( listener, "enterSingleQuoted" ):
@@ -611,13 +611,13 @@ class CommandGrammarParser ( Parser ):
 
     def singleQuoted(self):
 
-        localctx = CommandGrammarParser.SingleQuotedContext(self, self._ctx, self.state)
+        localctx = ShellGrammarParser.SingleQuotedContext(self, self._ctx, self.state)
         self.enterRule(localctx, 10, self.RULE_singleQuoted)
         self._la = 0 # Token type
         try:
             self.enterOuterAlt(localctx, 1)
             self.state = 91
-            self.match(CommandGrammarParser.SINGLE_QUOTE)
+            self.match(ShellGrammarParser.SINGLE_QUOTE)
             self.state = 93 
             self._errHandler.sync(self)
             _la = self._input.LA(1)
@@ -636,7 +636,7 @@ class CommandGrammarParser ( Parser ):
                     break
 
             self.state = 97
-            self.match(CommandGrammarParser.SINGLE_QUOTE)
+            self.match(ShellGrammarParser.SINGLE_QUOTE)
         except RecognitionException as re:
             localctx.exception = re
             self._errHandler.reportError(self, re)
@@ -655,18 +655,18 @@ class CommandGrammarParser ( Parser ):
 
         def BACKQUOTE(self, i:int=None):
             if i is None:
-                return self.getTokens(CommandGrammarParser.BACKQUOTE)
+                return self.getTokens(ShellGrammarParser.BACKQUOTE)
             else:
-                return self.getToken(CommandGrammarParser.BACKQUOTE, i)
+                return self.getToken(ShellGrammarParser.BACKQUOTE, i)
 
         def NEWLINE(self, i:int=None):
             if i is None:
-                return self.getTokens(CommandGrammarParser.NEWLINE)
+                return self.getTokens(ShellGrammarParser.NEWLINE)
             else:
-                return self.getToken(CommandGrammarParser.NEWLINE, i)
+                return self.getToken(ShellGrammarParser.NEWLINE, i)
 
         def getRuleIndex(self):
-            return CommandGrammarParser.RULE_backQuoted
+            return ShellGrammarParser.RULE_backQuoted
 
         def enterRule(self, listener:ParseTreeListener):
             if hasattr( listener, "enterBackQuoted" ):
@@ -687,13 +687,13 @@ class CommandGrammarParser ( Parser ):
 
     def backQuoted(self):
 
-        localctx = CommandGrammarParser.BackQuotedContext(self, self._ctx, self.state)
+        localctx = ShellGrammarParser.BackQuotedContext(self, self._ctx, self.state)
         self.enterRule(localctx, 12, self.RULE_backQuoted)
         self._la = 0 # Token type
         try:
             self.enterOuterAlt(localctx, 1)
             self.state = 99
-            self.match(CommandGrammarParser.BACKQUOTE)
+            self.match(ShellGrammarParser.BACKQUOTE)
             self.state = 101 
             self._errHandler.sync(self)
             _la = self._input.LA(1)
@@ -712,7 +712,7 @@ class CommandGrammarParser ( Parser ):
                     break
 
             self.state = 105
-            self.match(CommandGrammarParser.BACKQUOTE)
+            self.match(ShellGrammarParser.BACKQUOTE)
         except RecognitionException as re:
             localctx.exception = re
             self._errHandler.reportError(self, re)
@@ -731,31 +731,31 @@ class CommandGrammarParser ( Parser ):
 
         def DOUBLE_QUOTE(self, i:int=None):
             if i is None:
-                return self.getTokens(CommandGrammarParser.DOUBLE_QUOTE)
+                return self.getTokens(ShellGrammarParser.DOUBLE_QUOTE)
             else:
-                return self.getToken(CommandGrammarParser.DOUBLE_QUOTE, i)
+                return self.getToken(ShellGrammarParser.DOUBLE_QUOTE, i)
 
         def backQuoted(self, i:int=None):
             if i is None:
-                return self.getTypedRuleContexts(CommandGrammarParser.BackQuotedContext)
+                return self.getTypedRuleContexts(ShellGrammarParser.BackQuotedContext)
             else:
-                return self.getTypedRuleContext(CommandGrammarParser.BackQuotedContext,i)
+                return self.getTypedRuleContext(ShellGrammarParser.BackQuotedContext,i)
 
 
         def NEWLINE(self, i:int=None):
             if i is None:
-                return self.getTokens(CommandGrammarParser.NEWLINE)
+                return self.getTokens(ShellGrammarParser.NEWLINE)
             else:
-                return self.getToken(CommandGrammarParser.NEWLINE, i)
+                return self.getToken(ShellGrammarParser.NEWLINE, i)
 
         def BACKQUOTE(self, i:int=None):
             if i is None:
-                return self.getTokens(CommandGrammarParser.BACKQUOTE)
+                return self.getTokens(ShellGrammarParser.BACKQUOTE)
             else:
-                return self.getToken(CommandGrammarParser.BACKQUOTE, i)
+                return self.getToken(ShellGrammarParser.BACKQUOTE, i)
 
         def getRuleIndex(self):
-            return CommandGrammarParser.RULE_doubleQuoted
+            return ShellGrammarParser.RULE_doubleQuoted
 
         def enterRule(self, listener:ParseTreeListener):
             if hasattr( listener, "enterDoubleQuoted" ):
@@ -776,13 +776,13 @@ class CommandGrammarParser ( Parser ):
 
     def doubleQuoted(self):
 
-        localctx = CommandGrammarParser.DoubleQuotedContext(self, self._ctx, self.state)
+        localctx = ShellGrammarParser.DoubleQuotedContext(self, self._ctx, self.state)
         self.enterRule(localctx, 14, self.RULE_doubleQuoted)
         self._la = 0 # Token type
         try:
             self.enterOuterAlt(localctx, 1)
             self.state = 107
-            self.match(CommandGrammarParser.DOUBLE_QUOTE)
+            self.match(ShellGrammarParser.DOUBLE_QUOTE)
             self.state = 112
             self._errHandler.sync(self)
             _la = self._input.LA(1)
@@ -811,7 +811,7 @@ class CommandGrammarParser ( Parser ):
                 _la = self._input.LA(1)
 
             self.state = 115
-            self.match(CommandGrammarParser.DOUBLE_QUOTE)
+            self.match(ShellGrammarParser.DOUBLE_QUOTE)
         except RecognitionException as re:
             localctx.exception = re
             self._errHandler.reportError(self, re)
@@ -829,15 +829,15 @@ class CommandGrammarParser ( Parser ):
             self.parser = parser
 
         def redirection(self):
-            return self.getTypedRuleContext(CommandGrammarParser.RedirectionContext,0)
+            return self.getTypedRuleContext(ShellGrammarParser.RedirectionContext,0)
 
 
         def argument(self):
-            return self.getTypedRuleContext(CommandGrammarParser.ArgumentContext,0)
+            return self.getTypedRuleContext(ShellGrammarParser.ArgumentContext,0)
 
 
         def getRuleIndex(self):
-            return CommandGrammarParser.RULE_atom
+            return ShellGrammarParser.RULE_atom
 
         def enterRule(self, listener:ParseTreeListener):
             if hasattr( listener, "enterAtom" ):
@@ -858,7 +858,7 @@ class CommandGrammarParser ( Parser ):
 
     def atom(self):
 
-        localctx = CommandGrammarParser.AtomContext(self, self._ctx, self.state)
+        localctx = ShellGrammarParser.AtomContext(self, self._ctx, self.state)
         self.enterRule(localctx, 16, self.RULE_atom)
         try:
             self.state = 119
@@ -895,19 +895,19 @@ class CommandGrammarParser ( Parser ):
 
         def quoted(self, i:int=None):
             if i is None:
-                return self.getTypedRuleContexts(CommandGrammarParser.QuotedContext)
+                return self.getTypedRuleContexts(ShellGrammarParser.QuotedContext)
             else:
-                return self.getTypedRuleContext(CommandGrammarParser.QuotedContext,i)
+                return self.getTypedRuleContext(ShellGrammarParser.QuotedContext,i)
 
 
         def UNQUOTED(self, i:int=None):
             if i is None:
-                return self.getTokens(CommandGrammarParser.UNQUOTED)
+                return self.getTokens(ShellGrammarParser.UNQUOTED)
             else:
-                return self.getToken(CommandGrammarParser.UNQUOTED, i)
+                return self.getToken(ShellGrammarParser.UNQUOTED, i)
 
         def getRuleIndex(self):
-            return CommandGrammarParser.RULE_argument
+            return ShellGrammarParser.RULE_argument
 
         def enterRule(self, listener:ParseTreeListener):
             if hasattr( listener, "enterArgument" ):
@@ -928,7 +928,7 @@ class CommandGrammarParser ( Parser ):
 
     def argument(self):
 
-        localctx = CommandGrammarParser.ArgumentContext(self, self._ctx, self.state)
+        localctx = ShellGrammarParser.ArgumentContext(self, self._ctx, self.state)
         self.enterRule(localctx, 18, self.RULE_argument)
         try:
             self.enterOuterAlt(localctx, 1)
@@ -946,7 +946,7 @@ class CommandGrammarParser ( Parser ):
                         pass
                     elif token in [11]:
                         self.state = 122
-                        self.match(CommandGrammarParser.UNQUOTED)
+                        self.match(ShellGrammarParser.UNQUOTED)
                         pass
                     else:
                         raise NoViableAltException(self)
@@ -975,23 +975,23 @@ class CommandGrammarParser ( Parser ):
             self.parser = parser
 
         def LESS_THAN(self):
-            return self.getToken(CommandGrammarParser.LESS_THAN, 0)
+            return self.getToken(ShellGrammarParser.LESS_THAN, 0)
 
         def argument(self):
-            return self.getTypedRuleContext(CommandGrammarParser.ArgumentContext,0)
+            return self.getTypedRuleContext(ShellGrammarParser.ArgumentContext,0)
 
 
         def WHITESPACE(self, i:int=None):
             if i is None:
-                return self.getTokens(CommandGrammarParser.WHITESPACE)
+                return self.getTokens(ShellGrammarParser.WHITESPACE)
             else:
-                return self.getToken(CommandGrammarParser.WHITESPACE, i)
+                return self.getToken(ShellGrammarParser.WHITESPACE, i)
 
         def GREATER_THAN(self):
-            return self.getToken(CommandGrammarParser.GREATER_THAN, 0)
+            return self.getToken(ShellGrammarParser.GREATER_THAN, 0)
 
         def getRuleIndex(self):
-            return CommandGrammarParser.RULE_redirection
+            return ShellGrammarParser.RULE_redirection
 
         def enterRule(self, listener:ParseTreeListener):
             if hasattr( listener, "enterRedirection" ):
@@ -1012,7 +1012,7 @@ class CommandGrammarParser ( Parser ):
 
     def redirection(self):
 
-        localctx = CommandGrammarParser.RedirectionContext(self, self._ctx, self.state)
+        localctx = ShellGrammarParser.RedirectionContext(self, self._ctx, self.state)
         self.enterRule(localctx, 20, self.RULE_redirection)
         self._la = 0 # Token type
         try:
@@ -1022,13 +1022,13 @@ class CommandGrammarParser ( Parser ):
             if token in [5]:
                 self.enterOuterAlt(localctx, 1)
                 self.state = 127
-                self.match(CommandGrammarParser.LESS_THAN)
+                self.match(ShellGrammarParser.LESS_THAN)
                 self.state = 131
                 self._errHandler.sync(self)
                 _la = self._input.LA(1)
                 while _la==9:
                     self.state = 128
-                    self.match(CommandGrammarParser.WHITESPACE)
+                    self.match(ShellGrammarParser.WHITESPACE)
                     self.state = 133
                     self._errHandler.sync(self)
                     _la = self._input.LA(1)
@@ -1039,13 +1039,13 @@ class CommandGrammarParser ( Parser ):
             elif token in [6]:
                 self.enterOuterAlt(localctx, 2)
                 self.state = 135
-                self.match(CommandGrammarParser.GREATER_THAN)
+                self.match(ShellGrammarParser.GREATER_THAN)
                 self.state = 139
                 self._errHandler.sync(self)
                 _la = self._input.LA(1)
                 while _la==9:
                     self.state = 136
-                    self.match(CommandGrammarParser.WHITESPACE)
+                    self.match(ShellGrammarParser.WHITESPACE)
                     self.state = 141
                     self._errHandler.sync(self)
                     _la = self._input.LA(1)

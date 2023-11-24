@@ -1,4 +1,4 @@
-# Generated from CommandGrammar.g4 by ANTLR 4.13.1
+# Generated from ShellGrammar.g4 by ANTLR 4.13.1
 from antlr4 import *
 from io import StringIO
 import sys
@@ -30,7 +30,7 @@ def serializedATN():
         0,0,0,49,50,1,0,0,0,50,22,1,0,0,0,3,0,42,49,0
     ]
 
-class CommandGrammarLexer(Lexer):
+class ShellGrammarLexer(Lexer):
 
     atn = ATNDeserializer().deserialize(serializedATN())
 
@@ -64,7 +64,7 @@ class CommandGrammarLexer(Lexer):
                   "LESS_THAN", "GREATER_THAN", "BACKQUOTE", "NEWLINE", "WHITESPACE", 
                   "NON_KEYWORD", "UNQUOTED" ]
 
-    grammarFileName = "CommandGrammar.g4"
+    grammarFileName = "ShellGrammar.g4"
 
     def __init__(self, input=None, output:TextIO = sys.stdout):
         super().__init__(input, output)

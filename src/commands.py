@@ -17,7 +17,7 @@ class Visitor(CommandGrammarVisitor):
 How to start:
 --------------
 - Look at generated antlr files
-- look at context
+- look at context (ctx)
 - look at visitor & visotr children
 
 - think of it recursively 

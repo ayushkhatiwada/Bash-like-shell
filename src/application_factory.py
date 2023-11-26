@@ -16,8 +16,22 @@ from applications.tail import Tail
 
 
 # dictionary used to avoid if/ swtich statements, see below 
-# change to {"cat" : Cat, ...}
-APPLICATION_DICT = { application.name: application for application in [Cat, Cd, Cut, Echo, Find, Grep, Head, Ls, Pwd, Sort, Uniq, Tail] }
+# APPLICATION_DICT = { application.name: application for application in [Cat, Cd, Cut, Echo, Find, Grep, Head, Ls, Pwd, Sort, Uniq, Tail] }
+APPLICATION_DICT = {
+    "cat": Cat,
+    "cd": Cd,
+    "cut": Cut,
+    "echo": Echo,
+    "find": Find,
+    "grep": Grep,
+    "head": Head,
+    "ls": Ls,
+    "pwd": Pwd,
+    "sort": Sort,
+    "uniq": Uniq,
+    "tail": Tail
+}
+
 
 class ApplicationFactory(Singleton):
     """

@@ -41,7 +41,6 @@ class ApplicationFactory(Singleton):
     Singleton because we only care about using exec function in each class
     We don't really care about creating multiple objects - possibly saves memory
     Allows us to use another design pattern to get marks
-    
     """
 
     def get_application(self, args: list[str]) -> AbstractApplication:

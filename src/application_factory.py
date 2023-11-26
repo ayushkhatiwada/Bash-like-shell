@@ -1,5 +1,6 @@
 from singleton import Singleton
 from applications.abstract_application import AbstractApplication
+from custom_exceptions import ApplicationError
 
 from applications.cat import Cat
 from applications.cd import Cd
@@ -43,13 +44,12 @@ class ApplicationFactory(Singleton):
     
     """
 
-    
     def get_application(self, args: list[str]) -> AbstractApplication:
 
         application_name = args[0]
 
         # APPLICATION_DICT used to avoid if/swtich statements
         if application_name in APPLICATION_DICT:
-            return APPLICATION_DICT[application_name]
+            return APPLICATION_DICT[application_name]()
         
-        #raise ApplicationError(f"Invalid application `{application_name}`")
+        raise ApplicationError(f"{application_name}: command not found")

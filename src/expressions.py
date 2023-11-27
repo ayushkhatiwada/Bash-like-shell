@@ -1,6 +1,11 @@
 from visitor import Visitor
 
 
+class AbstractCommand:
+    def __init__(self) -> None:
+        pass
+
+
 # change accept commands to execute???
 
 # I don't think it should be called command
@@ -13,17 +18,9 @@ class Commmand:
         return visitor.visit_command(self)
 
 
-# I think this is the base case
-# Call represents ONE specific command (cat) and it's, one or more, input arguments (file1.txt, file2.txt)
-class Call:
-    
-    def accept(self, visitor):
-        return visitor.visit_call(self)
-
-
 class Pipe:
     # check type hints with HJP/XLow
-    def __init__(self, left_side: Call, right_side: Commmand):
+    def __init__(self, left_side, right_side: Commmand):
         self.left_side = left_side
         self.right_side = right_side
 

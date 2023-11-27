@@ -1,1 +1,5 @@
-# Add custom exceptions here
+class ApplicationError(Exception):
+    pass
+
+class ArgumentError(Exception):
+    pass

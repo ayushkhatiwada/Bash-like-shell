@@ -2,6 +2,7 @@ import os
 from collections import deque
 
 from abstract_application import AbstractApplication
+from ..custom_exceptions import ApplicationError
 
 
 class Cd(AbstractApplication):
@@ -26,9 +27,9 @@ class Cd(AbstractApplication):
         try:
             os.chdir(directory_path)
         except FileNotFoundError:
-            raise FileNotFoundError(f"{directory_path} directory does not exist.")
+            raise ApplicationError(f"{directory_path} directory does not exist.")
         except PermissionError:
-            raise PermissionError(f"Permission denied to access: {directory_path}.")
+            raise ApplicationError(f"Permission denied to access: {directory_path}.")
         except Exception as e:
             # General exception catch for any other unforeseen errors
-            raise Exception(f"An error occurred while changing directory: {e}.")
+            raise ApplicationError(f"An error occurred while changing directory: {e}.")

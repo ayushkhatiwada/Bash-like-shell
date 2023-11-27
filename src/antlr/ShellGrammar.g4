@@ -48,6 +48,7 @@ UNQUOTED : ~[ "'`\n;|<>\t]+;
 // might not need EOF
 command : (pipe | seq | call)? EOF;
 pipe : call PIPE call | call PIPE pipe;
+// pipe : call PIPE call | pipe PIPE call;
 
 // Error: The following sets of rules are mutually left-recursive [pipe] and [command, seq] ???
 seq : (pipe | call) SEMI_COLON (pipe | seq | call)?;

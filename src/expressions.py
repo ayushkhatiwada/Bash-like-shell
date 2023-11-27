@@ -47,6 +47,16 @@ class Call:
 
 
 
+
+
+
+
+
+class DoubleQuote:
+    pass
+
+
+
 # I don't think argument is needed, only pipe, seq, and call
 # Call seems to be the base case
 # Because call contains your specific command (cat, ls) and the specific arguments need (file.txt)

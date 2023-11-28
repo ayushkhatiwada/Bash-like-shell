@@ -11,7 +11,7 @@ class AbstractCommand:
 # Should be called a command of commands - or a better name entirely
 # This is a non base case command
 class Commmand(AbstractCommand):
-    
+
     def accept(self, visitor):
         return visitor.visit_command(self)
 
@@ -27,15 +27,16 @@ class Pipe(AbstractCommand):
 
 
 class Seq(AbstractCommand):
-    
+
     def accept(self, visitor):
         return visitor.visit_seq(self)
 
 
 # I think this is the base case
-# Call represents ONE specific command (cat) and it's, one or more, input arguments (file1.txt, file2.txt)
+# Call represents ONE specific command (cat) and it's, one or more, input 
+# arguments (file1.txt, file2.txt)
 class Call(AbstractCommand):
-    
+
     def accept(self, visitor):
         return visitor.visit_call(self)
 
@@ -45,7 +46,7 @@ class Atom:
 
 
 class Argument:
-    
+
     def accept(self, visitor):
         return visitor.visit_argument(self)
 
@@ -68,8 +69,5 @@ class BackQuoted:
 
 class DoubleQuoted:
     pass
-
-
-
 
 # Note: not sure how to handle redirection or command substitution

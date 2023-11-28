@@ -15,8 +15,8 @@ from expressions import (
     DoubleQuoted
 )
 
-# double check Pipe and Seq with HJP/XLow
 
+# double check Pipe and Seq with HJP/XLow
 class Converter(ShellGrammarVisitor):
     def __init__(self, out) -> None:
         super().__init__()
@@ -24,13 +24,13 @@ class Converter(ShellGrammarVisitor):
     def visitCommand(self, ctx: ShellGrammarParser.CommandContext):
         child = ctx.children[0]
 
-        if type(child) == ShellGrammarParser.PipeContext:
+        if isinstance(child, ShellGrammarParser.PipeContext):
             return Commmand(self.visitPipe(child))
-        elif type(child) == ShellGrammarParser.SeqContext:
+        elif isinstance(child, ShellGrammarParser.SeqContext):
             return Commmand(self.visitSeq(child))
-        elif type(child) == ShellGrammarParser.CallContext:
+        elif isinstance(child, ShellGrammarParser.CallContext):
             return Commmand(self.visitCall(child))
-        
+
         raise AssertionError("Command must be of type pipe, seq or call")
 
     def visitPipe(self, ctx: ShellGrammarParser.PipeContext):
@@ -38,100 +38,104 @@ class Converter(ShellGrammarVisitor):
         left_side = self.visitCall(left_child)
 
         right_side = ctx.children[2]
-        if type(right_side) == ShellGrammarParser.CallContext:
+        if isinstance(right_side, ShellGrammarParser.CallContext):
             right_side = self.visitCall(right_side)
-        elif type(right_side) == ShellGrammarParser.PipeContext:
+        elif isinstance(right_side, ShellGrammarParser.PipeContext):
             right_side = self.visitPipe(right_side)
         else:
-            raise AssertionError("Right side of | must be either of type pipe or call")
+            raise AssertionError("""
+                Right side of | must be either of type pipe or call
+            """)
 
         return Pipe(left_side, right_side)
 
     def visitSeq(self, ctx: ShellGrammarParser.SeqContext):
         left_side = ctx.children[0]
-        if type(left_side) == ShellGrammarParser.PipeContext:
+        if isinstance(left_side, ShellGrammarParser.PipeContext):
             left_side = self.visitPipe(left_side)
-        elif type(left_side)  == ShellGrammarParser.CallContext:
+        elif isinstance(left_side, ShellGrammarParser.CallContext):
             left_side = self.visitCall(left_side)
         else:
-            raise AssertionError("Left side of ; must be either of type pipe or call")
+            raise AssertionError("""Left side of ; must be either of type pipe
+            or call""")
 
         right_side = ctx.children[2]
-        if type(right_side) == ShellGrammarParser.PipeContext:
+        if isinstance(right_side, ShellGrammarParser.PipeContext):
             right_side = self.visitPipe(right_side)
-        elif type(right_side) == ShellGrammarParser.SeqContext:
+        if isinstance(right_side, ShellGrammarParser.SeqContext):
             right_side = self.visitSeq(right_side)
-        elif type(right_side) == ShellGrammarParser.CallContext:
+        if isinstance(right_side, ShellGrammarParser.CallContext):
             right_side = self.visitCall(right_side)
         else:
-            raise AssertionError("Right side of ; must be either of type pipe, seq or call")
+            raise AssertionError("""Right side of ; must be either of type
+            pipe, seq or call""")
 
         return Seq(left_side, right_side)
 
+    # check with HJP/XLow
     def visitCall(self, ctx: ShellGrammarParser.CallContext):
         elements = []
 
         for child in ctx.children:
-            if type(child) == ShellGrammarParser.RedirectionContext:
-                child = Redirection(self.visitRedirection(child))
-                elements.append(child)
-            elif type(child) == ShellGrammarParser.ArgumentContext:
-                child = Argument(self.visitArgument(child))
-                elements.append(child)
-            elif type(child) == ShellGrammarParser.AtomContext:
-                child = Atom(self.visitAtom(child))
-                elements.append(child)
-            else:
-                pass
+            if isinstance(child, ShellGrammarParser.RedirectionContext):
+                elements.append(self.visitRedirection(child))
+            elif isinstance(child, ShellGrammarParser.ArgumentContext):
+                elements.append(self.visitArgument(child))
+            elif isinstance(child, ShellGrammarParser.AtomContext):
+                elements.append(self.visitAtom(child))
 
         return Call(*elements)
 
     def visitAtom(self, ctx: ShellGrammarParser.AtomContext):
         child = ctx.children[0]
 
-        if type(child) == ShellGrammarParser.RedirectionContext:
+        if isinstance(child, ShellGrammarParser.RedirectionContext):
             return Atom(self.visitRedirection(child))
-        elif type(child) == ShellGrammarParser.ArgumentContext:
+        if isinstance(child, ShellGrammarParser.ArgumentContext):
             return Atom(self.visitArgument(child))
         else:
-            raise AssertionError("Atom must be of type redirection or argument")
+            raise AssertionError("""Atom must be of type redirection
+            or argument""")
 
     def visitArgument(self, ctx: ShellGrammarParser.ArgumentContext):
         child = ctx.children[0]
 
-        if type(child) == ShellGrammarParser.QuotedContext:
+        if isinstance(child, ShellGrammarParser.QuotedContext):
             return Argument(self.visitQuoted(child))
         else:
-            return child.getText()
+            return Argument(child.getText())
 
     # not 100% confient in this
     def visitRedirection(self, ctx: ShellGrammarParser.RedirectionContext):
         less_than_or_greater_than = ctx.children[0]
         argument = ctx.children[2]
 
-
     def visitQuoted(self, ctx: ShellGrammarParser.QuotedContext):
         child = ctx.children[0]
 
-        if type(child) == ShellGrammarParser.SingleQuotedContext:
+        if isinstance(child, ShellGrammarParser.SingleQuotedContext):
             return Quoted(self.visitSingleQuoted(child))
-        elif type(child) == ShellGrammarParser.DoubleQuotedContext:
+        elif isinstance(child, ShellGrammarParser.DoubleQuotedContext):
             return Quoted(self.visitDoubleQuoted(child))
-        elif type(child) == ShellGrammarParser.BackQuotedContext:
+        elif isinstance(child, ShellGrammarParser.BackQuotedContext):
             return Quoted(self.visitBackQuoted(child))
         else:
-            raise AssertionError("Quoted must be of type singleQuoted, doubleQuoted or backQuoted")
+            raise AssertionError("""Quoted must be of type singleQuoted,
+            doubleQuoted or backQuoted""")
 
     def visitSingleQuoted(self, ctx: ShellGrammarParser.SingleQuotedContext):
-        child = ctx.children[0]
-        # [1:-1] removes the single quotes from the string
-        return SingleQuoted(child.getText()[1:-1])
+        # Getting 2nd child because the first & last childs are single quotes
+        # Check Antlr lab tree to see why
+        child = ctx.children[1]
+        return SingleQuoted(child.getText())
 
     def visitBackQuoted(self, ctx: ShellGrammarParser.BackQuotedContext):
-        child = ctx.children[0]
-        return BackQuoted(child.getText()[1:-1])
-    
-    # Code from HJP/XLow
+        # Getting the 2nd child because the first & last childs are back quotes
+        # Check Antlr lab tree to see why
+        child = ctx.children[1]
+        return BackQuoted(child.getText())
+
+    # HJP/XLow - might need to change
     def visitDoubleQuoted(self, ctx: ShellGrammarParser.DoubleQuotedContext):
         elements = []
         curr = ""

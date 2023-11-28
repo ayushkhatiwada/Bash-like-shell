@@ -17,9 +17,9 @@ def exec_shell() -> None:
 
         if not (num_of_args == 2 and sys.argv[1] == "-c"):
             raise ValueError("""
-                            Incorrect number of arguments passed
-                            If you are trying to evaluate a single command once only
-                            Try typing `-c "<command>"` with quotation marks
+            Incorrect number of arguments passed
+            If you are trying to evaluate a single command once only
+            Try typing `-c "<command>"` with quotation marks
                             """)
 
     # interactive mode - REPL 

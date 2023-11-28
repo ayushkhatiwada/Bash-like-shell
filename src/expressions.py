@@ -1,72 +1,72 @@
 from visitor import Visitor
 
 
-class AbstractCommand:
+class AbstractShellFeature:
     def __init__(self) -> None:
         pass
 
 
-class Commmand(AbstractCommand):
+class Commmand(AbstractShellFeature):
 
     def accept(self, visitor: Visitor):
         return visitor.visit_command(self)
 
 
-class Pipe(AbstractCommand):
+class Pipe(AbstractShellFeature):
 
     def accept(self, visitor: Visitor):
         return visitor.visit_pipe(self)
 
 
-class Seq(AbstractCommand):
+class Seq(AbstractShellFeature):
 
     def accept(self, visitor: Visitor):
         return visitor.visit_seq(self)
 
 
-class Call(AbstractCommand):
+class Call(AbstractShellFeature):
 
     def accept(self, visitor: Visitor):
         return visitor.visit_call(self)
 
 
-class Atom:
+class Atom(AbstractShellFeature):
 
     def accept(self, visitor: Visitor):
         return visitor.visit_atom(self)
 
 
-class Argument:
-
-    def accept(self, visitor: Visitor):
-        return visitor.visit_argument(self)
-
-
-class Redirection:
+class Redirection(AbstractShellFeature):
 
     def accept(self, visitor: Visitor):
         return visitor.visit_redirection(self)
 
 
-class Quoted:
+class Argument(AbstractShellFeature):
+
+    def accept(self, visitor: Visitor):
+        return visitor.visit_argument(self)
+
+
+class Quoted(AbstractShellFeature):
 
     def accept(self, visitor: Visitor):
         return visitor.visit_quoted(self)
 
 
-class SingleQuoted:
+class SingleQuoted(AbstractShellFeature):
 
     def accept(self, visitor: Visitor):
         return visitor.visit_single_quoted(self)
 
 
-class BackQuoted:
-
-    def accept(self, visitor: Visitor):
-        return visitor.visit_back_quoted(self)
-
-
-class DoubleQuoted:
+class DoubleQuoted(AbstractShellFeature):
 
     def accept(self, visitor: Visitor):
         return visitor.visit_double_quoted(self)
+
+
+class BackQuoted(AbstractShellFeature):
+
+    def accept(self, visitor: Visitor):
+        return visitor.visit_back_quoted(self)

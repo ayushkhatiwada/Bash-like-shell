@@ -7,12 +7,12 @@ from expressions import (
     Seq,
     Call,
     Atom,
-    Argument,
     Redirection,
+    Argument,
     Quoted,
     SingleQuoted,
-    BackQuoted,
-    DoubleQuoted
+    DoubleQuoted,
+    BackQuoted
 )
 
 
@@ -99,14 +99,6 @@ class Converter(ShellGrammarVisitor):
             raise AssertionError("""Atom must be of type redirection
             or argument""")
 
-    def visitArgument(self, ctx: ShellGrammarParser.ArgumentContext):
-        child = ctx.children[0]
-
-        if isinstance(child, ShellGrammarParser.QuotedContext):
-            return Argument(self.visitQuoted(child))
-        else:
-            return Argument(child.getText())
-
     # not 100% confient in this
     def visitRedirection(self, ctx: ShellGrammarParser.RedirectionContext):
         less_than_or_greater_than = ctx.children[0]
@@ -120,6 +112,14 @@ class Converter(ShellGrammarVisitor):
             raise AssertionError("Redirection must be either > or <")
 
         return Redirection(redirection_type, self.visitArgument(argument))
+
+    def visitArgument(self, ctx: ShellGrammarParser.ArgumentContext):
+        child = ctx.children[0]
+
+        if isinstance(child, ShellGrammarParser.QuotedContext):
+            return Argument(self.visitQuoted(child))
+        else:
+            return Argument(child.getText())
 
     def visitQuoted(self, ctx: ShellGrammarParser.QuotedContext):
         child = ctx.children[0]
@@ -139,12 +139,6 @@ class Converter(ShellGrammarVisitor):
         # Check Antlr lab tree to see why
         child = ctx.children[1]
         return SingleQuoted(child.getText())
-
-    def visitBackQuoted(self, ctx: ShellGrammarParser.BackQuotedContext):
-        # Getting the 2nd child because the first & last childs are back quotes
-        # Check Antlr lab tree to see why
-        child = ctx.children[1]
-        return BackQuoted(child.getText())
 
     # From HJP/XLow - might need to change
     def visitDoubleQuoted(self, ctx: ShellGrammarParser.DoubleQuotedContext):
@@ -168,3 +162,9 @@ class Converter(ShellGrammarVisitor):
             elements.append(curr)
 
         return DoubleQuoted(*elements)
+
+    def visitBackQuoted(self, ctx: ShellGrammarParser.BackQuotedContext):
+        # Getting the 2nd child because the first & last childs are back quotes
+        # Check Antlr lab tree to see why
+        child = ctx.children[1]
+        return BackQuoted(child.getText())

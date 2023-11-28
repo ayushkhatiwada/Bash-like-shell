@@ -13,10 +13,13 @@ class Commmand(AbstractShellFeature):
 
 
 class Pipe(AbstractShellFeature):
+    def __init__(self, left=None, right=None) -> None:
+        super().__init__()
+        self.left = left
+        self.right = right
 
     def accept(self, visitor: Visitor):
         return visitor.visit_pipe(self)
-
 
 class Seq(AbstractShellFeature):
 

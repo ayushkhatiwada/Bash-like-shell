@@ -20,7 +20,7 @@ from expressions import (
 
 # double check Pipe and Seq with HJP/XLow
 class Converter(ShellGrammarVisitor):
-    def __init__(self, out) -> None:
+    def __init__(self, out=None) -> None:
         super().__init__()
 
     def visitCommand(self, ctx: ShellGrammarParser.CommandContext):

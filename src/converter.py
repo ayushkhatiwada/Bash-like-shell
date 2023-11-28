@@ -16,7 +16,10 @@ from expressions import (
 )
 
 
-# TODO: change AssertionErrors to something more specific
+# TODO: Create tests for the converter (VERY IMPORTATNT for code coverage)
+
+# TODO: Change AssertionErrors to something more specific
+# (This is minor and can be skipped)
 
 # double check Pipe and Seq with HJP/XLow
 class Converter(ShellGrammarVisitor):

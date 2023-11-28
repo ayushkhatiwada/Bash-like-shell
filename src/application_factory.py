@@ -50,5 +50,5 @@ class ApplicationFactory(Singleton):
         # APPLICATION_DICT used to avoid if/swtich statements
         if application_name in APPLICATION_DICT:
             return APPLICATION_DICT[application_name]()
-        
+
         raise ApplicationError(f"{application_name}: command not found")

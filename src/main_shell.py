@@ -1,6 +1,6 @@
 """
-This file will replace shell.py 
-This is start, where everything will be run from 
+This file will replace shell.py
+This is start, where everything will be run from
 """
 
 import os
@@ -14,7 +14,7 @@ def exec_shell() -> None:
 
     # non interactive mode - evaluating a single command once e.g. py shell.py -c "echo foo"
     if num_of_args > 0:
-        
+
         if not (num_of_args == 2 and sys.argv[1] == "-c"):
             raise ValueError("""
                             Incorrect number of arguments passed
@@ -57,7 +57,6 @@ def eval(cmd_line: str, stdout: deque[str]) -> None:
     # call the parsing and executing commands here
 
     pass
-
 
 
 if __name__ == "__main__":

@@ -7,12 +7,19 @@ class AbstractShellFeature:
 
 
 class Commmand(AbstractShellFeature):
+    def __init__(self, child) -> None:
+        super().__init__()
+        self.child = child
 
     def accept(self, visitor: Visitor):
         return visitor.visit_command(self)
 
 
 class Pipe(AbstractShellFeature):
+    def __init__(self, left_side, right_side) -> None:
+        super().__init__()
+        self.left_side = left_side
+        self.right_side = right_side
 
     def accept(self, visitor: Visitor):
         return visitor.visit_pipe(self)

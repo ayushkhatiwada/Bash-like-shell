@@ -102,6 +102,6 @@ atom : redirection | argument;
 // + means it can appear 1 or more times
 argument : (quoted | UNQUOTED)+;
 
-// redirection could be simplified to: (LESS_THAN | GREATER_THAN) WHITESPACE? argument;
+// redirection could be simplified to: (LESS_THAN | GREATER_THAN) WHITESPACE* argument;
 // ? means it can appear 0 times or once
 redirection : LESS_THAN WHITESPACE* argument | GREATER_THAN WHITESPACE* argument;

@@ -16,6 +16,8 @@ from expressions import (
 )
 
 
+# TODO: change AssertionErrors to something more specific
+
 # double check Pipe and Seq with HJP/XLow
 class Converter(ShellGrammarVisitor):
     def __init__(self, out) -> None:
@@ -110,6 +112,15 @@ class Converter(ShellGrammarVisitor):
         less_than_or_greater_than = ctx.children[0]
         argument = ctx.children[2]
 
+        if less_than_or_greater_than.getText() == ">":
+            redirection_type = ">"
+        elif less_than_or_greater_than.getText() == "<":
+            redirection_type = "<"
+        else:
+            raise AssertionError("Redirection must be either > or <")
+
+        return Redirection(redirection_type, self.visitArgument(argument))
+
     def visitQuoted(self, ctx: ShellGrammarParser.QuotedContext):
         child = ctx.children[0]
 
@@ -135,7 +146,7 @@ class Converter(ShellGrammarVisitor):
         child = ctx.children[1]
         return BackQuoted(child.getText())
 
-    # HJP/XLow - might need to change
+    # From HJP/XLow - might need to change
     def visitDoubleQuoted(self, ctx: ShellGrammarParser.DoubleQuotedContext):
         elements = []
         curr = ""

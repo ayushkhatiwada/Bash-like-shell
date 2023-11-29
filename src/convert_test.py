@@ -1,23 +1,36 @@
-import unittest
-from unittest.mock import MagicMock
-from expressions import Commmand, Pipe, Seq, Call
-from converter import Converter
+from antlr4 import InputStream, CommonTokenStream
+from antlr.ShellGrammarLexer import ShellGrammarLexer
 from antlr.ShellGrammarParser import ShellGrammarParser
+from converter import Converter
+from expressions import Commmand, Call, Atom, Argument
 
-class TestConverter(unittest.TestCase):
-    def setUp(self):
-        self.converter = Converter()
-        self.command_context_mock = MagicMock()
+command = "echo hello"
+print(f"Input Command: {command}")
 
-    def test_visit_pipe(self):
-        left_call_context_mock = MagicMock(spec=ShellGrammarParser.CallContext)
-        right_call_context_mock = MagicMock(spec=ShellGrammarParser.CallContext)
-        pipe_context_mock = MagicMock(spec=ShellGrammarParser.PipeContext)
-        pipe_context_mock.children = [left_call_context_mock, '|', right_call_context_mock]
+input_stream = InputStream(command)
 
-        self.converter.visitCall = MagicMock(return_value="mocked value")
-        result = self.converter.visitPipe(pipe_context_mock)
-        self.assertIsInstance(result, Pipe)
+lexer = ShellGrammarLexer(input_stream)
+token_stream = CommonTokenStream(lexer)
+parser = ShellGrammarParser(token_stream)
 
-if __name__ == '__main__':
-    unittest.main()
+print("Parsing command...")
+parse_tree = parser.command()
+print("Parse Tree:")
+print(parse_tree.toStringTree(recog=parser))
+
+converter = Converter()
+print("Converting parse tree...")
+actual_output = converter.visit(parse_tree)
+
+print("Converted Result:")
+print(actual_output)
+
+expected_output = Commmand(Call((Argument("echo")), Atom(Argument("hello"))))
+
+print("Expected Result:")
+print(expected_output)
+
+if actual_output == expected_output:
+    print("Success: The outputs match.")
+else:
+    print("Failure: The outputs do not match.")

@@ -1,6 +1,15 @@
 from visitor import Visitor
 
 
+"""
+Implementation of commands (Pipe, Seq, Call) will be done here
+Each class will have an eval method that will evaluate the command
+This is clear in the UML diagram from Sergey
+
+Ignore the accept method, they will be deleted
+"""
+
+
 class AbstractShellFeature:
     def __init__(self) -> None:
         pass
@@ -20,6 +29,9 @@ class Pipe(AbstractShellFeature):
         super().__init__()
         self.left_side = left_side
         self.right_side = right_side
+
+    def eval(self, input, output):
+        pass
 
     def accept(self, visitor: Visitor):
         return visitor.visit_pipe(self)

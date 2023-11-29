@@ -21,11 +21,25 @@ from expressions import (
 # TODO: Change AssertionErrors to something more specific
 # (This is minor and can be skipped)
 
-# double check Pipe and Seq with HJP/XLow
+"""
+This class converts the parse tree into an abstract syntax tree
+Here's how it works:
+
+echo hello becomes:
+Command(  Call( Argument("echo"), Atom(Argument("hello")) )  )
+
+echo hello | grep he becomes:
+Command(  Pipe(Call(Argument("echo"), Atom(Argument("hello")))  ).eval()
+"""
+
+
+# double check everything with HJP/XLow
 class Converter(ShellGrammarVisitor):
     def __init__(self, out) -> None:
         super().__init__()
 
+    # VisitCommand is not needed - Sergey
+    # Because the parse tree starts with Pipe, seq or call
     def visitCommand(self, ctx: ShellGrammarParser.CommandContext):
         child = ctx.children[0]
 

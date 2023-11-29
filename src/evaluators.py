@@ -1,3 +1,10 @@
+"""
+This is not needed - Sergey
+Implementation of commands will be done in expressions.py
+Each class will have an eval method that will evaluate the command
+This is clear in the UML diagram from Sergey
+"""
+
 from visitor import Visitor
 from collections import deque
 

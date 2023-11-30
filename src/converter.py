@@ -28,6 +28,7 @@ Here's how it works:
 echo hello becomes:
 Command(  Call( Argument("echo"), Atom(Argument("hello")) )  )
 
+
 echo hello | grep he becomes:
 Command(  Pipe(Call(Argument("echo"), Atom(Argument("hello")))  ).eval()
 """
@@ -157,7 +158,7 @@ class Converter(ShellGrammarVisitor):
         child = ctx.children[1]
         return SingleQuoted(child.getText())
 
-    # From HJP/XLow - might need to change
+    # From HJP/XL - might need to change
     def visitDoubleQuoted(self, ctx: ShellGrammarParser.DoubleQuotedContext):
         elements = []
         curr = ""

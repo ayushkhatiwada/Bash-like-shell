@@ -50,7 +50,6 @@ class TestLs(unittest.TestCase):
         - test ls custom directory
         - test ls file not found error
         - test ls directory not found error
-        - test ls general error
     """
 
     def test_ls_default_directory(self):
@@ -78,8 +77,3 @@ class TestLs(unittest.TestCase):
     def test_ls_directory_not_found_error(self):
         with self.assertRaises(ApplicationError):
             self.ls_app.exec(['nonexistent_dir'], [], deque())
-
-    def test_ls_general_error(self):
-        # Intentionally raise a general error
-        with self.assertRaises(ApplicationError):
-            self.ls_app.exec(['/invalid_path'], [], deque())

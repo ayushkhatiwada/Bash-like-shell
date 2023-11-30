@@ -35,7 +35,7 @@ Command(  Pipe(Call(Argument("echo"), Atom(Argument("hello")))  ).eval()
 
 # double check everything with HJP/XLow
 class Converter(ShellGrammarVisitor):
-    def __init__(self, out) -> None:
+    def __init__(self, out=None) -> None:
         super().__init__()
 
     # VisitCommand is not needed - Sergey

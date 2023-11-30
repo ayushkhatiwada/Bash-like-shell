@@ -44,14 +44,6 @@ class TestLs(unittest.TestCase):
         os.chdir('..')
         shutil.rmtree(self.TEST_DIR)
 
-    """
-        Tests
-        - test ls default directory
-        - test ls custom directory
-        - test ls file not found error
-        - test ls directory not found error
-    """
-
     def test_ls_default_directory(self):
         output = deque()
         self.ls_app.exec([], [], output)

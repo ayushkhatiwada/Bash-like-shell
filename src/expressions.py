@@ -1,8 +1,14 @@
-from visitor import Visitor
+"""
+Implementation of commands (Pipe, Seq, Call) will be done here
+Each class will have an eval method that will evaluate the command
+This is clear in the UML diagram from Sergey
+
+Ignore the accept method, they will be deleted
+"""
 
 class AbstractShellFeature:
-    def __init__(self) -> None:
-        pass
+    def __init__(self, child) -> None:
+        self.child = child
 
     def __str__(self):
         return "AbstractShellFeature"
@@ -21,8 +27,8 @@ class Commmand(AbstractShellFeature):
     def __eq__(self, other):
         return isinstance(other, Commmand) and self.input == other.input
 
-    def accept(self, visitor: Visitor):
-        return visitor.visit_command(self)
+    def eval(self, input, output):
+        pass
 
 class Pipe(AbstractShellFeature):
     def __init__(self, left=None, right=None) -> None:
@@ -36,8 +42,8 @@ class Pipe(AbstractShellFeature):
     def __eq__(self, other):
         return isinstance(other, Pipe) and self.left == other.left and self.right == other.right
 
-    def accept(self, visitor: Visitor):
-        return visitor.visit_pipe(self)
+    def eval(self, input, output):
+        pass
 
 class Seq(AbstractShellFeature):
     def __init__(self, left=None, right=None) -> None:
@@ -51,8 +57,8 @@ class Seq(AbstractShellFeature):
     def __eq__(self, other):
         return isinstance(other, Seq) and self.left == other.left and self.right == other.right
 
-    def accept(self, visitor: Visitor):
-        return visitor.visit_seq(self)
+    def eval(self, input, output):
+        pass
 
 class Call(AbstractShellFeature):
     def __init__(self, *args):
@@ -66,9 +72,10 @@ class Call(AbstractShellFeature):
     def __eq__(self, other):
         return isinstance(other, Call) and self.args == other.args
 
-    def accept(self, visitor: Visitor):
-        return visitor.visit_call(self)
+    def eval(self, input, output):
+        pass
 
+    
 class Atom(AbstractShellFeature):
     def __init__(self, input):
         super().__init__()
@@ -80,9 +87,10 @@ class Atom(AbstractShellFeature):
     def __eq__(self, other):
         return isinstance(other, Atom) and self.input == other.input
 
-    def accept(self, visitor: Visitor):
-        return visitor.visit_atom(self)
+    def eval(self, input, output):
+        pass
 
+      
 class Redirection(AbstractShellFeature):
     def __init__(self, type=None, target=None):
         super().__init__()
@@ -95,8 +103,8 @@ class Redirection(AbstractShellFeature):
     def __eq__(self, other):
         return isinstance(other, Redirection) and self.type == other.type and self.target == other.target
 
-    def accept(self, visitor: Visitor):
-        return visitor.visit_redirection(self)
+    def eval(self, input, output):
+        pass
 
 class Argument(AbstractShellFeature):
     def __init__(self, input):
@@ -109,8 +117,8 @@ class Argument(AbstractShellFeature):
     def __eq__(self, other):
         return isinstance(other, Argument) and self.input == other.input
 
-    def accept(self, visitor: Visitor):
-        return visitor.visit_argument(self)
+    def eval(self, input, output):
+        pass
 
 class Quoted(AbstractShellFeature):
     def __init__(self, content=None):
@@ -123,8 +131,8 @@ class Quoted(AbstractShellFeature):
     def __eq__(self, other):
         return isinstance(other, Quoted) and self.content == other.content
 
-    def accept(self, visitor: Visitor):
-        return visitor.visit_quoted(self)
+    def eval(self, input, output):
+        pass
 
 class SingleQuoted(AbstractShellFeature):
     def __init__(self, content=None):
@@ -137,8 +145,8 @@ class SingleQuoted(AbstractShellFeature):
     def __eq__(self, other):
         return isinstance(other, SingleQuoted) and self.content == other.content
 
-    def accept(self, visitor: Visitor):
-        return visitor.visit_single_quoted(self)
+    def eval(self, input, output):
+        pass
 
 class DoubleQuoted(AbstractShellFeature):
     def __init__(self, content=None):
@@ -151,8 +159,8 @@ class DoubleQuoted(AbstractShellFeature):
     def __eq__(self, other):
         return isinstance(other, DoubleQuoted) and self.content == other.content
 
-    def accept(self, visitor: Visitor):
-        return visitor.visit_double_quoted(self)
+    def eval(self, input, output):
+        pass
 
 class BackQuoted(AbstractShellFeature):
     def __init__(self, content=None):
@@ -165,5 +173,5 @@ class BackQuoted(AbstractShellFeature):
     def __eq__(self, other):
         return isinstance(other, BackQuoted) and self.content == other.content
 
-    def accept(self, visitor: Visitor):
-        return visitor.visit_back_quoted(self)
+    def eval(self, input, output):
+        pass

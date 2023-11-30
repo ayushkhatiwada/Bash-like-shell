@@ -14,9 +14,7 @@ SEMI_COLON : ';';
 LESS_THAN : '<';     // Change to REDIRECT_INPUT: '<'; ?
 GREATER_THAN : '>';  // Change to REDIRECT_OUTPUT: '>'; ?
 
-// name this BACTICK OR BACKQUOTE?
 BACKQUOTE : '`';
-
 NEWLINE : '\n';
 WHITESPACE : [ \t\r]+;
 
@@ -53,7 +51,6 @@ pipe : call PIPE call | call PIPE pipe;
 // Error: The following sets of rules are mutually left-recursive [pipe] and [command, seq] ???
 seq : (pipe | call) SEMI_COLON (pipe | seq | call)?;
 
-// two call commands in read me? 
 // * means it can appear 0 or more times
 //call : (NON_KEYWORD | quoted)*;
 call: WHITESPACE* (redirection WHITESPACE*)* argument (WHITESPACE* atom)* WHITESPACE*;
@@ -102,6 +99,6 @@ atom : redirection | argument;
 // + means it can appear 1 or more times
 argument : (quoted | UNQUOTED)+;
 
-// redirection could be simplified to: (LESS_THAN | GREATER_THAN) WHITESPACE? argument;
+// redirection could be simplified to: (LESS_THAN | GREATER_THAN) WHITESPACE* argument;
 // ? means it can appear 0 times or once
 redirection : LESS_THAN WHITESPACE* argument | GREATER_THAN WHITESPACE* argument;

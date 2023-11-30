@@ -5,8 +5,9 @@ if "." in __name__:
 else:
     from ShellGrammarParser import ShellGrammarParser
 
-# This class defines a complete generic visitor for a parse tree produced by ShellGrammarParser.
 
+# This class defines a complete generic visitor for a parse tree produced by
+# ShellGrammarParser
 class ShellGrammarVisitor(ParseTreeVisitor):
 
     # Visit a parse tree produced by ShellGrammarParser#command.

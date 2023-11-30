@@ -5,70 +5,184 @@ from expressions import (
     Commmand,
     Pipe,
     Seq,
-    Call
+    Call,
+    Atom,
+    Redirection,
+    Argument,
+    Quoted,
+    SingleQuoted,
+    DoubleQuoted,
+    BackQuoted
 )
 
 
-class Converter(ShellGrammarVisitor):
-    def __init__(self, out) -> None:
-        super().__init__()
-        # uras stuff
-        # self.out = out
-        # self.pipeData = None
+# TODO: Create tests for the converter (VERY IMPORTATNT for code coverage)
 
+# TODO: Change AssertionErrors to something more specific
+# (This is minor and can be skipped)
+
+"""
+This class converts the parse tree into an abstract syntax tree
+Here's how it works:
+
+echo hello becomes:
+Command(  Call( Argument("echo"), Atom(Argument("hello")) )  )
+
+
+echo hello | grep he becomes:
+Command(  Pipe(Call(Argument("echo"), Atom(Argument("hello")))  ).eval()
+"""
+
+
+# double check everything with HJP/XLow
+class Converter(ShellGrammarVisitor):
+    def __init__(self, out=None) -> None:
+        super().__init__()
+
+    # VisitCommand is not needed - Sergey
+    # Because the parse tree starts with Pipe, seq or call
     def visitCommand(self, ctx: ShellGrammarParser.CommandContext):
         child = ctx.children[0]
 
-        if type(child) == ShellGrammarParser.PipeContext:
-            return Pipe(child)
-        elif type(child) == ShellGrammarParser.SeqContext:
-            return Seq(child)
-        elif type(child) == ShellGrammarParser.CallContext:
-            return Call(child)
-        
+        if isinstance(child, ShellGrammarParser.PipeContext):
+            return Commmand(self.visitPipe(child))
+        elif isinstance(child, ShellGrammarParser.SeqContext):
+            return Commmand(self.visitSeq(child))
+        elif isinstance(child, ShellGrammarParser.CallContext):
+            return Commmand(self.visitCall(child))
+
         raise AssertionError("Command must be of type pipe, seq or call")
-    
 
     def visitPipe(self, ctx: ShellGrammarParser.PipeContext):
-        left_side = Call(ctx.children[0])
+        left_child = ctx.children[0]
+        left_side = self.visitCall(left_child)
 
         right_side = ctx.children[2]
-        if type(right_side) == ShellGrammarParser.CallContext:
-            right_side = Call(right_side)
-        elif type(right_side) == ShellGrammarParser.PipeContext:
-            right_side = Pipe(right_side)
+        if isinstance(right_side, ShellGrammarParser.CallContext):
+            right_side = self.visitCall(right_side)
+        elif isinstance(right_side, ShellGrammarParser.PipeContext):
+            right_side = self.visitPipe(right_side)
         else:
-            raise AssertionError("Right side of | must be either of type pipe or call")
+            raise AssertionError("""
+                Right side of | must be either of type pipe or call
+            """)
 
         return Pipe(left_side, right_side)
 
-        # uras stuff
-        # for child in ctx.getChildren():
-        #     self.visit(child)
-        #     self.pipeData = self.out.pop()
-
     def visitSeq(self, ctx: ShellGrammarParser.SeqContext):
         left_side = ctx.children[0]
-        if type(left_side) == ShellGrammarParser.PipeContext:
-            left_side = Pipe(left_side)
-        elif type(left_side)  == ShellGrammarParser.CallContext:
-            left_side = Call(left_side)
+        if isinstance(left_side, ShellGrammarParser.PipeContext):
+            left_side = self.visitPipe(left_side)
+        elif isinstance(left_side, ShellGrammarParser.CallContext):
+            left_side = self.visitCall(left_side)
         else:
-            raise AssertionError("Sum ting wong with seq converter.py")
+            raise AssertionError("""Left side of ; must be either of type pipe
+            or call""")
 
         right_side = ctx.children[2]
-        if type(right_side) == ShellGrammarParser.PipeContext:
-            right_side = Pipe(right_side)
-        elif type(right_side) == ShellGrammarParser.SeqContext:
-            right_side = Seq(right_side)
-        elif type(right_side) == ShellGrammarParser.CallContext:
-            right_side = Call(right_side)
+        if isinstance(right_side, ShellGrammarParser.PipeContext):
+            right_side = self.visitPipe(right_side)
+        if isinstance(right_side, ShellGrammarParser.SeqContext):
+            right_side = self.visitSeq(right_side)
+        if isinstance(right_side, ShellGrammarParser.CallContext):
+            right_side = self.visitCall(right_side)
         else:
-            raise AssertionError("Sum ting wong with seq converter.py")
+            raise AssertionError("""Right side of ; must be either of type
+            pipe, seq or call""")
 
         return Seq(left_side, right_side)
 
+    # check with HJP/XLow
     def visitCall(self, ctx: ShellGrammarParser.CallContext):
-        
-        
-        pass
+        elements = []
+
+        for child in ctx.children:
+            if isinstance(child, ShellGrammarParser.RedirectionContext):
+                elements.append(self.visitRedirection(child))
+            elif isinstance(child, ShellGrammarParser.ArgumentContext):
+                elements.append(self.visitArgument(child))
+            elif isinstance(child, ShellGrammarParser.AtomContext):
+                elements.append(self.visitAtom(child))
+
+        return Call(*elements)
+
+    def visitAtom(self, ctx: ShellGrammarParser.AtomContext):
+        child = ctx.children[0]
+
+        if isinstance(child, ShellGrammarParser.RedirectionContext):
+            return Atom(self.visitRedirection(child))
+        if isinstance(child, ShellGrammarParser.ArgumentContext):
+            return Atom(self.visitArgument(child))
+        else:
+            raise AssertionError("""Atom must be of type redirection
+            or argument""")
+
+    # not 100% confient in this
+    def visitRedirection(self, ctx: ShellGrammarParser.RedirectionContext):
+        less_than_or_greater_than = ctx.children[0]
+        argument = ctx.children[2]
+
+        if less_than_or_greater_than.getText() == ">":
+            redirection_type = ">"
+        elif less_than_or_greater_than.getText() == "<":
+            redirection_type = "<"
+        else:
+            raise AssertionError("Redirection must be either > or <")
+
+        return Redirection(redirection_type, self.visitArgument(argument))
+
+    def visitArgument(self, ctx: ShellGrammarParser.ArgumentContext):
+        child = ctx.children[0]
+
+        if isinstance(child, ShellGrammarParser.QuotedContext):
+            return Argument(self.visitQuoted(child))
+        else:
+            return Argument(child.getText())
+
+    def visitQuoted(self, ctx: ShellGrammarParser.QuotedContext):
+        child = ctx.children[0]
+
+        if isinstance(child, ShellGrammarParser.SingleQuotedContext):
+            return Quoted(self.visitSingleQuoted(child))
+        elif isinstance(child, ShellGrammarParser.DoubleQuotedContext):
+            return Quoted(self.visitDoubleQuoted(child))
+        elif isinstance(child, ShellGrammarParser.BackQuotedContext):
+            return Quoted(self.visitBackQuoted(child))
+        else:
+            raise AssertionError("""Quoted must be of type singleQuoted,
+            doubleQuoted or backQuoted""")
+
+    def visitSingleQuoted(self, ctx: ShellGrammarParser.SingleQuotedContext):
+        # Getting 2nd child because the first & last childs are single quotes
+        # Check Antlr lab tree to see why
+        child = ctx.children[1]
+        return SingleQuoted(child.getText())
+
+    # From HJP/XL - might need to change
+    def visitDoubleQuoted(self, ctx: ShellGrammarParser.DoubleQuotedContext):
+        elements = []
+        curr = ""
+
+        for child in ctx.getChildren():
+            if isinstance(child, ShellGrammarParser.BackQuotedContext):
+                if curr:
+                    elements.append(curr)
+                    curr = ""
+                elements.append(self.visitBackQuoted(child))
+
+            else:
+                # Skip "" in converter formatting
+                if child.getText() == '"':
+                    continue
+                curr += child.getText()
+
+        if curr:
+            elements.append(curr)
+
+        return DoubleQuoted(*elements)
+
+    def visitBackQuoted(self, ctx: ShellGrammarParser.BackQuotedContext):
+        # Getting the 2nd child because the first & last childs are back quotes
+        # Check Antlr lab tree to see why
+        child = ctx.children[1]
+        return BackQuoted(child.getText())

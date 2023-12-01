@@ -4,6 +4,7 @@ from antlr4 import CommonTokenStream, InputStream
 from antlr.ShellGrammarLexer import ShellGrammarLexer
 from antlr.ShellGrammarParser import ShellGrammarParser
 from converter import Converter
+from shell import convert
 
 """
 Implementation of commands (Pipe, Seq, Call) will be done here
@@ -249,7 +250,8 @@ class BackQuoted(AbstractShellFeature):
         return isinstance(other, BackQuoted) and self.child == other.child
 
     def eval(self, input, output):
-        return
+        expression = convert(self.child)
+        return expression.eval()
 
         # Dunno how to resolve circular import
         cmd_line = self.child

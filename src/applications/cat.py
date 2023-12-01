@@ -1,13 +1,10 @@
 import os
-# import sys
-# sys.path.append('/com.docker.devenvironments.code/src')
 from collections import deque
 
-from abstract_application import AbstractApplication
+from .application import Application
 
 
-class Cat(AbstractApplication):
-
+class Cat(Application):
     name = "cat"
 
     def __init__(self) -> None:

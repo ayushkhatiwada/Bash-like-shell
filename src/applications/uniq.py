@@ -1,9 +1,9 @@
 from collections import deque
 
-from abstract_application import AbstractApplication
+from .application import Application
 
 
-class Uniq(AbstractApplication):
+class Uniq(Application):
 
     name = "uniq"
 

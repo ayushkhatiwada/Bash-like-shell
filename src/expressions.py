@@ -35,7 +35,7 @@ class Commmand(AbstractShellFeature):
         return isinstance(other, Commmand) and self.child == other.child
 
     def eval(self, input: deque[str] = None, output: deque[str] = None):
-        # ??? - check with UZK
+
         # return self.child.eval(input, output)
 
         # Don't need to return anything in eval
@@ -126,23 +126,36 @@ class Atom(AbstractShellFeature):
 
 ###############################################################################
 class Redirection(AbstractShellFeature):
-    def __init__(self, type, target):
+    """
+    Redirection from Sergey's README:
+    1. Opens the file following the < symbol for input redirection;
+    2. Opens the file following the > symbol for output redirection;
+    3. If several files are specified for input or output redirection
+        - (e.g. > a.txt > b.txt), throws an exception;
+    4. If the file specified for input redirection does not exist,
+        - throws an exception;
+    5. If the file specified for output redirection does not exist, creates it.
+
+    So >> is not needed
+    """
+
+    def __init__(self, type, file):
         super().__init__()
         self.type = type
-        self.target = target
+        self.file = file
 
     def __str__(self):
-        return f"Redirection({self.type}, {self.target})"
+        return f"Redirection({self.type}, {self.file})"
 
     def __eq__(self, other):
         return (
             isinstance(other, Redirection)
             and self.type == other.type
-            and self.target == other.target
+            and self.file == other.file
         )
 
     def eval(self, input, output):
-        pass
+        return (self.type, self.file)
 
 
 class Argument(AbstractShellFeature):
@@ -223,6 +236,7 @@ class DoubleQuoted(AbstractShellFeature):
 
 
 ##############################################################################
+# This is quite hard to implement - AK
 class BackQuoted(AbstractShellFeature):
     def __init__(self, child):
         super().__init__()

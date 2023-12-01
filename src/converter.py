@@ -15,7 +15,6 @@ from expressions import (
     BackQuoted
 )
 
-
 # TODO: Create tests for the converter (VERY IMPORTATNT for code coverage)
 
 # TODO: Change AssertionErrors to something more specific
@@ -92,7 +91,7 @@ class Converter(ShellGrammarVisitor):
 
         return Seq(left_side, right_side)
 
-    # check with HJP/XLow
+    # check with HJP/XL
     def visitCall(self, ctx: ShellGrammarParser.CallContext):
         elements = []
 

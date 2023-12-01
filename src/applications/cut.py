@@ -1,11 +1,9 @@
-import os
 from collections import deque
 
-from abstract_application import AbstractApplication
+from .application import Application
 
 
-class Cut(AbstractApplication):
-
+class Cut(Application):
     name = "cut"
 
     def __init__(self) -> None:
@@ -46,6 +44,8 @@ class Cut(AbstractApplication):
         return input
 
     def extract_bytes(self, line: str, byte_ranges: list[range]) -> str:
-        return ''.join(line[i] for r in byte_ranges for i in r if i < len(line))
+        return ''.join(
+            line[i] for r in byte_ranges for i in r if i < len(line)
+        )
 
 # Add additional documentation or help messages as needed

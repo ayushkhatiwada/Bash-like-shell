@@ -2,11 +2,10 @@ import os
 import fnmatch
 from collections import deque
 
-from abstract_application import AbstractApplication
+from .application import Application
 
 
-class Find(AbstractApplication):
-
+class Find(Application):
     name = "find"
 
     def __init__(self) -> None:

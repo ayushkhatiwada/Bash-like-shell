@@ -1,11 +1,9 @@
-import os
 from collections import deque
 
-from abstract_application import AbstractApplication
+from .application import Application
 
 
-class Head(AbstractApplication):
-    
+class Head(Application):
     name = "head"
 
     def __init__(self) -> None:
@@ -21,7 +19,9 @@ class Head(AbstractApplication):
                 try:
                     num_lines = int(arg[2:])
                 except ValueError:
-                    raise ValueError("Invalid number of lines specified with -n option")
+                    raise ValueError(
+                        "Invalid number of lines specified with -n option"
+                    )
             else:
                 file_name = arg
 

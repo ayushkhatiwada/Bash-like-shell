@@ -1,10 +1,9 @@
 from collections import deque
 
-from abstract_application import AbstractApplication
+from .application import Application
 
 
-class Echo(AbstractApplication):
-    
+class Echo(Application):
     name = "echo"
 
     def __init__(self) -> None:
@@ -14,4 +13,4 @@ class Echo(AbstractApplication):
         output = " ".join(args)
         out.append(output + "\n")
 
-# To may do: add flag -n to omit the new line
+# Todo (may): add flag -n to omit the new line

@@ -35,7 +35,7 @@ class Commmand(AbstractShellFeature):
         return isinstance(other, Commmand) and self.child == other.child
 
     def eval(self, input: deque[str] = None, output: deque[str] = None):
-        # ??? - check with UZK
+
         # return self.child.eval(input, output)
 
         # Don't need to return anything in eval
@@ -46,29 +46,6 @@ class Commmand(AbstractShellFeature):
 ##############################################################################
 # dunno if this works
 class Pipe:
-    def __init__(self, left, right) -> None:
-        super().__init__()
-        self.left = left
-        self.right = right
-
-    def __str__(self):
-        return f"Pipe({self.left}, {self.right})"
-
-    def __eq__(self, other):
-        return (
-            isinstance(other, Pipe)
-            and self.left == other.left
-            and self.right == other.right
-        )
-
-    # don't need input=None, output=None
-    # Because Command class's eval method has input=None, output=None
-    # This input and output from Command will be passed to Pipe's eval method
-    # So, Pipe's eval method will get input and output passed in
-    # Same goes for Seq and Call and other nested classes
-    def eval(self, input, output):
-        std_out_left_side = self.left.eval(input, output)
-        self.right.eval(std_out_left_side, output)
     def __init__(self, left, right) -> None:
         super().__init__()
         self.left = left
@@ -149,106 +126,36 @@ class Atom(AbstractShellFeature):
 
 ###############################################################################
 class Redirection(AbstractShellFeature):
-    def __init__(self, type, target):
+    """
+    Redirection from Sergey's README:
+    1. Opens the file following the < symbol for input redirection;
+    2. Opens the file following the > symbol for output redirection;
+    3. If several files are specified for input or output redirection
+        - (e.g. > a.txt > b.txt), throws an exception;
+    4. If the file specified for input redirection does not exist,
+        - throws an exception;
+    5. If the file specified for output redirection does not exist, creates it.
+
+    So >> is not needed
+    """
+
+    def __init__(self, type, file):
         super().__init__()
         self.type = type
-        self.target = target
+        self.file = file
 
     def __str__(self):
-        return f"Redirection({self.type}, {self.target})"
+        return f"Redirection({self.type}, {self.file})"
 
     def __eq__(self, other):
         return (
             isinstance(other, Redirection)
             and self.type == other.type
-            and self.target == other.target
+            and self.file == other.file
         )
 
     def eval(self, input, output):
-        pass
-
-
-class Argument(AbstractShellFeature):
-    def __init__(self, child):
-        super().__init__()
-        self.child = child
-
-    def __str__(self):
-        return f"Argument({self.child})"
-
-    def __eq__(self, other):
-        return isinstance(other, Argument) and self.child == other.child
-    def __init__(self, left, right) -> None:
-        super().__init__()
-        self.left = left
-        self.right = right
-
-    def __str__(self):
-        return f"Seq({self.left}, {self.right})"
-
-    def __eq__(self, other):
-        return (
-            isinstance(other, Seq)
-            and self.left == other.left
-            and self.right == other.right
-        )
-
-    def eval(self, input, output):
-        self.left.eval(input, output)
-        self.right.eval(input, output)
-
-
-###############################################################################
-class Call(AbstractShellFeature):
-    def __init__(self, *args):
-        super().__init__()
-        self.args = args
-
-    def __str__(self):
-        args_str = ", ".join(str(arg) for arg in self.args)
-        return f"Call({args_str})"
-
-    def __eq__(self, other):
-        return isinstance(other, Call) and self.args == other.args
-
-    def eval(self, input, output):
-        pass
-
-
-class Atom(AbstractShellFeature):
-    def __init__(self, child):
-        super().__init__()
-        self.child = child
-
-    def __str__(self):
-        return f"Atom({self.child})"
-
-    def __eq__(self, other):
-        return isinstance(other, Atom) and self.child == other.child
-
-    def eval(self, input, output):
-        return self.child.eval(input, output)
-
-
-###############################################################################
-class Redirection(AbstractShellFeature):
-    def __init__(self, type, target):
-        super().__init__()
-        self.type = type
-        self.target = target
-
-    def __str__(self):
-        return f"Redirection({self.type}, {self.target})"
-
-    def __eq__(self, other):
-        return (
-            isinstance(other, Redirection)
-            and self.type == other.type
-            and self.target == other.target
-        )
-
-    def eval(self, input, output):
-        pass
+        return (self.type, self.file)
 
 
 class Argument(AbstractShellFeature):
@@ -329,6 +236,7 @@ class DoubleQuoted(AbstractShellFeature):
 
 
 ##############################################################################
+# This is quite hard to implement - AK
 class BackQuoted(AbstractShellFeature):
     def __init__(self, child):
         super().__init__()

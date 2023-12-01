@@ -1,10 +1,10 @@
 import os
 from collections import deque
 
-from applications.application import AbstractApplication
+from .application import Application
 
 
-class Cat(AbstractApplication):
+class Cat(Application):
     name = "cat"
 
     def __init__(self) -> None:

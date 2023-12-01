@@ -1,8 +1,7 @@
 import os
 from collections import deque
 
-from applications.application import Application
-from applications.application import ApplicationError
+from .application import Application, ApplicationError
 
 
 class Cd(Application):

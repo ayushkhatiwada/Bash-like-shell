@@ -1,6 +1,6 @@
 from collections import deque
 
-from applications.application import Application
+from .application import Application
 
 
 class Echo(Application):
@@ -13,4 +13,4 @@ class Echo(Application):
         output = " ".join(args)
         out.append(output + "\n")
 
-# To do (may): add flag -n to omit the new line
+# Todo (may): add flag -n to omit the new line

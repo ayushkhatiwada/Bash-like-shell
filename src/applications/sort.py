@@ -1,9 +1,9 @@
 from collections import deque
 
-from applications.application import AbstractApplication
+from .application import Application
 
 
-class Sort(AbstractApplication):
+class Sort(Application):
 
     name = "sort"
 

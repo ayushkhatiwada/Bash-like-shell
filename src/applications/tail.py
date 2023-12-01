@@ -1,11 +1,9 @@
-import os
 from collections import deque
 
-from applications.application import AbstractApplication
+from .application import Application
 
 
-class Tail(AbstractApplication):
-    
+class Tail(Application):
     name = "tail"
 
     def __init__(self) -> None:
@@ -21,7 +19,9 @@ class Tail(AbstractApplication):
                 try:
                     num_lines = int(arg[2:])
                 except ValueError:
-                    raise ValueError("Invalid number of lines specified with -n option")
+                    raise ValueError("""
+                            Invalid number of lines specified with -n option
+                                    """)
             else:
                 file_name = arg
 
@@ -29,7 +29,7 @@ class Tail(AbstractApplication):
         lines = []
         if file_name:
             try:
-                with open(file_name, 'r') as file:
+                with open(file_name, "r") as file:
                     lines = file.readlines()
             except FileNotFoundError:
                 raise FileNotFoundError(f"File not found: {file_name}")

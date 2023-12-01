@@ -1,6 +1,6 @@
 from collections import deque
 
-from applications.application import Application
+from .application import Application
 
 
 class Cut(Application):

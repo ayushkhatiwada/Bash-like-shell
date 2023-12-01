@@ -15,42 +15,6 @@ from expressions import (
     BackQuoted
 )
 
-
-# TODO: Create tests for the converter (VERY IMPORTATNT for code coverage)
-
-# TODO: Change AssertionErrors to something more specific
-# (This is minor and can be skipped)
-
-"""
-This class converts the parse tree into an abstract syntax tree
-Here's how it works:
-
-echo hello becomes:
-Command(  Call( Argument("echo"), Atom(Argument("hello")) )  )
-
-
-echo hello | grep he becomes:
-Command(  Pipe(Call(Argument("echo"), Atom(Argument("hello")))  ).eval()
-"""
-
-
-# double check everything with HJP/XLow
-
-from expressions import (
-    Commmand,
-    Pipe,
-    Seq,
-    Call,
-    Atom,
-    Redirection,
-    Argument,
-    Quoted,
-    SingleQuoted,
-    DoubleQuoted,
-    BackQuoted
-)
-
-
 # TODO: Create tests for the converter (VERY IMPORTATNT for code coverage)
 
 # TODO: Change AssertionErrors to something more specific
@@ -72,11 +36,8 @@ Command(  Pipe(Call(Argument("echo"), Atom(Argument("hello")))  ).eval()
 # double check everything with HJP/XLow
 class Converter(ShellGrammarVisitor):
     def __init__(self, out=None) -> None:
-    def __init__(self, out=None) -> None:
         super().__init__()
 
-    # VisitCommand is not needed - Sergey
-    # Because the parse tree starts with Pipe, seq or call
     # VisitCommand is not needed - Sergey
     # Because the parse tree starts with Pipe, seq or call
     def visitCommand(self, ctx: ShellGrammarParser.CommandContext):
@@ -90,32 +51,8 @@ class Converter(ShellGrammarVisitor):
             return Commmand(self.visitCall(child))
 
         raise AssertionError("Command must be of type pipe, seq or call")
-        child = ctx.children[0]
-
-        if isinstance(child, ShellGrammarParser.PipeContext):
-            return Commmand(self.visitPipe(child))
-        elif isinstance(child, ShellGrammarParser.SeqContext):
-            return Commmand(self.visitSeq(child))
-        elif isinstance(child, ShellGrammarParser.CallContext):
-            return Commmand(self.visitCall(child))
-
-        raise AssertionError("Command must be of type pipe, seq or call")
 
     def visitPipe(self, ctx: ShellGrammarParser.PipeContext):
-        left_child = ctx.children[0]
-        left_side = self.visitCall(left_child)
-
-        right_side = ctx.children[2]
-        if isinstance(right_side, ShellGrammarParser.CallContext):
-            right_side = self.visitCall(right_side)
-        elif isinstance(right_side, ShellGrammarParser.PipeContext):
-            right_side = self.visitPipe(right_side)
-        else:
-            raise AssertionError("""
-                Right side of | must be either of type pipe or call
-            """)
-
-        return Pipe(left_side, right_side)
         left_child = ctx.children[0]
         left_side = self.visitCall(left_child)
 
@@ -154,30 +91,7 @@ class Converter(ShellGrammarVisitor):
 
         return Seq(left_side, right_side)
 
-    # check with HJP/XLow
-        left_side = ctx.children[0]
-        if isinstance(left_side, ShellGrammarParser.PipeContext):
-            left_side = self.visitPipe(left_side)
-        elif isinstance(left_side, ShellGrammarParser.CallContext):
-            left_side = self.visitCall(left_side)
-        else:
-            raise AssertionError("""Left side of ; must be either of type pipe
-            or call""")
-
-        right_side = ctx.children[2]
-        if isinstance(right_side, ShellGrammarParser.PipeContext):
-            right_side = self.visitPipe(right_side)
-        if isinstance(right_side, ShellGrammarParser.SeqContext):
-            right_side = self.visitSeq(right_side)
-        if isinstance(right_side, ShellGrammarParser.CallContext):
-            right_side = self.visitCall(right_side)
-        else:
-            raise AssertionError("""Right side of ; must be either of type
-            pipe, seq or call""")
-
-        return Seq(left_side, right_side)
-
-    # check with HJP/XLow
+    # check with HJP/XL
     def visitCall(self, ctx: ShellGrammarParser.CallContext):
         elements = []
 

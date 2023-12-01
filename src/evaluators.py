@@ -1,25 +1,63 @@
-from expressions import *
+"""
+This is not needed - Sergey
+Implementation of commands will be done in expressions.py
+Each class will have an eval method that will evaluate the command
+This is clear in the UML diagram from Sergey
+"""
+
+
 from visitor import Visitor
+from collections import deque
+
+from expressions import (
+    Commmand,
+    Pipe,
+    Seq,
+    Call,
+    Atom,
+    Redirection,
+    Argument,
+    Quoted,
+    SingleQuoted,
+    DoubleQuoted,
+    BackQuoted
+)
 
 
 class Evaluator(Visitor):
-    def visit_command(self, a):
+    def __init__(self) -> None:
+        super().__init__()
+
+    def visit_command(self: Visitor, command: Commmand) -> deque[str]:
+        return command.child.accept(self)
+
+    def visit_pipe(self, pipe: Pipe) -> deque[str]:
+        std_out_left_side = pipe.left_side.accept(self)
+        return pipe.right_side.accept(self, std_out_left_side)
+
+    def visit_seq(self, seq: Seq) -> deque[str]:
         pass
 
-
-    def visit_pipe(self: Visitor, command: Pipe) -> Commmand:
-        # evaluate left side while continuing to pass around visitor???
-        left_side_std_out = command.left_side.accept(self)
-        return command.right_side
-
-    def visit_seq(self, a):
+    def visit_call(self, call: Call) -> deque[str]:
         pass
 
-    def visit_call(self, a):
+    def visit_atom(self, atom: Atom) -> deque[str]:
         pass
 
+    def visit_redirection(self, redirection: Redirection) -> deque[str]:
+        pass
 
+    def visit_argument(self, argument: Argument) -> deque[str]:
+        pass
 
-    # don't think this is needed
-    def visit_argument(self, a):
+    def visit_quoted(self, quoted: Quoted) -> deque[str]:
+        pass
+
+    def visit_single_quoted(self, singleQuoted: SingleQuoted) -> deque[str]:
+        pass
+
+    def visit_double_quoted(self, doubleQuoted: DoubleQuoted) -> deque[str]:
+        pass
+
+    def visit_back_quoted(self, backQuoted: BackQuoted) -> deque[str]:
         pass

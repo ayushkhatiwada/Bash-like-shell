@@ -1,6 +1,6 @@
 from collections import deque
 
-from abstract_application import AbstractApplication
+from applications.application import AbstractApplication
 
 
 class Sort(AbstractApplication):

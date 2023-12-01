@@ -1,0 +1,9 @@
+- should use `from typing import List` in e.g. def execute(self, args: List[str], stdin: str) -> str, instead of `list`
+- consider raising errors in format f"{self.name}: {directory_path}: No such file or directory."
+  ApplicationError should take (name, and arguments then)
+- use `mock` for testing?
+- Update the requirement.txt (remember about antlr version, antlr4-python3-runtime==4.13.1)
+
+Applications
+- Ls
+  - add more error handling, e.g. permission error ?

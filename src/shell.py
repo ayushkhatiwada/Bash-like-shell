@@ -5,6 +5,12 @@ This is the main shell file that will be executed when the user runs the shell.
 import os
 import sys
 from collections import deque
+from typing import Deque
+
+from antlr4 import CommonTokenStream, InputStream
+from antlr.ShellGrammarLexer import ShellGrammarLexer
+from antlr.ShellGrammarParser import ShellGrammarParser
+from converter import Converter
 
 
 def exec_shell() -> None:
@@ -40,21 +46,28 @@ def process_input(cmd_line: str) -> None:
 
     stdout = deque()
     # error handling for eval function
-    try:
-        # pass stdout deque as reference
-        eval(cmd_line, stdout)
-    except:
-        pass
+    # try:
+    #     # pass stdout deque as reference
+    #     eval(cmd_line, stdout)
+    # except Exception as e:
+    #     # TODO: add error handling
+    #     print(f"An error occurred: {e}")
+    eval(cmd_line, stdout)
 
     # final output of shell after everything has been done
     while stdout:
         print(stdout.popleft(), end="")
 
 
-def eval(cmd_line: str, stdout: deque[str]) -> None:
+def eval(cmd_line: str, std_out: Deque[str]) -> None:
     # call the parsing and executing commands here
+    lexer = ShellGrammarLexer(InputStream(cmd_line))
+    tokens = CommonTokenStream(lexer)
+    parser = ShellGrammarParser(tokens)
 
-    pass
+    tree = parser.command()
+    expression = tree.accept(Converter())
+    expression.eval(output=std_out)
 
 
 if __name__ == "__main__":

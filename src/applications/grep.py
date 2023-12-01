@@ -1,12 +1,10 @@
-import os   # imported but not used? Max pls check
 import re
 from collections import deque
 
-from abstract_application import AbstractApplication
+from applications.application import Application
 
 
-class Grep(AbstractApplication):
-    
+class Grep(Application):
     name = "grep"
 
     def __init__(self) -> None:

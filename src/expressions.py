@@ -1,10 +1,13 @@
 from collections import deque
-from antlr4 import CommonTokenStream, InputStream
 
-from antlr.ShellGrammarLexer import ShellGrammarLexer
-from antlr.ShellGrammarParser import ShellGrammarParser
-from converter import Converter
-from shell import convert
+# from antlr4 import CommonTokenStream, InputStream
+
+# from antlr.ShellGrammarLexer import ShellGrammarLexer
+# from antlr.ShellGrammarParser import ShellGrammarParser
+
+# causes circular import
+# from converter import Converter
+# from shell import convert
 
 """
 Implementation of commands (Pipe, Seq, Call) will be done here
@@ -36,7 +39,6 @@ class Commmand(AbstractShellFeature):
         return isinstance(other, Commmand) and self.child == other.child
 
     def eval(self, input: deque[str] = None, output: deque[str] = None):
-
         # return self.child.eval(input, output)
 
         # Don't need to return anything in eval
@@ -177,7 +179,7 @@ class Argument(AbstractShellFeature):
     def eval(self, input, output):
         # child is quoted class
         if isinstance(self.child, Quoted):
-            self.child.eval(input, output)
+            return self.child.eval(input, output)
         # child is text
         else:
             return self.child
@@ -229,10 +231,7 @@ class DoubleQuoted(AbstractShellFeature):
         return isinstance(other, DoubleQuoted) and self.child == other.child
 
     def eval(self, input, output):
-        elements = [
-            c.eval() if isinstance(c, BackQuoted) else c
-            for c in self.child
-        ]
+        elements = [c.eval() if isinstance(c, BackQuoted) else c for c in self.child]
         return elements
 
 
@@ -250,19 +249,20 @@ class BackQuoted(AbstractShellFeature):
         return isinstance(other, BackQuoted) and self.child == other.child
 
     def eval(self, input, output):
-        expression = convert(self.child)
-        return expression.eval()
+        return
+        # expression = convert(self.child)
+        # return expression.eval()
 
-        # Dunno how to resolve circular import
-        cmd_line = self.child
-        std_out = deque()
+        # # Dunno how to resolve circular import
+        # cmd_line = self.child
+        # std_out = deque()
 
-        lexer = ShellGrammarLexer(InputStream(cmd_line))
-        tokens = CommonTokenStream(lexer)
-        parser = ShellGrammarParser(tokens)
+        # lexer = ShellGrammarLexer(InputStream(cmd_line))
+        # tokens = CommonTokenStream(lexer)
+        # parser = ShellGrammarParser(tokens)
 
-        tree = parser.command()
-        expression = tree.accept(Converter())
-        expression.eval(output=std_out)
+        # tree = parser.command()
+        # expression = tree.accept(Converter())
+        # expression.eval(output=std_out)
 
-        return std_out
+        # return std_out

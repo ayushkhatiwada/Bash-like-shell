@@ -1,5 +1,19 @@
-nose2
-coverage
-flake8==3.8.0
-flake8-html
-junit2html
+antlr4-python3-runtime==4.13.1
+antlr4-tools==0.2.1
+coverage==7.3.2
+flake8==6.1.0
+flake8-html==0.4.3
+install-jdk==1.1.0
+Jinja2==3.1.2
+junit2html==30.1.3
+MarkupSafe==2.1.3
+mccabe==0.7.0
+nose2==0.14.0
+pycodestyle==2.11.1
+pyflakes==3.1.0
+Pygments==2.17.2
+
+# python -m venv .venv              - create virtual environment named .venv
+# source .venv/bin/activate         - activate virtual environment
+# deactivate                        - deactivate virtual environment
+# pip install -r requirements.txt   - install all dependencies

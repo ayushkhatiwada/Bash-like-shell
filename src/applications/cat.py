@@ -1,7 +1,7 @@
 import os
 from collections import deque
 
-from .application import Application
+from .application import Application, ApplicationError
 
 
 class Cat(Application):
@@ -17,13 +17,12 @@ class Cat(Application):
                 # Check if the file exists
                 if os.path.exists(filename):
                     # Open and read the file
-                    with open(filename, 'r') as file:
+                    with open(filename, "r") as file:
                         # Read each line from the file and append to out
                         for line in file:
                             out.append(line)
                 else:
-                    # If the file does not exist, add an error message to out
-                    out.append(f"Error: File '{filename}' not found.\n")
+                    raise ApplicationError(f"File '{filename}' not found.")
         else:
             # If there are no args, process the input list
             for line in input:

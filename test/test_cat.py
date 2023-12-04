@@ -1,3 +1,6 @@
+# NOTE: Error is thrown when running with docker
+# Check with Jan
+
 import os
 import shutil
 import unittest

@@ -17,7 +17,7 @@ class TestCat(unittest.TestCase):
         test_directory
         ├── file1.txt
         ├── file2.txt
-        ├── file3.txt
+        └── file3.txt
         """
 
         self.std_out = deque()

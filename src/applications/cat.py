@@ -1,5 +1,7 @@
 import os
-from collections import deque
+# use this instead of list, and deque from collections
+# fixes docker errors idk how
+from typing import List, Deque
 
 from .application import Application, ApplicationError
 
@@ -10,7 +12,7 @@ class Cat(Application):
     def __init__(self) -> None:
         super().__init__()
 
-    def exec(self, args: list[str], input: list[str], out: deque[str]) -> None:
+    def exec(self, args: List[str], input: List[str], out: Deque[str]) -> None:
         if args:
             # Process each file in the args
             for filename in args:

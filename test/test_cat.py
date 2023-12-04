@@ -1,6 +1,3 @@
-# NOTE: Error is thrown when running with docker
-# Check with Jan
-
 import os
 import shutil
 import unittest
@@ -52,14 +49,12 @@ class TestCat(unittest.TestCase):
     def test_cat_single_file(self):
         self.cat_app.exec(["file1.txt"], [], self.std_out)
         ans = self.files["file1.txt"].split()
-        for i in range(len(self.std_out)):
-            self.assertEqual(self.std_out.popleft(), ans[i] + "\n")
+        self.assertListEqual(list(self.std_out), [line + "\n" for line in ans])
 
     def test_cat_std_in(self):
         std_in = "Sergey is very handsome ;)".split()
         self.cat_app.exec([], std_in, self.std_out)
-        for i in range(len(std_in)):
-            self.assertEqual(self.std_out.popleft(), std_in[i])
+        self.assertListEqual(list(self.std_out), [line for line in std_in])
 
     def test_cat_two_files(self):
         args = ["file1.txt", "file2.txt"]
@@ -67,8 +62,7 @@ class TestCat(unittest.TestCase):
 
         files = [self.files[arg] for arg in args]
         ans = "".join(files).split()
-        for i in range(len(self.std_out)):
-            self.assertEqual(self.std_out.popleft(), ans[i] + "\n")
+        self.assertListEqual(list(self.std_out), [line + "\n" for line in ans])
 
     def test_cat_multiple_files(self):
         args = ["file1.txt", "file2.txt", "file3.txt"]
@@ -76,13 +70,8 @@ class TestCat(unittest.TestCase):
 
         files = [self.files[arg] for arg in args]
         ans = "".join(files).split()
-        for i in range(len(self.std_out)):
-            self.assertEqual(self.std_out.popleft(), ans[i] + "\n")
+        self.assertListEqual(list(self.std_out), [line + "\n" for line in ans])
 
     def test_cat_file_not_found_error(self):
         with self.assertRaises(ApplicationError):
             self.cat_app.exec(["file1"], [], self.std_out)
-
-
-if __name__ == "__main__":
-    unittest.main()

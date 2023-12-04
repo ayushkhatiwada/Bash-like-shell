@@ -1,12 +1,10 @@
 from collections import deque
-
-from .application import Application
-
+from .application import Application, ApplicationError
 
 class Head(Application):
     name = "head"
 
-    def __init__(self) -> None:
+    def __init__(self):
         super().__init__()
 
     def exec(self, args: list[str], input: list[str], out: deque[str]) -> None:
@@ -19,8 +17,8 @@ class Head(Application):
                 try:
                     num_lines = int(arg[2:])
                 except ValueError:
-                    raise ValueError(
-                        "Invalid number of lines specified with -n option"
+                    raise ApplicationError(
+                        f"{self.name}: Invalid number of lines specified with -n option"
                     )
             else:
                 file_name = arg
@@ -36,12 +34,10 @@ class Head(Application):
                             break
                         lines.append(line)
             except FileNotFoundError:
-                raise FileNotFoundError(f"File not found: {file_name}")
+                raise ApplicationError(f"{self.name}: File not found: {file_name}")
         else:
             lines = input[:num_lines]
 
         # Outputting lines
-        for line in lines:
-            out.append(line)
-
-# Add documentation or help messages as needed
+        formatted_output = ''.join(lines)
+        out.append(formatted_output)

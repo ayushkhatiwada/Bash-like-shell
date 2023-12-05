@@ -20,10 +20,8 @@ class TestGrep(unittest.TestCase):
             ├── file2 (contains 'goodbye world')
         """
 
-        # Create the test directory
         os.mkdir(self.TEST_DIR)
 
-        # Create files with content
         with open(os.path.join(self.TEST_DIR, 'file1'), 'w') as f:
             f.write('hello world\nanother line\n')
 
@@ -33,13 +31,12 @@ class TestGrep(unittest.TestCase):
         os.chdir(self.TEST_DIR)
 
     def tearDown(self):
-        # Clean up the test directory
         os.chdir('..')
         shutil.rmtree(self.TEST_DIR)
 
     def test_grep_pattern_in_file(self):
         output = deque()
-        self.grep_app.exec(['world'], [], output)
+        self.grep_app.exec(['world', 'file1', 'file2'], [], output)
         result = '\n'.join(output)
 
         self.assertIn('file1:hello world', result)
@@ -60,11 +57,12 @@ class TestGrep(unittest.TestCase):
 
     def test_grep_pattern_found_in_file(self):
         output = deque()
-        self.grep_app.exec(['hello'], [], output)
+
+        self.grep_app.exec(['hello', 'file1'], [], output)
         self.assertIn('file1:hello world\n', output)
         output.clear()
 
-        self.grep_app.exec(['goodbye'], [], output)
+        self.grep_app.exec(['goodbye', 'file2'], [], output)
         self.assertIn('file2:goodbye world\n', output)
 
     def test_grep_pattern_not_found_in_file(self):
@@ -73,15 +71,12 @@ class TestGrep(unittest.TestCase):
         self.assertEqual(len(output), 0)
 
     def test_grep_pattern_found_in_specific_file(self):
-        # Setup
         output = deque()
         pattern = 'hello'
-        expected_line = 'hello world\n'  # Adjust this line to match exactly what's in the file
+        expected_line = 'hello world\n'
 
-        # Execute
         self.grep_app.exec([pattern, 'file1'], [], output)
 
-        # Verify
         found = any(expected_line in line and 'file1:' in line for line in output)
         self.assertTrue(found, f"Pattern '{pattern}' was not found in 'file1'")
 
@@ -99,6 +94,3 @@ class TestGrep(unittest.TestCase):
         self.assertIn('hello world', result)
         self.assertIn('goodbye world', result)
         self.assertNotIn('some other line', result)
-
-if __name__ == '__main__':
-    unittest.main()

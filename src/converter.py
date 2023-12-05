@@ -15,8 +15,8 @@ from expressions import (
     BackQuoted,
 )
 
-
 # TODO: change AssertionErrors to something more specific
+
 
 # double check Pipe and Seq with HJP/XLow
 class Converter(ShellGrammarVisitor):

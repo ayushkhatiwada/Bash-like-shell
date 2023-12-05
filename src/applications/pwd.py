@@ -1,16 +1,13 @@
 import os
 from typing import Deque, List
 
-from .application import Application, ApplicationError
+from .application import Application
+
 
 class Pwd(Application):
     name = 'pwd'
-    def exec(
-        self,
-        args: List[str],
-        input: List[str],
-        output: Deque[str]
-    ) -> None:
+
+    def exec(self, args: List[str], input: List[str], out: Deque[str]) -> None:
         # Get the current working directory
         current_directory = os.getcwd()
 
@@ -18,4 +15,4 @@ class Pwd(Application):
         formatted_output = current_directory + '\n'
 
         # Add the formatted output to the deque
-        output.append(formatted_output)
+        out.append(formatted_output)

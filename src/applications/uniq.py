@@ -1,4 +1,4 @@
-from collections import deque
+from typing import List, Deque
 
 from .application import Application
 
@@ -10,7 +10,7 @@ class Uniq(Application):
     def __init__(self) -> None:
         super().__init__()
 
-    def exec(self, args: list[str], input: list[str], out: deque[str]) -> None:
+    def exec(self, args: List[str], input: List[str], out: Deque[str]) -> None:
         ignore_case = '-i' in args
         file_name = None
 
@@ -30,5 +30,3 @@ class Uniq(Application):
             if line_to_compare != last_line:
                 out.append(line)
                 last_line = line_to_compare
-
-# Add additional documentation or help messages as needed

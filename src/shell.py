@@ -1,16 +1,15 @@
-"""
-This is the main shell file that will be executed when the user runs the shell.
-"""
-
 import os
 import sys
 from collections import deque
 from typing import Deque
+# import subprocess
 
 from antlr4 import CommonTokenStream, InputStream
 from antlr.ShellGrammarLexer import ShellGrammarLexer
 from antlr.ShellGrammarParser import ShellGrammarParser
-from converter import Converter
+
+import converter
+from applications.application import ApplicationError, ArgumentError
 
 
 def exec_shell() -> None:
@@ -35,6 +34,9 @@ def exec_shell() -> None:
             cmd_line = input()
             process_input(cmd_line)
 
+        # result = subprocess.run(cmd_line, shell=True, check=True, text=True)
+        # print(result.stdout, end="")
+
 
 def process_input(cmd_line: str) -> None:
     # removes whitespace from beginning and end of string
@@ -44,23 +46,20 @@ def process_input(cmd_line: str) -> None:
     if not cmd_line:
         return
 
-    stdout = deque()
-    # error handling for eval function
-    # try:
-    #     # pass stdout deque as reference
-    #     eval(cmd_line, stdout)
-    # except Exception as e:
-    #     # TODO: add error handling
-    #     print(f"An error occurred: {e}")
-    eval(cmd_line, stdout)
+    std_out = deque()
+    try:
+        eval(cmd_line, std_out)
+    except ArgumentError as err:
+        sys.stderr.write(f"argument error: {err}\n")
+    except ApplicationError as err:
+        sys.stderr.write(f"application error: {err}\n")
 
     # final output of shell after everything has been done
-    while stdout:
-        print(stdout.popleft(), end="")
+    while std_out:
+        print(std_out.popleft(), end="")
 
 
 def eval(cmd_line: str, std_out: Deque[str]) -> None:
-    # call the parsing and executing commands here
     expression = convert(cmd_line)
     expression.eval(output=std_out)
 
@@ -71,7 +70,7 @@ def convert(cmd_line: str):
     parser = ShellGrammarParser(tokens)
 
     tree = parser.command()
-    expression = tree.accept(Converter())
+    expression = tree.accept(converter.Converter())
 
     return expression
 

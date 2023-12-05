@@ -1,7 +1,7 @@
-import sys
 from typing import Deque, List
 
 from .application import Application, ApplicationError
+
 
 class Head(Application):
     name = 'head'

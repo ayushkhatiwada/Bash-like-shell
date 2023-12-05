@@ -5,7 +5,9 @@ from .application import Application, ApplicationError
 
 
 class Cd(Application):
-    """Change th shell working directory."""
+    """
+    cd — change the working directory
+    """
 
     name = "cd"
 

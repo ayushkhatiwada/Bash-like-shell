@@ -5,6 +5,10 @@ from .application import Application, ApplicationError
 
 
 class Ls(Application):
+    """
+    ls - list directory contents
+    """
+
     name = 'ls'
 
     def exec(

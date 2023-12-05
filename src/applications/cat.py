@@ -7,6 +7,10 @@ from .application import Application, ApplicationError
 
 
 class Cat(Application):
+    """
+    cat - concatenate files and print on the standard output
+    """
+
     name = "cat"
 
     def __init__(self) -> None:

@@ -1,27 +1,23 @@
 import re
-from collections import deque
+from typing import List, Deque
 
-from .application import Application
+from .application import Application, ApplicationError
 
 
 class Grep(Application):
     name = "grep"
 
-    def __init__(self) -> None:
-        super().__init__()
-
-    def exec(self, args: list[str], input: list[str], out: deque[str]) -> None:
-        if len(args) == 0:
-            raise ValueError("No pattern provided for grep command")
+    def exec(self, args: List[str], input: List[str], output: Deque[str]) -> None:
+        if not args:
+            raise ApplicationError(f"{self.name}: No pattern provided.")
 
         pattern = args[0]
         files = args[1:]
 
-        # Compile the regular expression pattern
         try:
             regex = re.compile(pattern)
-        except re.error:
-            raise ValueError("Invalid regular expression")
+        except re.error as e:
+            raise ApplicationError(f"{self.name}: Invalid regular expression - {e}")
 
         if files:
             # Process each file
@@ -30,11 +26,10 @@ class Grep(Application):
                     with open(file_name, 'r') as file:
                         for line in file:
                             if regex.search(line):
-                                out.append(f"{file_name}:{line}")
+                                output.append(f"{file_name}:{line}")
                 except FileNotFoundError:
-                    raise FileNotFoundError(f"File not found: {file_name}")
+                    raise ApplicationError(f"{self.name}: File not found: {file_name}")
         else:
-            # Process stdin
             for line in input:
                 if regex.search(line):
-                    out.append(line)
+                    output.append(line)

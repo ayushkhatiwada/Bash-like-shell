@@ -15,31 +15,14 @@ from expressions import (
     BackQuoted,
 )
 
-# TODO: Create tests for the converter (VERY IMPORTATNT for code coverage)
 
-# TODO: Change AssertionErrors to something more specific
-# (This is minor and can be skipped)
+# TODO: change AssertionErrors to something more specific
 
-"""
-This class converts the parse tree into an abstract syntax tree
-Here's how it works:
-
-echo hello becomes:
-Command(  Call( Argument("echo"), Atom(Argument("hello")) )  )
-
-
-echo hello | grep he becomes:
-Command(  Pipe(Call(Argument("echo"), Atom(Argument("hello")))  ).eval()
-"""
-
-
-# double check everything with HJP/XLow
+# double check Pipe and Seq with HJP/XLow
 class Converter(ShellGrammarVisitor):
     def __init__(self, out=None) -> None:
         super().__init__()
 
-    # VisitCommand is not needed - Sergey
-    # Because the parse tree starts with Pipe, seq or call
     def visitCommand(self, ctx: ShellGrammarParser.CommandContext):
         child = ctx.children[0]
 
@@ -97,7 +80,7 @@ class Converter(ShellGrammarVisitor):
 
         return Seq(left_side, right_side)
 
-    # check with HJP/XL
+    # check with HJP/XLow
     def visitCall(self, ctx: ShellGrammarParser.CallContext):
         elements = []
 
@@ -167,7 +150,7 @@ class Converter(ShellGrammarVisitor):
         child = ctx.children[1]
         return SingleQuoted(child.getText())
 
-    # From HJP/XL - might need to change
+    # From HJP/XLow - might need to change
     def visitDoubleQuoted(self, ctx: ShellGrammarParser.DoubleQuotedContext):
         elements = []
         curr = ""

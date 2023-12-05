@@ -2,6 +2,7 @@ from typing import Deque
 from abc import ABC, abstractmethod
 
 import shell
+from application_factory import ApplicationFactory
 
 """
 Implementation of commands (Pipe, Seq, Call) will be done here
@@ -108,8 +109,15 @@ class Call(AbstractShellFeature):
     def eval(self, input, output):
         # self.args could be (Redirection(), Argument(), Atom(), Atom(), ...)
         # eval each class in self.args and store in new_args list
-        new_args = [c.eval() for c in self.args]
+        new_args = [c.eval(input, output) for c in self.args]
         # now I have a bunch of shit to deal with
+
+        # attempt 1: which handles a simple case
+        application_name = new_args[0]
+        args = new_args[1:]
+
+        app = ApplicationFactory().get_application([application_name])
+        app.exec(args, None, output)
 
 
 class Atom(AbstractShellFeature):
@@ -231,7 +239,9 @@ class DoubleQuoted(AbstractShellFeature):
         return isinstance(other, DoubleQuoted) and self.child == other.child
 
     def eval(self, input, output):
-        elements = [c.eval() if isinstance(c, BackQuoted) else c for c in self.child]
+        elements = [
+            c.eval() if isinstance(c, BackQuoted) else c for c in self.child
+        ]
         return elements
 
 

@@ -1,4 +1,4 @@
-from collections import deque
+from typing import List, Deque
 
 from .application import Application
 
@@ -9,7 +9,7 @@ class Cut(Application):
     def __init__(self) -> None:
         super().__init__()
 
-    def exec(self, args: list[str], input: list[str], out: deque[str]) -> None:
+    def exec(self, args: List[str], input: List[str], out: Deque[str]) -> None:
         if not args or args[0] != '-b':
             raise ValueError("Invalid or missing -b option for cut command")
 

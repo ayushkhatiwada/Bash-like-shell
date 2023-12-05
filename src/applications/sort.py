@@ -1,4 +1,4 @@
-from collections import deque
+from typing import List, Deque
 
 from .application import Application
 
@@ -10,7 +10,7 @@ class Sort(Application):
     def __init__(self) -> None:
         super().__init__()
 
-    def exec(self, args: list[str], input: list[str], out: deque[str]) -> None:
+    def exec(self, args: List[str], input: List[str], out: Deque[str]) -> None:
         reverse_order = '-r' in args
         file_name = None
 

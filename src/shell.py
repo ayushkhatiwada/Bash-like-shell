@@ -61,13 +61,19 @@ def process_input(cmd_line: str) -> None:
 
 def eval(cmd_line: str, std_out: Deque[str]) -> None:
     # call the parsing and executing commands here
+    expression = convert(cmd_line)
+    expression.eval(output=std_out)
+
+
+def convert(cmd_line: str):
     lexer = ShellGrammarLexer(InputStream(cmd_line))
     tokens = CommonTokenStream(lexer)
     parser = ShellGrammarParser(tokens)
 
     tree = parser.command()
     expression = tree.accept(Converter())
-    expression.eval(output=std_out)
+
+    return expression
 
 
 if __name__ == "__main__":

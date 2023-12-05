@@ -1,16 +1,20 @@
-from collections import deque
+from typing import List, Deque
 
 from .application import Application
 
 
 class Echo(Application):
+    """
+    echo — write arguments to standard output
+    """
+
     name = "echo"
 
     def __init__(self) -> None:
         super().__init__()
 
-    def exec(self, args: list[str], input: list[str], out: deque[str]) -> None:       
+    def exec(self, args: List[str], input: List[str], out: Deque[str]) -> None:
         output = " ".join(args)
         out.append(output + "\n")
 
-# Todo (may): add flag -n to omit the new line
+# TODO (maybe): add flag -n to omit the new line

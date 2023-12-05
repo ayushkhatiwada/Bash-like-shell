@@ -1,43 +1,33 @@
 import os
-from collections import deque
+from typing import List, Deque
 
 from .application import Application, ApplicationError
 
 
 class Cd(Application):
+    """
+    cd — change the working directory
+    """
+
     name = "cd"
 
     def __init__(self) -> None:
         super().__init__()
 
-    def exec(self, args: list[str], input: list[str], out: deque[str]) -> None:
-        if len(args) != 1:
-            raise ValueError(
-                "Wrong number of command line arguments.\
-                      cd takes exactly 1 argument."
-            )
+    def exec(self, args: List[str], input: List[str], out: Deque[str]) -> None:
+        if len(args) == 0:
+            # if no args, do nothing
+            return
+        elif len(args) != 1:
+            raise ApplicationError("cd: too many arguments")
 
         directory_path = args[0]
-
-        # Check if the directory_path is indeed a directory
-        if not os.path.isdir(directory_path):
-            raise NotADirectoryError(
-                f"{directory_path} is not a directory."
-            )
-
-        # Errors need to be changed for custom Application error
         try:
             os.chdir(directory_path)
         except FileNotFoundError:
             raise ApplicationError(
-                f"{directory_path} directory does not exist."
-            )
+                f"cd: {directory_path}: No such file or directory.")
+        except NotADirectoryError:
+            raise ApplicationError(f"cd: {directory_path}: Not a directory.")
         except PermissionError:
-            raise ApplicationError(
-                f"Permission denied to access: {directory_path}."
-            )
-        except Exception as e:
-            # General exception catch for any other unforeseen errors
-            raise ApplicationError(
-                f"An error occurred while changing directory: {e}."
-            )
+            raise ApplicationError(f"cd: {directory_path}: Permission denied.")

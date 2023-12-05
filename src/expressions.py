@@ -1,4 +1,21 @@
-from visitor import Visitor
+from collections import deque
+
+# from antlr4 import CommonTokenStream, InputStream
+
+# from antlr.ShellGrammarLexer import ShellGrammarLexer
+# from antlr.ShellGrammarParser import ShellGrammarParser
+
+# causes circular import
+# from converter import Converter
+# from shell import convert
+
+"""
+Implementation of commands (Pipe, Seq, Call) will be done here
+Each class will have an eval method that will evaluate the command
+This is clear in the UML diagram from Sergey
+"""
+
+
 class AbstractShellFeature:
     def __init__(self) -> None:
         pass
@@ -18,10 +35,11 @@ class Commmand(AbstractShellFeature):
         return f"Commmand(input={self.input})"
 
     def __eq__(self, other):
-        return isinstance(other, Commmand) and self.input == other.input
+        return isinstance(other, Commmand) and self.child == other.child
 
-    def accept(self, visitor: Visitor):
-        return visitor.visit_command(self)
+    def eval(self, input: deque[str] = None, output: deque[str] = None):
+        # return self.child.eval(input, output)
+
 
 class Pipe(AbstractShellFeature):
     def __init__(self, left=None, right=None) -> None:
@@ -108,7 +126,19 @@ class Argument(AbstractShellFeature):
         return f"Argument(input={self.input})"
 
     def __eq__(self, other):
-        return isinstance(other, Argument) and self.input == other.input
+        return isinstance(other, Argument) and self.child == other.child
+
+    def accept(self, visitor):
+        visitor.visit_argument(self)
+
+    # child of argument could be Quoted class or text (e.g. "echo")
+    def eval(self, input, output):
+        # child is quoted class
+        if isinstance(self.child, Quoted):
+            return self.child.eval(input, output)
+        # child is text
+        else:
+            return self.child
 
     def accept(self, visitor: Visitor):
         return visitor.visit_argument(self)
@@ -150,7 +180,11 @@ class DoubleQuoted(AbstractShellFeature):
         return f"DoubleQuoted(content={self.content})"
 
     def __eq__(self, other):
-        return isinstance(other, DoubleQuoted) and self.content == other.content
+        return isinstance(other, DoubleQuoted) and self.child == other.child
+
+    def eval(self, input, output):
+        elements = [c.eval() if isinstance(c, BackQuoted) else c for c in self.child]
+        return elements
 
     def accept(self, visitor: Visitor):
         return visitor.visit_double_quoted(self)
@@ -164,7 +198,23 @@ class BackQuoted(AbstractShellFeature):
         return f"BackQuoted(content={self.content})"
 
     def __eq__(self, other):
-        return isinstance(other, BackQuoted) and self.content == other.content
+        return isinstance(other, BackQuoted) and self.child == other.child
 
-    def accept(self, visitor: Visitor):
-        return visitor.visit_back_quoted(self)
+    def eval(self, input, output):
+        return
+        # expression = convert(self.child)
+        # return expression.eval()
+
+        # # Dunno how to resolve circular import
+        # cmd_line = self.child
+        # std_out = deque()
+
+        # lexer = ShellGrammarLexer(InputStream(cmd_line))
+        # tokens = CommonTokenStream(lexer)
+        # parser = ShellGrammarParser(tokens)
+
+        # tree = parser.command()
+        # expression = tree.accept(Converter())
+        # expression.eval(output=std_out)
+
+        # return std_out

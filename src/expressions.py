@@ -26,6 +26,7 @@ class AbstractShellFeature:
     def __eq__(self, other):
         return isinstance(other, type(self))
 
+
 class Commmand(AbstractShellFeature):
     def __init__(self, input):
         super().__init__()
@@ -39,6 +40,7 @@ class Commmand(AbstractShellFeature):
 
     def eval(self, input: deque[str] = None, output: deque[str] = None):
         # return self.child.eval(input, output)
+        pass
 
 
 class Pipe(AbstractShellFeature):

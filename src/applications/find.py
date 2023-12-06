@@ -2,31 +2,30 @@ import os
 import fnmatch
 from typing import List, Deque
 
-from .application import Application
+from .application import Application, ArgumentError
 
 
 class Find(Application):
+    """
+    find - search for files in a directory hierarchy
+    """
+
     name = "find"
 
     def __init__(self) -> None:
         super().__init__()
 
     def exec(self, args: List[str], input: List[str], out: Deque[str]) -> None:
-        # Parse arguments
-        if '-name' not in args:
-            raise ValueError("Missing -name argument in find command")
+        if len(args) not in [2, 3] or \
+                args[0 if len(args) == 2 else 1] != "-name":
+            raise ArgumentError(type(self), "find command must follow format: "
+                                            "find [path] -name <pattern>")
 
-        name_index = args.index('-name')
-        if name_index == len(args) - 1:
-            raise ValueError("No pattern provided for -name in find command")
+        path = args[0] if len(args) == 3 else "."
+        pattern = args[1] if len(args) == 2 else args[2]
 
-        pattern = args[name_index + 1]
-        root_path = args[0] if args[0] != '-name' else '.'
-
-        # Perform the search
-        for path, dirs, files in os.walk(root_path):
-            for file in files:
-                if fnmatch.fnmatch(file, pattern):
-                    out.append(os.path.join(path, file) + "\n")
-
-# Add additional documentation or help messages as needed
+        # walk through directory tree
+        for root, dirs, files in os.walk(path):
+            for name in files:
+                if fnmatch.fnmatch(name, pattern):
+                    out.append(os.path.join(root, name) + "\n")

@@ -159,13 +159,13 @@ class Redirection(AbstractShellFeature):
         self.argument_class = argument_class
 
     def __str__(self):
-        return f"Redirection({self.type}, {self.file})"
+        return f"Redirection({self.type}, {self.argument_class})"
 
     def __eq__(self, other):
         return (
             isinstance(other, Redirection)
             and self.type == other.type
-            and self.file == other.file
+            and self.argument_class == other.argument_class
         )
 
     def eval(self, input, output):

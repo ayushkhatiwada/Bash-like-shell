@@ -1,25 +1,18 @@
-import sys
 from typing import Deque, List
 
 from .application import Application, ApplicationError
 
 
 class Uniq(Application):
-    name = 'uniq'
+    name = "uniq"
 
-    def exec(
-        self,
-        args: List[str],
-        input: List[str],
-        output: Deque[str]
-    ) -> None:
-
-        ignore_case = '-i' in args
+    def exec(self, args: List[str], input: List[str], out: Deque[str]) -> None:
+        ignore_case = "-i" in args
         file_path = None
 
         # Check for file argument
         for arg in args:
-            if not arg.startswith('-'):
+            if not arg.startswith("-"):
                 file_path = arg
                 break
 
@@ -27,12 +20,12 @@ class Uniq(Application):
         try:
             # Read from file or stdin
             if file_path:
-                with open(file_path, 'r') as file:
+                with open(file_path, "r") as file:
                     lines = file.readlines()
             else:
                 lines = input
 
-            self.process_lines(lines, ignore_case, output)
+            self.process_lines(lines, ignore_case, out)
         except FileNotFoundError:
             raise ApplicationError(
                 f"{self.name}: {file_path}: No such file or directory."
@@ -41,10 +34,7 @@ class Uniq(Application):
             raise ApplicationError(str(e))
 
     def process_lines(
-        self,
-        lines: List[str],
-        ignore_case: bool,
-        output: Deque[str]
+        self, lines: List[str], ignore_case: bool, output: Deque[str]
     ) -> None:
         if not lines:
             return

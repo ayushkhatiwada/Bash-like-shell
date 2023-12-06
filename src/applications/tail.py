@@ -1,41 +1,45 @@
+import sys
+from typing import Deque, List
 from collections import deque
 
-from .application import Application
-
+from .application import Application, ApplicationError
 
 class Tail(Application):
-    name = "tail"
+    name = 'tail'
 
-    def __init__(self) -> None:
-        super().__init__()
+    def exec(
+        self,
+        args: List[str],
+        input: List[str],
+        output: Deque[str]
+    ) -> None:
+        # Default number of lines to display
+        num_lines = 10
 
-    def exec(self, args: list[str], input: list[str], out: deque[str]) -> None:
-        num_lines = 10  # Default number of lines
-        file_name = None
-
-        # Parsing command line arguments
+        # Process command line arguments
+        file_path = None
         for arg in args:
-            if arg.startswith("-n"):
+            if arg.startswith('-n'):
                 try:
                     num_lines = int(arg[2:])
                 except ValueError:
-                    raise ValueError("""
-                            Invalid number of lines specified with -n option
-                                    """)
+                    raise ApplicationError(f"{self.name}: Invalid number of lines: {arg[2:]}")
             else:
-                file_name = arg
+                file_path = arg
 
-        # Reading lines from file or stdin
-        lines = []
-        if file_name:
-            try:
-                with open(file_name, "r") as file:
+        # Read from file or stdin
+        try:
+            if file_path:
+                with open(file_path, 'r') as file:
                     lines = file.readlines()
-            except FileNotFoundError:
-                raise FileNotFoundError(f"File not found: {file_name}")
-        else:
-            lines = input
+            else:
+                lines = input
+        except FileNotFoundError:
+            raise ApplicationError(f"{self.name}: {file_path}: No such file or directory.")
 
-        # Outputting the last N lines
-        for line in lines[-num_lines:]:
-            out.append(line)
+        last_lines = deque(maxlen=num_lines)
+        for line in lines:
+            last_lines.append(line)
+
+        formatted_output = ''.join(last_lines)
+        output.append(formatted_output)

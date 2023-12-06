@@ -1,5 +1,7 @@
 # Assumed necessary imports
 from collections import deque
+from typing import Deque, Optional
+
 
 # Assuming Visitor is a defined class elsewhere in your project
 class Visitor:
@@ -27,7 +29,7 @@ class Command(AbstractShellFeature):
         return isinstance(other, Command) and self.input == other.input
 
     # Assuming this method is intended to be implemented
-    def eval(self, input: deque[str] = None, output: deque[str] = None):
+    def eval(self, input: Optional[Deque[str]] = None, output: Optional[Deque[str]] = None):
         pass
 
 class Pipe(AbstractShellFeature):

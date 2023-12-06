@@ -107,7 +107,3 @@ class TestShellCommands(unittest.TestCase):
                 Call((Argument("echo")), Atom(Argument(Quoted(BackQuoted("date")))))
             ),
         )
-
-
-if __name__ == "__main__":
-    unittest.main()

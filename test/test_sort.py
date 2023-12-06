@@ -5,6 +5,7 @@ import os
 from applications.application import ApplicationError
 from applications.sort import Sort
 
+
 class TestSort(unittest.TestCase):
     sort_app = Sort()
     test_file_name = 'test_file.txt'
@@ -15,10 +16,7 @@ class TestSort(unittest.TestCase):
             file.writelines(self.test_content)
 
     def tearDown(self):
-        try:
-            os.remove(self.test_file_name)
-        except OSError:
-            pass
+        os.remove(self.test_file_name)
 
     def test_sort_file(self):
         output = deque()
@@ -48,4 +46,3 @@ class TestSort(unittest.TestCase):
         nonexistent_file = 'nonexistent_file.txt'
         with self.assertRaises(ApplicationError):
             self.sort_app.exec([nonexistent_file], [], deque())
-

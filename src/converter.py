@@ -2,7 +2,7 @@ from antlr.ShellGrammarParser import ShellGrammarParser
 from antlr.ShellGrammarVisitor import ShellGrammarVisitor
 
 from expressions import (
-    Commmand,
+    Command,
     Pipe,
     Seq,
     Call,
@@ -27,11 +27,11 @@ class Converter(ShellGrammarVisitor):
         child = ctx.children[0]
 
         if isinstance(child, ShellGrammarParser.PipeContext):
-            return Commmand(self.visitPipe(child))
+            return Command(self.visitPipe(child))
         elif isinstance(child, ShellGrammarParser.SeqContext):
-            return Commmand(self.visitSeq(child))
+            return Command(self.visitSeq(child))
         elif isinstance(child, ShellGrammarParser.CallContext):
-            return Commmand(self.visitCall(child))
+            return Command(self.visitCall(child))
 
         raise AssertionError("Command must be of type pipe, seq or call")
 

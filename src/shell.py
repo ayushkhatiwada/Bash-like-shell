@@ -2,7 +2,6 @@ import os
 import sys
 from collections import deque
 from typing import Deque
-# import subprocess
 
 from antlr4 import CommonTokenStream, InputStream
 from antlr.ShellGrammarLexer import ShellGrammarLexer
@@ -33,9 +32,6 @@ def exec_shell() -> None:
             print(os.getcwd() + "> ", end="")
             cmd_line = input()
             process_input(cmd_line)
-
-        # result = subprocess.run(cmd_line, shell=True, check=True, text=True)
-        # print(result.stdout, end="")
 
 
 def process_input(cmd_line: str) -> None:

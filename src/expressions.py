@@ -2,20 +2,38 @@
 from collections import deque
 from typing import Deque, Optional
 
+from typing import Deque
+from abc import ABC, abstractmethod
+
+import shell
+from application_factory import ApplicationFactory
+
+"""
+Implementation of commands (Pipe, Seq, Call) will be done here
+Each class will have an eval method that will evaluate the command
+This is clear in the UML diagram from Sergey
+"""
+"""
+echo hello
+Command(Call(Argument(echo), Atom(Argument(hello)))).eval()
+"""
+
 
 # Assuming Visitor is a defined class elsewhere in your project
 class Visitor:
     pass
 
-class AbstractShellFeature:
-    def __init__(self) -> None:
-        pass
-
+class AbstractShellFeature(ABC):
     def __str__(self):
         return "AbstractShellFeature"
 
     def __eq__(self, other):
-        return isinstance(other, type(self))
+        pass
+
+    @abstractmethod
+    def eval(self, input, output):
+        pass
+
 
 class Command(AbstractShellFeature):
     def __init__(self, input):
@@ -32,149 +50,241 @@ class Command(AbstractShellFeature):
     def eval(self, input: Optional[Deque[str]] = None, output: Optional[Deque[str]] = None):
         pass
 
+class Command(AbstractShellFeature):
+    def __init__(self, child):
+        self.child = child
+
+    def __str__(self):
+        return f"Command({self.child})"
+
+    def __eq__(self, other):
+        return isinstance(other, Command) and self.child == other.child
+
+    def eval(self, input: Deque[str] = None, output: Deque[str] = None):
+        # return self.child.eval(input, output)
+
+        # Don't need to return anything in eval
+        # Because output is a deque that is passed around
+        self.child.eval(input, output)
+
+
+##############################################################################
+# dunno if this works
 class Pipe(AbstractShellFeature):
-    def __init__(self, left=None, right=None) -> None:
-        super().__init__()
+    def __init__(self, left, right) -> None:
         self.left = left
         self.right = right
 
     def __str__(self):
-        return f"Pipe(left={self.left}, right={self.right})"
+        return f"Pipe({self.left}, {self.right})"
 
     def __eq__(self, other):
-        return isinstance(other, Pipe) and self.left == other.left and self.right == other.right
+        return (
+            isinstance(other, Pipe)
+            and self.left == other.left
+            and self.right == other.right
+        )
 
-    def accept(self, visitor: Visitor):
-        return visitor.visit_pipe(self)
+    # don't need input=None, output=None
+    # Because Command class's eval method has input=None, output=None
+    # This input and output from Command will be passed to Pipe's eval method
+    # So, Pipe's eval method will get input and output passed in
+    # Same goes for Seq and Call and other nested classes
+    def eval(self, input, output):
+        std_out_left_side = self.left.eval(input, output)
+        self.right.eval(std_out_left_side, output)
 
-class Seq(AbstractShellFeature):
-    def __init__(self, left=None, right=None) -> None:
-        super().__init__()
+
+class Seq:
+    def __init__(self, left, right) -> None:
         self.left = left
         self.right = right
 
     def __str__(self):
-        return f"Seq(left={self.left}, right={self.right})"
+        return f"Seq({self.left}, {self.right})"
 
     def __eq__(self, other):
-        return isinstance(other, Seq) and self.left == other.left and self.right == other.right
+        return (
+            isinstance(other, Seq)
+            and self.left == other.left
+            and self.right == other.right
+        )
 
-    def accept(self, visitor: Visitor):
-        return visitor.visit_seq(self)
+    def eval(self, input, output):
+        self.left.eval(input, output)
+        self.right.eval(input, output)
 
+
+###############################################################################
 class Call(AbstractShellFeature):
     def __init__(self, *args):
-        super().__init__()
+        # self.args is a tuple
+        # it contains redirection, argument, or atom classes
         self.args = args
 
     def __str__(self):
-        args_str = ', '.join(str(arg) for arg in self.args)
-        return f"Call(args={args_str})"
+        args_str = ", ".join(str(arg) for arg in self.args)
+        return f"Call({args_str})"
 
     def __eq__(self, other):
-        if not isinstance(other, Call) or len(self.args) != len(other.args):
-            return False
-        return all(s_arg == o_arg for s_arg, o_arg in zip(self.args, other.args))
+        return isinstance(other, Call) and self.args == other.args
 
-    def accept(self, visitor: Visitor):
-        return visitor.visit_call(self)
+    def eval(self, input, output):
+        # self.args could be (Redirection(), Argument(), Atom(), Atom(), ...)
+        # eval each class in self.args and store in new_args list
+        new_args = [c.eval(input, output) for c in self.args]
+        # now I have a bunch of shit to deal with
+
+        # attempt 1: which handles a simple case
+        application_name = new_args[0]
+        args = new_args[1:]
+
+        app = ApplicationFactory().get_application([application_name])
+        app.exec(args, None, output)
+
 
 class Atom(AbstractShellFeature):
-    def __init__(self, input):
-        super().__init__()
-        self.input = input
+    def __init__(self, child):
+        self.child = child
 
     def __str__(self):
-        return f"Atom(input={self.input})"
+        return f"Atom({self.child})"
 
     def __eq__(self, other):
-        return isinstance(other, Atom) and self.input == other.input
+        return isinstance(other, Atom) and self.child == other.child
 
-    def accept(self, visitor: Visitor):
-        return visitor.visit_atom(self)
+    def eval(self, input, output):
+        # Atoms' children are either redirection or argument
+        return self.child.eval(input, output)
 
+
+###############################################################################
 class Redirection(AbstractShellFeature):
-    def __init__(self, type=None, target=None):
-        super().__init__()
+    """
+    Redirection from Sergey's README:
+    1. Opens the file following the < symbol for input redirection;
+    2. Opens the file following the > symbol for output redirection;
+    3. If several files are specified for input or output redirection
+        - (e.g. > a.txt > b.txt), throws an exception;
+    4. If the file specified for input redirection does not exist,
+        - throws an exception;
+    5. If the file specified for output redirection does not exist, creates it.
+
+    So >> is not needed
+    """
+
+    def __init__(self, type, argument_class):
+        # redirection has two children
+        # left child is redirection type (> or <)
+        # right child is an argument class
+        # check antlr tree to see what I mean
         self.type = type
-        self.target = target
+        self.argument_class = argument_class
 
     def __str__(self):
-        return f"Redirection(type={self.type}, target={self.target})"
+        return f"Redirection({self.type}, {self.argument_class})"
 
     def __eq__(self, other):
-        return isinstance(other, Redirection) and self.type == other.type and self.target == other.target
+        return (
+            isinstance(other, Redirection)
+            and self.type == other.type
+            and self.argument_class == other.argument_class
+        )
 
-    def accept(self, visitor: Visitor):
-        return visitor.visit_redirection(self)
+    def eval(self, input, output):
+        # eval argument class (right child)
+        argument = self.argument_class.eval(input, output)
+        return (self.type, argument)
+
 
 class Argument(AbstractShellFeature):
-    def __init__(self, input):
-        super().__init__()
-        self.input = input
+    def __init__(self, child):
+        self.child = child
 
     def __str__(self):
-        return f"Argument(input={self.input})"
+        return f"Argument({self.child})"
 
     def __eq__(self, other):
-        return isinstance(other, Argument) and self.input == other.input
 
-    def accept(self, visitor: Visitor):
-        return visitor.visit_argument(self)
+        return isinstance(other, Argument) and self.input == other.input
+        return isinstance(other, Argument) and self.child == other.child
+
+    # child of argument could be Quoted class or text (e.g. "echo")
+    def eval(self, input, output):
+        # child is quoted class
+        if isinstance(self.child, Quoted):
+            return self.child.eval(input, output)
+        # child is text
+        else:
+            return self.child
+
 
     # Placeholder for eval method
     def eval(self, input, output):
         pass
 
 class Quoted(AbstractShellFeature):
-    def __init__(self, content=None):
-        super().__init__()
-        self.content = content
+    def __init__(self, child):
+        self.child = child
 
     def __str__(self):
-        return f"Quoted(content={self.content})"
+        return f"Quoted({self.child})"
 
     def __eq__(self, other):
-        return isinstance(other, Quoted) and self.content == other.content
+        return isinstance(other, Quoted) and self.child == other.child
 
-    def accept(self, visitor: Visitor):
-        return visitor.visit_quoted(self)
+    def eval(self, input, output):
+        # Quoted's child is either single quoted, double quoted, or back quoted
+        return self.child.eval(input, output)
+
 
 class SingleQuoted(AbstractShellFeature):
-    def __init__(self, content=None):
-        super().__init__()
-        self.content = content
+    def __init__(self, child):
+        self.child = child
 
     def __str__(self):
-        return f"SingleQuoted(content={self.content})"
+        return f"SingleQuoted({self.child})"
 
     def __eq__(self, other):
-        return isinstance(other, SingleQuoted) and self.content == other.content
+        return isinstance(other, SingleQuoted) and self.child == other.child
 
-    def accept(self, visitor: Visitor):
-        return visitor.visit_single_quoted(self)
+    def eval(self, input, output):
+        # "Base case", single quoted contains text only
+        return self.child
+
 
 class DoubleQuoted(AbstractShellFeature):
-    def __init__(self, content=None):
-        super().__init__()
-        self.content = content
+    # child is a list of elements
+    # elements could be text or backQuoted
+    # see visitDoubleQuoted method in converter.py
+    # e.g. elements = [text, text, backQuoted(), text, backQuoted(), text]
+    def __init__(self, child):
+        self.child = child
 
     def __str__(self):
-        return f"DoubleQuoted(content={self.content})"
+        return f"DoubleQuoted({self.child})"
 
     def __eq__(self, other):
+
         return isinstance(other, DoubleQuoted) and self.content == other.content
+        return isinstance(other, DoubleQuoted) and self.child == other.child
 
-    def accept(self, visitor: Visitor):
-        return visitor.visit_double_quoted(self)
+    def eval(self, input, output):
+        elements = [
+            c.eval() if isinstance(c, BackQuoted) else c for c in self.child
+        ]
+        return elements
 
+
+
+##############################################################################
+# This is quite hard to implement - AK
 class BackQuoted(AbstractShellFeature):
-    def __init__(self, content=None):
-        super().__init__()
-        self.content = content
+    def __init__(self, child):
+        self.child = child
 
     def __str__(self):
-        return f"BackQuoted(content={self.content})"
+        return f"BackQuoted({self.child})"
 
     def __eq__(self, other):
         return isinstance(other, BackQuoted) and self.content == other.content
@@ -185,3 +295,12 @@ class BackQuoted(AbstractShellFeature):
     # Placeholder for eval method
     def eval(self, input, output):
         pass
+        return isinstance(other, BackQuoted) and self.child == other.child
+
+    # backQuoted is a sort of base case
+    # it does not contain any classes inside it
+    def eval(self, input, output):
+        # This is black magic
+        # Circular import is somehow avoided
+        expression = shell.convert(self.child)
+        return expression.eval()

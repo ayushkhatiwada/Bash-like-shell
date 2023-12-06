@@ -4,6 +4,7 @@ from collections import deque
 
 from .application import Application, ApplicationError
 
+
 class Tail(Application):
     name = 'tail'
 

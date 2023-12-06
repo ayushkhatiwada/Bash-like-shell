@@ -3,6 +3,7 @@ import unittest
 from antlr4 import InputStream, CommonTokenStream
 from antlr.ShellGrammarLexer import ShellGrammarLexer
 from antlr.ShellGrammarParser import ShellGrammarParser
+
 from converter import Converter
 from expressions import Command, Call, Atom, Argument, Pipe, Seq, Redirection, Quoted, DoubleQuoted, BackQuoted
 

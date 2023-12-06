@@ -16,6 +16,7 @@ class Sort(Application):
 
         # Separate options from potential file path
         file_path = None
+        
         for arg in args:
             if arg != '-r':
                 file_path = arg

@@ -1,7 +1,7 @@
-from singleton import Singleton
-from applications.application import Application
-from applications.application import ApplicationError
+from typing import List
 
+from singleton import Singleton
+from applications.application import Application, ApplicationError
 from applications.cat import Cat
 from applications.cd import Cd
 from applications.cut import Cut
@@ -40,7 +40,7 @@ class ApplicationFactory(Singleton):
     Possibly saves memory
     """
 
-    def get_application(self, args: list[str]) -> Application:
+    def get_application(self, args: List[str]) -> Application:
         application_name = args[0]
 
         # APPLICATIONS dict used to avoid if/swtich statements

@@ -3,6 +3,7 @@ from typing import Deque, List
 
 from .application import Application, ApplicationError
 
+
 class Uniq(Application):
     name = 'uniq'
 
@@ -12,6 +13,7 @@ class Uniq(Application):
         input: List[str],
         output: Deque[str]
     ) -> None:
+
         ignore_case = '-i' in args
         file_path = None
 

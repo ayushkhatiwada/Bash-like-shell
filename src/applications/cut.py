@@ -1,4 +1,4 @@
-from collections import deque
+from typing import List, Deque
 
 from .application import Application
 
@@ -9,7 +9,7 @@ class Cut(Application):
     def __init__(self) -> None:
         super().__init__()
 
-    def exec(self, args: list[str], input: list[str], out: deque[str]) -> None:
+    def exec(self, args: List[str], input: List[str], out: Deque[str]) -> None:
         if not args or args[0] != '-b':
             raise ValueError("Invalid or missing -b option for cut command")
 
@@ -21,7 +21,7 @@ class Cut(Application):
             cut_line = self.extract_bytes(line, byte_ranges)
             out.append(cut_line)
 
-    def parse_byte_ranges(self, byte_range_str: str) -> list[range]:
+    def parse_byte_ranges(self, byte_range_str: str) -> List[range]:
         ranges = []
         for part in byte_range_str.split(','):
             if '-' in part:
@@ -34,7 +34,7 @@ class Cut(Application):
                 ranges.append(range(index, index + 1))
         return ranges
 
-    def read_lines(self, file_name: str, input: list[str]) -> list[str]:
+    def read_lines(self, file_name: str, input: List[str]) -> List[str]:
         if file_name:
             try:
                 with open(file_name, 'r') as file:
@@ -43,7 +43,7 @@ class Cut(Application):
                 raise FileNotFoundError(f"File not found: {file_name}")
         return input
 
-    def extract_bytes(self, line: str, byte_ranges: list[range]) -> str:
+    def extract_bytes(self, line: str, byte_ranges: List[range]) -> str:
         return ''.join(
             line[i] for r in byte_ranges for i in r if i < len(line)
         )

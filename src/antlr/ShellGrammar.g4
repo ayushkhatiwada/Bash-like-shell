@@ -11,8 +11,8 @@ PIPE : '|';
 SINGLE_QUOTE : '\'';
 DOUBLE_QUOTE : '"';
 SEMI_COLON : ';';
-LESS_THAN : '<';     // Change to REDIRECT_INPUT: '<'; ?
-GREATER_THAN : '>';  // Change to REDIRECT_OUTPUT: '>'; ?
+LESS_THAN : '<';  
+GREATER_THAN : '>';
 
 BACKQUOTE : '`';
 NEWLINE : '\n';

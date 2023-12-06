@@ -1,6 +1,10 @@
 import os
+
 # use this instead of list, and deque from collections
 # fixes docker errors idk how
+# it's because Dockerfile uses python 3.8
+# and type hinting was done differently in 3.8 and below
+# check Dockerfile
 from typing import List, Deque
 
 from .application import Application, ApplicationError

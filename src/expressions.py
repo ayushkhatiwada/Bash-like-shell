@@ -27,15 +27,15 @@ class AbstractShellFeature(ABC):
         pass
 
 
-class Commmand(AbstractShellFeature):
+class Command(AbstractShellFeature):
     def __init__(self, child):
         self.child = child
 
     def __str__(self):
-        return f"Commmand({self.child})"
+        return f"Command({self.child})"
 
     def __eq__(self, other):
-        return isinstance(other, Commmand) and self.child == other.child
+        return isinstance(other, Command) and self.child == other.child
 
     def eval(self, input: Deque[str] = None, output: Deque[str] = None):
         # return self.child.eval(input, output)

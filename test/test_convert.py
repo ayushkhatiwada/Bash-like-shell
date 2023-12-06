@@ -1,11 +1,12 @@
 import unittest
+
 from antlr4 import InputStream, CommonTokenStream
 from antlr.ShellGrammarLexer import ShellGrammarLexer
 from antlr.ShellGrammarParser import ShellGrammarParser
 
 from converter import Converter
 from expressions import (
-    Commmand,
+    Command,
     Call,
     Atom,
     Argument,
@@ -19,7 +20,7 @@ from expressions import (
 
 
 class TestShellCommands(unittest.TestCase):
-    def test_convert_check_command(self, command, expected_output):
+    def check_command(self, command, expected_output):
         input_stream = InputStream(command)
         lexer = ShellGrammarLexer(input_stream)
         token_stream = CommonTokenStream(lexer)
@@ -29,23 +30,23 @@ class TestShellCommands(unittest.TestCase):
         actual_output = converter.visit(parse_tree)
         self.assertEqual(actual_output, expected_output)
 
-    def test_convert_echo_hello(self):
-        self.test_convert_check_command(
-            "echo hello", Commmand(Call((Argument("echo")), Atom(Argument("hello"))))
+    def test_echo_hello(self):
+        self.check_command(
+            "echo hello", Command(Call((Argument("echo")), Atom(Argument("hello"))))
         )
 
-    def test_convert_ls_l_home(self):
-        self.test_convert_check_command(
+    def test_ls_l_home(self):
+        self.check_command(
             "ls -l /home",
-            Commmand(
+            Command(
                 Call((Argument("ls")), Atom(Argument("-l")), Atom(Argument("/home")))
             ),
         )
 
-    def test_convert_cat_file_txt_pipe_grep_search_term(self):
-        self.test_convert_check_command(
+    def test_cat_file_txt_pipe_grep_search_term(self):
+        self.check_command(
             "cat file.txt | grep search_term",
-            Commmand(
+            Command(
                 Pipe(
                     Call((Argument("cat")), Atom(Argument("file.txt"))),
                     Call((Argument("grep")), Atom(Argument("search_term"))),
@@ -53,10 +54,10 @@ class TestShellCommands(unittest.TestCase):
             ),
         )
 
-    def test_convert_echo_hello_redirection(self):
-        self.test_convert_check_command(
+    def test_echo_hello_redirection(self):
+        self.check_command(
             "echo hello > output.txt",
-            Commmand(
+            Command(
                 Call(
                     (Argument("echo")),
                     Atom(Argument("hello")),
@@ -65,10 +66,10 @@ class TestShellCommands(unittest.TestCase):
             ),
         )
 
-    def test_convert_grep_search_term_redirection(self):
-        self.test_convert_check_command(
+    def test_grep_search_term_redirection(self):
+        self.check_command(
             "grep search_term < input.txt",
-            Commmand(
+            Command(
                 Call(
                     (Argument("grep")),
                     Atom(Argument("search_term")),
@@ -77,10 +78,10 @@ class TestShellCommands(unittest.TestCase):
             ),
         )
 
-    def test_convert_mkdir_cd_new_folder(self):
-        self.test_convert_check_command(
+    def test_mkdir_cd_new_folder(self):
+        self.check_command(
             "mkdir new_folder; cd new_folder",
-            Commmand(
+            Command(
                 Seq(
                     Call((Argument("mkdir")), Atom(Argument("new_folder"))),
                     Call((Argument("cd")), Atom(Argument("new_folder"))),
@@ -88,10 +89,10 @@ class TestShellCommands(unittest.TestCase):
             ),
         )
 
-    def test_convert_echo_double_quoted(self):
-        self.test_convert_check_command(
+    def test_echo_double_quoted(self):
+        self.check_command(
             'echo "hello world"',
-            Commmand(
+            Command(
                 Call(
                     (Argument("echo")),
                     Atom(Argument(Quoted(DoubleQuoted("hello world")))),
@@ -99,10 +100,10 @@ class TestShellCommands(unittest.TestCase):
             ),
         )
 
-    def test_convert_echo_back_quoted(self):
-        self.test_convert_check_command(
+    def test_echo_back_quoted(self):
+        self.check_command(
             "echo `date`",
-            Commmand(
+            Command(
                 Call((Argument("echo")), Atom(Argument(Quoted(BackQuoted("date")))))
             ),
         )

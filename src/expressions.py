@@ -1,4 +1,4 @@
-from typing import Deque
+from typing import Deque, List
 from abc import ABC, abstractmethod
 
 import shell
@@ -110,6 +110,7 @@ class Call(AbstractShellFeature):
         # self.args could be (Redirection(), Argument(), Atom(), Atom(), ...)
         # eval each class in self.args and store in new_args list
         new_args = [c.eval(input, output) for c in self.args]
+        # e.g. new_args = [echo, hello]
         # now I have a bunch of shit to deal with
 
         # attempt 1: which handles a simple case
@@ -174,7 +175,12 @@ class Redirection(AbstractShellFeature):
         return (self.type, argument)
 
 
+# Edge case: Argument can have more than one child
+# e.g. echo "hello"'world'lol - check on ANTLR tree
+# Argument(Quoted(DoubleQuoted("hello")), Quoted(SingleQuoted('world')), lol)
 class Argument(AbstractShellFeature):
+    # child is a list of elements
+    # arguement can have multiple children
     def __init__(self, child):
         self.child = child
 
@@ -186,12 +192,18 @@ class Argument(AbstractShellFeature):
 
     # child of argument could be Quoted class or text (e.g. "echo")
     def eval(self, input, output):
-        # child is quoted class
-        if isinstance(self.child, Quoted):
-            return self.child.eval(input, output)
-        # child is text
-        else:
-            return self.child
+        elements = [
+            c.eval() if isinstance(c, Quoted) else c for c in self.child
+        ]
+
+        return elements
+
+        # # child is quoted class
+        # if isinstance(self.child, Quoted):
+        #     return self.child.eval(input, output)
+        # # child is text
+        # else:
+        #     return self.child
 
 
 class Quoted(AbstractShellFeature):
@@ -246,7 +258,6 @@ class DoubleQuoted(AbstractShellFeature):
 
 
 ##############################################################################
-# This is quite hard to implement - AK
 class BackQuoted(AbstractShellFeature):
     def __init__(self, child):
         self.child = child

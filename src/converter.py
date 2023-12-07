@@ -121,13 +121,32 @@ class Converter(ShellGrammarVisitor):
 
         return Redirection(redirection_type, self.visitArgument(argument))
 
-    def visitArgument(self, ctx: ShellGrammarParser.ArgumentContext):
-        child = ctx.children[0]
+    # def visitArgument(self, ctx: ShellGrammarParser.ArgumentContext):
+    #     child = ctx.children[0]
 
-        if isinstance(child, ShellGrammarParser.QuotedContext):
-            return Argument(self.visitQuoted(child))
-        else:
-            return Argument(child.getText())
+    #     if isinstance(child, ShellGrammarParser.QuotedContext):
+    #         return Argument(self.visitQuoted(child))
+    #     else:
+    #         return Argument(child.getText())
+
+    """
+    # Alternative implementation of visitArgument
+    # Because Arugment can have multiple children
+    # e.g. echo "hello"'world'lol - check on ANTLR tree
+    # Argument(Quoted(DoubleQuoted("hello")), Quoted(SingleQuoted('world')), lol)
+    """
+
+    def visitArgument(self, ctx: ShellGrammarParser.ArgumentContext):
+        elements = []
+
+        for child in ctx.children:
+            if isinstance(child, ShellGrammarParser.QuotedContext):
+                elements.append(self.visitQuoted(child))
+            else:
+                # base case: child is text
+                elements.append(child.getText())
+
+        return Argument(*elements)
 
     def visitQuoted(self, ctx: ShellGrammarParser.QuotedContext):
         child = ctx.children[0]

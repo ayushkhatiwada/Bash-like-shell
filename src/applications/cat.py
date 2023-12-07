@@ -1,16 +1,16 @@
 import os
-from collections import deque
+from typing import Deque, List
 
-from applications.application import AbstractApplication
+from applications.application import Application
 
 
-class Cat(AbstractApplication):
+class Cat(Application):
     name = "cat"
 
     def __init__(self) -> None:
         super().__init__()
 
-    def exec(self, args: list[str], input: list[str], out: deque[str]) -> None:
+    def exec(self, args: List[str], input: List[str], out: Deque[str]) -> None:
         if args:
             # Process each file in the args
             for filename in args:

@@ -1,16 +1,16 @@
-from collections import deque
+from typing import Deque, List
 
-from applications.application import AbstractApplication
+from applications.application import Application
 
 
-class Uniq(AbstractApplication):
+class Uniq(Application):
 
     name = "uniq"
 
     def __init__(self) -> None:
         super().__init__()
 
-    def exec(self, args: list[str], input: list[str], out: deque[str]) -> None:
+    def exec(self, args: List[str], input: List[str], out: Deque[str]) -> None:
         ignore_case = '-i' in args
         file_name = None
 

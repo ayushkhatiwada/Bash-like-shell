@@ -1,5 +1,5 @@
 import re
-from collections import deque
+from typing import Deque, List
 
 from applications.application import Application
 
@@ -10,7 +10,7 @@ class Grep(Application):
     def __init__(self) -> None:
         super().__init__()
 
-    def exec(self, args: list[str], input: list[str], out: deque[str]) -> None:
+    def exec(self, args: List[str], input: List[str], out: Deque[str]) -> None:
         if len(args) == 0:
             raise ValueError("No pattern provided for grep command")
 

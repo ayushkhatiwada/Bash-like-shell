@@ -1,4 +1,4 @@
-from collections import deque
+from typing import Deque, List
 
 from applications.application import Application
 
@@ -9,7 +9,7 @@ class Head(Application):
     def __init__(self) -> None:
         super().__init__()
 
-    def exec(self, args: list[str], input: list[str], out: deque[str]) -> None:
+    def exec(self, args: List[str], input: List[str], out: Deque[str]) -> None:
         num_lines = 10  # Default number of lines
         file_name = None
 

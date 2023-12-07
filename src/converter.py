@@ -2,7 +2,7 @@ from antlr.ShellGrammarParser import ShellGrammarParser
 from antlr.ShellGrammarVisitor import ShellGrammarVisitor
 
 from expressions import (
-    Commmand,
+    Command,
     Pipe,
     Seq,
     Call,
@@ -28,9 +28,12 @@ Here's how it works:
 echo hello becomes:
 Command(  Call( Argument("echo"), Atom(Argument("hello")) )  )
 
+To evaluate:
+Command(  Pipe(Call(Argument("echo"), Atom(Argument("hello")))  ).eval()
 
 echo hello | grep he becomes:
-Command(  Pipe(Call(Argument("echo"), Atom(Argument("hello")))  ).eval()
+Command(  Pipe(Call(Argument("echo"), Atom(Argument("hello"))),
+    Call(Argument("grep"), Atom(Argument("he"))))  )
 """
 
 
@@ -45,11 +48,11 @@ class Converter(ShellGrammarVisitor):
         child = ctx.children[0]
 
         if isinstance(child, ShellGrammarParser.PipeContext):
-            return Commmand(self.visitPipe(child))
+            return Command(self.visitPipe(child))
         elif isinstance(child, ShellGrammarParser.SeqContext):
-            return Commmand(self.visitSeq(child))
+            return Command(self.visitSeq(child))
         elif isinstance(child, ShellGrammarParser.CallContext):
-            return Commmand(self.visitCall(child))
+            return Command(self.visitCall(child))
 
         raise AssertionError("Command must be of type pipe, seq or call")
 
@@ -63,9 +66,11 @@ class Converter(ShellGrammarVisitor):
         elif isinstance(right_side, ShellGrammarParser.PipeContext):
             right_side = self.visitPipe(right_side)
         else:
-            raise AssertionError("""
+            raise AssertionError(
+                """
                 Right side of | must be either of type pipe or call
-            """)
+            """
+            )
 
         return Pipe(left_side, right_side)
 
@@ -76,8 +81,10 @@ class Converter(ShellGrammarVisitor):
         elif isinstance(left_side, ShellGrammarParser.CallContext):
             left_side = self.visitCall(left_side)
         else:
-            raise AssertionError("""Left side of ; must be either of type pipe
-            or call""")
+            raise AssertionError(
+                """Left side of ; must be either of type pipe
+            or call"""
+            )
 
         right_side = ctx.children[2]
         if isinstance(right_side, ShellGrammarParser.PipeContext):
@@ -87,8 +94,10 @@ class Converter(ShellGrammarVisitor):
         if isinstance(right_side, ShellGrammarParser.CallContext):
             right_side = self.visitCall(right_side)
         else:
-            raise AssertionError("""Right side of ; must be either of type
-            pipe, seq or call""")
+            raise AssertionError(
+                """Right side of ; must be either of type
+            pipe, seq or call"""
+            )
 
         return Seq(left_side, right_side)
 
@@ -114,8 +123,10 @@ class Converter(ShellGrammarVisitor):
         if isinstance(child, ShellGrammarParser.ArgumentContext):
             return Atom(self.visitArgument(child))
         else:
-            raise AssertionError("""Atom must be of type redirection
-            or argument""")
+            raise AssertionError(
+                """Atom must be of type redirection
+            or argument"""
+            )
 
     # not 100% confident in this
     def visitRedirection(self, ctx: ShellGrammarParser.RedirectionContext):
@@ -149,8 +160,10 @@ class Converter(ShellGrammarVisitor):
         elif isinstance(child, ShellGrammarParser.BackQuotedContext):
             return Quoted(self.visitBackQuoted(child))
         else:
-            raise AssertionError("""Quoted must be of type singleQuoted,
-            doubleQuoted or backQuoted""")
+            raise AssertionError(
+                """Quoted must be of type singleQuoted,
+            doubleQuoted or backQuoted"""
+            )
 
     def visitSingleQuoted(self, ctx: ShellGrammarParser.SingleQuotedContext):
         # Getting 2nd child because the first & last childs are single quotes

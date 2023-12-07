@@ -3,7 +3,14 @@
   ApplicationError should take (name, and arguments then)
 - use `mock` for testing?
 - Update the requirement.txt (remember about antlr version, antlr4-python3-runtime==4.13.1)
+- Where does the name AbstractShellFeature in expressions.py come from?
+- In converter.py, rename functions to use the underscore_notation
 
 Applications
 - Ls
   - add more error handling, e.g. permission error ?
+
+
+Tests
+- test_expressions.py
+  - Go through all the tests once again, checking if they are representative of real commands

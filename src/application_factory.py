@@ -1,7 +1,10 @@
 from typing import List
 
 from singleton import Singleton
-from applications.application import Application, ApplicationError
+from applications.application_unsafe import ApplicationUnsafe
+from applications.application import Application
+from applications.application import ApplicationError
+
 from applications.cat import Cat
 from applications.cd import Cd
 from applications.cut import Cut
@@ -40,10 +43,17 @@ class ApplicationFactory(Singleton):
     Possibly saves memory
     """
 
-    def get_application(self, args: List[str]) -> Application:
-        application_name = args[0]
+    def get_application(self, application_name: str) -> Application:
+        unsafe = False
 
-        # APPLICATIONS dict used to avoid if/swtich statements
-        if application_name in APPLICATIONS:
+        if application_name.startswith("_"):
+            unsafe = True
+            application_name = application_name[1:]
+
+        if application_name not in APPLICATIONS:
+            raise ApplicationError(f"{application_name}: command not found")
+
+        if unsafe:
+            return ApplicationUnsafe(APPLICATIONS[application_name]())
+        else:
             return APPLICATIONS[application_name]()
-        raise ApplicationError(f"{application_name}: command not found")

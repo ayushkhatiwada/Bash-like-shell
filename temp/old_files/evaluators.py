@@ -10,7 +10,7 @@ from visitor import Visitor
 from collections import deque
 
 from expressions import (
-    Commmand,
+    Command,
     Pipe,
     Seq,
     Call,
@@ -20,7 +20,7 @@ from expressions import (
     Quoted,
     SingleQuoted,
     DoubleQuoted,
-    BackQuoted
+    BackQuoted,
 )
 
 
@@ -28,7 +28,7 @@ class Evaluator(Visitor):
     def __init__(self) -> None:
         super().__init__()
 
-    def visit_command(self: Visitor, command: Commmand) -> deque[str]:
+    def visit_command(self: Visitor, command: Command) -> deque[str]:
         return command.child.accept(self)
 
     def visit_pipe(self, pipe: Pipe) -> deque[str]:

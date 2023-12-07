@@ -16,9 +16,15 @@ Command(Call(Argument(echo), Atom(Argument(hello)))).eval()
 
 
 class AbstractShellFeature(ABC):
-    def __str__(self):
-        return "AbstractShellFeature"
+    @abstractmethod
+    def __init__(self) -> None:
+        pass
 
+    @abstractmethod
+    def __str__(self):
+        pass
+
+    @abstractmethod
     def __eq__(self, other):
         pass
 

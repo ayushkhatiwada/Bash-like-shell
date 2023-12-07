@@ -5,6 +5,8 @@
 - Update the requirement.txt (remember about antlr version, antlr4-python3-runtime==4.13.1)
 - Where does the name AbstractShellFeature in expressions.py come from?
 - In converter.py, rename functions to use the underscore_notation
+- Make Application return a List[] instead of modifying a Deque[] (Requires a lot of rewriting, so probably not worth it)
+- What is the accept method in expressions.py class Argument
 
 Applications
 - Ls

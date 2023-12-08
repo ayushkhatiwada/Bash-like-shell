@@ -25,6 +25,9 @@ def exec_shell() -> None:
                 Try typing `-c "<command>"` with quotation marks
                 """
             )
+        print(os.getcwd() + "> ", end="")
+        cmd_line = sys.argv[2]
+        process_input(cmd_line)
 
     # interactive mode - REPL
     else:

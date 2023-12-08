@@ -68,14 +68,14 @@ class Converter(ShellGrammarVisitor):
         right_side = ctx.children[2]
         if isinstance(right_side, ShellGrammarParser.PipeContext):
             right_side = self.visitPipe(right_side)
-        if isinstance(right_side, ShellGrammarParser.SeqContext):
+        elif isinstance(right_side, ShellGrammarParser.SeqContext):
             right_side = self.visitSeq(right_side)
-        if isinstance(right_side, ShellGrammarParser.CallContext):
+        elif isinstance(right_side, ShellGrammarParser.CallContext):
             right_side = self.visitCall(right_side)
         else:
             raise AssertionError(
-                """Right side of ; must be either of type
-            pipe, seq or call"""
+                "Right side of ; must be either of type "
+                "pipe, seq or call"
             )
 
         return Seq(left_side, right_side)
@@ -99,7 +99,7 @@ class Converter(ShellGrammarVisitor):
 
         if isinstance(child, ShellGrammarParser.RedirectionContext):
             return Atom(self.visitRedirection(child))
-        if isinstance(child, ShellGrammarParser.ArgumentContext):
+        elif isinstance(child, ShellGrammarParser.ArgumentContext):
             return Atom(self.visitArgument(child))
         else:
             raise AssertionError(

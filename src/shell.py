@@ -8,7 +8,7 @@ from antlr.ShellGrammarLexer import ShellGrammarLexer
 from antlr.ShellGrammarParser import ShellGrammarParser
 
 import converter
-from applications.application import ApplicationError, ArgumentError
+from applications.application import ApplicationError, FlagError, ArgumentError
 
 
 def exec_shell() -> None:
@@ -49,6 +49,8 @@ def process_input(cmd_line: str) -> None:
         eval(cmd_line, std_out)
     except ArgumentError as err:
         sys.stderr.write(f"argument error: {err}\n")
+    except FlagError as err:
+        sys.stderr.write(f"flag error: {err}\n")
     except ApplicationError as err:
         sys.stderr.write(f"application error: {err}\n")
 

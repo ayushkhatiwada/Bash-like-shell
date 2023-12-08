@@ -10,6 +10,7 @@ class Ls(Application):
     """
 
     name = 'ls'
+    allowed_flags = {'-a', '-s', '-r'}
 
     def exec(
         self,
@@ -17,6 +18,10 @@ class Ls(Application):
         input: List[str],
         output: Deque[str]
     ) -> None:
+        flags, args = self.parse_flags(
+            args=args, allowed_flags=self.allowed_flags
+        )
+
         # Determine the directory to list
         directory_path = args[0] if args else os.getcwd()
 

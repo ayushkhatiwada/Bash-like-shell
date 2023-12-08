@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import Deque, List
+from typing import Deque, List, Set, Tuple
 
 
 class Application(ABC):
@@ -14,6 +14,7 @@ class Application(ABC):
     """
 
     name: str
+    allowed_flags: Set[str]
 
     @abstractmethod
     def exec(
@@ -32,14 +33,51 @@ class Application(ABC):
 
         Raises:
             ArgumentError: Raised if an argument error occurs.
+            FlagError: Raised if a flag error occurs.
             ApplicationError: Raised if an application error occurs.
         """
 
         pass
 
+    @staticmethod
+    def parse_flags(
+        args: List[str],
+        allowed_flags: Set[str]
+    ) -> Tuple[Set[str], List[str]]:
+        """
+        Parse flags, and clean arguments.
+        e.g.
+            args: ['-a', 'temp']
+            returns: (set('-a'), ['temp'])
+
+        Args:
+            args: List of command-line arguments.
+            allowed_flags: Set of allowed flags.
+
+        Raises:
+            FlagError: Raised if a flag error occurs.
+        """
+
+        flags = set()
+        clean_args = []
+
+        for arg in args:
+            if arg.startswith('-'):
+                if arg not in allowed_flags:
+                    raise FlagError(f"Invalid flag: {arg}")
+                flags.add(arg)
+            else:
+                clean_args.append(arg)
+
+        return flags, clean_args
+
 
 class ArgumentError(Exception):
     """Raised if an argument error occurs"""
+
+
+class FlagError(Exception):
+    """Raised if a flag error occurs"""
 
 
 class ApplicationError(Exception):

@@ -9,7 +9,7 @@ class TestApplication(unittest.TestCase):
             allowed_flags = {"-a", "-s", "-r"}
 
             def exec(self, args, input, output):
-                super().exec(args, input, output)
+                pass
 
         self.mock_app = MockApplication()
 

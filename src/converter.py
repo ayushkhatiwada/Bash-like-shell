@@ -107,10 +107,23 @@ class Converter(ShellGrammarVisitor):
             or argument"""
             )
 
+    # # not 100% confient in this
+    # def visitRedirection(self, ctx: ShellGrammarParser.RedirectionContext):
+    #     less_than_or_greater_than = ctx.children[0]
+    #     argument = ctx.children[2]
+
+    #     if less_than_or_greater_than.getText() == ">":
+    #         redirection_type = ">"
+    #     elif less_than_or_greater_than.getText() == "<":
+    #         redirection_type = "<"
+    #     else:
+    #         raise AssertionError("Redirection must be either > or <")
+
+    #     return Redirection(redirection_type, self.visitArgument(argument))
+
     # not 100% confient in this
     def visitRedirection(self, ctx: ShellGrammarParser.RedirectionContext):
         less_than_or_greater_than = ctx.children[0]
-        argument = ctx.children[2]
 
         if less_than_or_greater_than.getText() == ">":
             redirection_type = ">"
@@ -118,6 +131,14 @@ class Converter(ShellGrammarVisitor):
             redirection_type = "<"
         else:
             raise AssertionError("Redirection must be either > or <")
+
+        # bit dodgy but it works
+        # problem is that redirections could have a space
+        # between the redirection type and the argument
+        # e.g. echo hello > file.txt vs echo hello>file.txt
+        for child in ctx.children:
+            if isinstance(child, ShellGrammarParser.ArgumentContext):
+                argument = child
 
         return Redirection(redirection_type, self.visitArgument(argument))
 

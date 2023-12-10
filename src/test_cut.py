@@ -39,7 +39,9 @@ class TestCut(unittest.TestCase):
     def test_cut_with_file(self):
         output = deque()
         test_file_content = 'line1\nline2\nline3\n'
-        with mock.patch('builtins.open', mock.mock_open(read_data=test_file_content)):
+        with mock.patch(
+                'builtins.open', mock.mock_open(read_data=test_file_content)):
+
             self.cut_app.exec(['-b', '1-3', 'test_file.txt'], [], output)
             result = ''.join(output)
 
@@ -72,9 +74,15 @@ class TestCut(unittest.TestCase):
     def test_cut_file_not_found_error(self):
         output = deque()
         with self.assertRaises(ApplicationError) as context:
-            self.cut_app.exec(['-b', '1-3', 'nonexistent_file.txt'], [], output)
+            self.cut_app.exec(
+                ['-b', '1-3', 'nonexistent_file.txt'], [], output
+            )
 
-        self.assertTrue('nonexistent_file.txt: Unable to read file or input.' in str(context.exception))
+        self.assertTrue(
+            'nonexistent_file.txt: Unable to read file or input.' in str(
+                context.exception
+            )
+        )
 
 
 if __name__ == '__main__':

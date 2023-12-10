@@ -44,42 +44,6 @@ class ShellGrammarListener(ParseTreeListener):
         pass
 
 
-    # Enter a parse tree produced by ShellGrammarParser#quoted.
-    def enterQuoted(self, ctx:ShellGrammarParser.QuotedContext):
-        pass
-
-    # Exit a parse tree produced by ShellGrammarParser#quoted.
-    def exitQuoted(self, ctx:ShellGrammarParser.QuotedContext):
-        pass
-
-
-    # Enter a parse tree produced by ShellGrammarParser#singleQuoted.
-    def enterSingleQuoted(self, ctx:ShellGrammarParser.SingleQuotedContext):
-        pass
-
-    # Exit a parse tree produced by ShellGrammarParser#singleQuoted.
-    def exitSingleQuoted(self, ctx:ShellGrammarParser.SingleQuotedContext):
-        pass
-
-
-    # Enter a parse tree produced by ShellGrammarParser#backQuoted.
-    def enterBackQuoted(self, ctx:ShellGrammarParser.BackQuotedContext):
-        pass
-
-    # Exit a parse tree produced by ShellGrammarParser#backQuoted.
-    def exitBackQuoted(self, ctx:ShellGrammarParser.BackQuotedContext):
-        pass
-
-
-    # Enter a parse tree produced by ShellGrammarParser#doubleQuoted.
-    def enterDoubleQuoted(self, ctx:ShellGrammarParser.DoubleQuotedContext):
-        pass
-
-    # Exit a parse tree produced by ShellGrammarParser#doubleQuoted.
-    def exitDoubleQuoted(self, ctx:ShellGrammarParser.DoubleQuotedContext):
-        pass
-
-
     # Enter a parse tree produced by ShellGrammarParser#atom.
     def enterAtom(self, ctx:ShellGrammarParser.AtomContext):
         pass
@@ -104,6 +68,42 @@ class ShellGrammarListener(ParseTreeListener):
 
     # Exit a parse tree produced by ShellGrammarParser#redirection.
     def exitRedirection(self, ctx:ShellGrammarParser.RedirectionContext):
+        pass
+
+
+    # Enter a parse tree produced by ShellGrammarParser#quoted.
+    def enterQuoted(self, ctx:ShellGrammarParser.QuotedContext):
+        pass
+
+    # Exit a parse tree produced by ShellGrammarParser#quoted.
+    def exitQuoted(self, ctx:ShellGrammarParser.QuotedContext):
+        pass
+
+
+    # Enter a parse tree produced by ShellGrammarParser#singleQuoted.
+    def enterSingleQuoted(self, ctx:ShellGrammarParser.SingleQuotedContext):
+        pass
+
+    # Exit a parse tree produced by ShellGrammarParser#singleQuoted.
+    def exitSingleQuoted(self, ctx:ShellGrammarParser.SingleQuotedContext):
+        pass
+
+
+    # Enter a parse tree produced by ShellGrammarParser#doubleQuoted.
+    def enterDoubleQuoted(self, ctx:ShellGrammarParser.DoubleQuotedContext):
+        pass
+
+    # Exit a parse tree produced by ShellGrammarParser#doubleQuoted.
+    def exitDoubleQuoted(self, ctx:ShellGrammarParser.DoubleQuotedContext):
+        pass
+
+
+    # Enter a parse tree produced by ShellGrammarParser#backQuoted.
+    def enterBackQuoted(self, ctx:ShellGrammarParser.BackQuotedContext):
+        pass
+
+    # Exit a parse tree produced by ShellGrammarParser#backQuoted.
+    def exitBackQuoted(self, ctx:ShellGrammarParser.BackQuotedContext):
         pass
 
 

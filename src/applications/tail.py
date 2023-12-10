@@ -3,42 +3,51 @@ from collections import deque
 
 from .application import Application, ApplicationError
 
-
 class Tail(Application):
-    name = "tail"
+    name = 'tail'
+    allowed_flags = {'-n'}
 
-    def exec(self, args: List[str], input: List[str], out: Deque[str]) -> None:
-        # Default number of lines to display
-        num_lines = 10
+    def exec(self, args: List[str], input: List[str], output: Deque[str]) -> None:
+        flags, args = self.parse_flags(
+            args=args, allowed_flags=self.allowed_flags
+        )
 
-        # Process command line arguments
-        file_path = None
-        for arg in args:
-            if arg.startswith("-n"):
-                try:
-                    num_lines = int(arg[2:])
-                except ValueError:
-                    raise ApplicationError(
-                        f"{self.name}: Invalid number of lines: {arg[2:]}"
-                    )
-            else:
-                file_path = arg
+        lines_to_print = 10
 
-        # Read from file or stdin
+        if '-n' in flags:
+            try:
+                lines_to_print = int(args[0])
+            except ValueError:
+                raise ApplicationError(
+                    f"{self.name}: invalid number of lines: {args[0]}"
+                )
+            args.remove(args[0])
+
+        # Special case handling for -n 0
+        if lines_to_print == 0:
+            return
+
+        file_path = args[0] if args else None
+
         try:
             if file_path:
-                with open(file_path, "r") as file:
+                with open(file_path, 'r') as file:
                     lines = file.readlines()
             else:
                 lines = input
+
+            # Extract the last 'lines_to_print' lines
+            lines = lines[-lines_to_print:]
+
+            formatted_output = ''.join(lines)
+
+            output.append(formatted_output)
+
         except FileNotFoundError:
             raise ApplicationError(
                 f"{self.name}: {file_path}: No such file or directory."
             )
-
-        last_lines = deque(maxlen=num_lines)
-        for line in lines:
-            last_lines.append(line)
-
-        formatted_output = "".join(last_lines)
-        out.append(formatted_output)
+        except Exception as e:
+            raise ApplicationError(
+                f"{self.name}: An error occurred: {str(e)}"
+            )

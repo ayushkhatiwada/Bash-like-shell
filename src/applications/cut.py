@@ -74,8 +74,13 @@ class Cut(Application):
         return slices
 
     def select_bytes(self, line: str, byte_positions: List[slice]) -> str:
-        selected_bytes = []
+        byte_indices = set()
         for position in byte_positions:
-            selected_bytes.append(line[position])
-        # Join the selected bytes and remove any trailing newline
+            start = position.start if position.start is not None else 0
+            stop = position.stop if position.stop is not None else len(line)
+            byte_indices.update(range(start, stop))
+
+        selected_bytes = [line[i] for i in sorted(byte_indices) if i < len(line)]
         return ''.join(selected_bytes).rstrip('\n')
+
+

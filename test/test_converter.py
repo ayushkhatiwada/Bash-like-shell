@@ -30,22 +30,4 @@ class TestConverter(unittest.TestCase):
     #     cmd_line = "echo hello ; echo world;
     #     expression = self.strToExpression(cmd_line)
 
-    #     self.assertEqual(
-    #         str(expression),
-    #         Command(
-    #             Seq(
-    #                 Call(Argument([\'echo\']), Atom(Argument([\'hello\']))), 
-    #                 Seq(
-    #                     Call(Argument([\'echo\']), Atom(Argument([\'world\']))), 
-    #                     Call(Argument([\'echo\']), Atom(Argument([\'hello\', \'world\'])))
-    #                 )
-    #             )
-    #         )"
-    #         # "Command("
-    #         # "Seq(Call(Argument([\'echo\']), Atom(Argument([\'hello\']))), "
-    #         # "Seq(Call(Argument([\'echo\']), Atom(Argument([\'world\']))), "
-    #         # "Call(Argument([\'echo\']), "
-    #         # "Atom(Argument([\'hello\']), Atom(Argument([\'world\']))))"
-    #     )
-
 # TODO: Add more tests

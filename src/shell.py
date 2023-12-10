@@ -9,6 +9,7 @@ from antlr.ShellGrammarParser import ShellGrammarParser
 
 import converter
 from applications.application import ApplicationError, FlagError, ArgumentError
+from globbing import expand_glob_command
 
 
 def exec_shell() -> None:
@@ -39,6 +40,9 @@ def exec_shell() -> None:
 def process_input(cmd_line: str) -> None:
     # removes whitespace from beginning and end of string
     cmd_line = cmd_line.strip()
+
+    # expand globbing
+    cmd_line = expand_glob_command(cmd_line)
 
     # if no command was entered, do nothing
     if not cmd_line:

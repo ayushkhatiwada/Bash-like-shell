@@ -18,6 +18,8 @@ class Ls(Application):
         input: List[str],
         output: Deque[str]
     ) -> None:
+        args = input + args
+
         flags, args = self.parse_flags(
             args=args, allowed_flags=self.allowed_flags
         )

@@ -77,7 +77,9 @@ class TestGrep(unittest.TestCase):
 
         self.grep_app.exec([pattern, 'file1'], [], output)
 
-        found = any(expected_line in line and 'file1:' in line for line in output)
+        found = any(
+            expected_line in line and 'file1:' in line for line in output
+        )
         self.assertTrue(found, f"Pattern '{pattern}' was not found in 'file1'")
 
     def test_grep_file_not_found(self):

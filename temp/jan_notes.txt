@@ -7,6 +7,8 @@
 - In converter.py, rename functions to use the underscore_notation
 - Make Application return a List[] instead of modifying a Deque[] (Requires a lot of rewriting, so probably not worth it)
 - What is the accept method in expressions.py class Argument
+- NON_KEYWORD useless in antlr grammar
+- Output lines shouldn't have '\n'  at the end, this should be added in the shell.py
 
 Applications
 - Ls
@@ -16,3 +18,4 @@ Applications
 Tests
 - test_expressions.py
   - Go through all the tests once again, checking if they are representative of real commands
+- Don't have any statements outside methods in test files: e.g. in test_cd use self.cd_app in setUp

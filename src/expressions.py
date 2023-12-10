@@ -1,8 +1,10 @@
-from typing import Deque, List
+from typing import Deque
 from abc import ABC, abstractmethod
+from collections import deque
 
 import shell
 from application_factory import ApplicationFactory
+from applications.application import ApplicationError
 
 """
 Implementation of commands (Pipe, Seq, Call) will be done here
@@ -29,7 +31,7 @@ class AbstractShellFeature(ABC):
         pass
 
     @abstractmethod
-    def eval(self, input, output):
+    def eval(self):
         pass
 
 
@@ -43,18 +45,12 @@ class Command(AbstractShellFeature):
     def __eq__(self, other):
         return isinstance(other, Command) and self.child == other.child
 
-    def eval(self, input: Deque[str] = None, output: Deque[str] = None):
-        # return self.child.eval(input, output)
-
-        # Don't need to return anything in eval
-        # Because output is a deque that is passed around
-        self.child.eval(input, output)
+    def eval(self, output: Deque[str]):
+        self.child.eval(output)
 
 
-##############################################################################
-# dunno if this works
 class Pipe(AbstractShellFeature):
-    def __init__(self, left, right) -> None:
+    def __init__(self, left, right):
         self.left = left
         self.right = right
 
@@ -68,18 +64,17 @@ class Pipe(AbstractShellFeature):
             and self.right == other.right
         )
 
-    # don't need input=None, output=None
-    # Because Command class's eval method has input=None, output=None
-    # This input and output from Command will be passed to Pipe's eval method
-    # So, Pipe's eval method will get input and output passed in
-    # Same goes for Seq and Call and other nested classes
-    def eval(self, input, output):
-        std_out_left_side = self.left.eval(input, output)
-        self.right.eval(std_out_left_side, output)
+    def eval(self, output, input=deque()):
+        left_output = deque()
+        self.left.eval(left_output, input)
+        self.right.eval(output, left_output)
+
+        # std_out_left_side = self.left.eval(output)
+        # self.right.eval(std_out_left_side, output)
 
 
 class Seq:
-    def __init__(self, left, right) -> None:
+    def __init__(self, left, right):
         self.left = left
         self.right = right
 
@@ -93,12 +88,11 @@ class Seq:
             and self.right == other.right
         )
 
-    def eval(self, input, output):
-        self.left.eval(input, output)
-        self.right.eval(input, output)
+    def eval(self, output):
+        self.left.eval(output)
+        self.right.eval(output)
 
 
-###############################################################################
 class Call(AbstractShellFeature):
     def __init__(self, *args):
         # self.args is a tuple
@@ -112,19 +106,73 @@ class Call(AbstractShellFeature):
     def __eq__(self, other):
         return isinstance(other, Call) and self.args == other.args
 
-    def eval(self, input, output):
+    def handle_redirections(self, redirections):
+        input = []
+        output_file = None
+
+        redirection_input = False
+        redirection_output = False
+
+        for redirection in redirections:
+            if redirection.type == "<":
+                if redirection_input:
+                    # TODO: Change this to custom exception
+                    raise ApplicationError("Multiple input redirections")
+                redirection_input = True
+
+                with open(redirection.argument, "r") as file:
+                    for line in file:
+                        input.append(line)
+
+            elif redirection.type == ">":
+                if redirection_output:
+                    # TODO: Change this to custom exception
+                    raise ApplicationError("Multiple output redirections")
+                redirection_output = True
+
+                output_file = redirection.argument
+
+        return input, output_file
+
+    def eval(self, output, input=deque()):
         # self.args could be (Redirection(), Argument(), Atom(), Atom(), ...)
-        # eval each class in self.args and store in new_args list
-        new_args = [c.eval(input, output) for c in self.args]
-        # e.g. new_args = [echo, hello]
-        # now I have a bunch of shit to deal with
+        # eval each class in self.args and store in evaluated_args list
+        app_input = []
+        while input:
+            app_input.append(input.popleft()[:-1])  # remove \n
 
-        # attempt 1: which handles a simple case
-        application_name = new_args[0]
-        args = new_args[1:]
+        # filter arguments and redirections
+        evaluated_args = []
+        redirections = []
 
-        app = ApplicationFactory().get_application([application_name])
-        app.exec(args, None, output)
+        for arg in self.args:
+            evaluated_arg = arg.eval()
+
+            if isinstance(evaluated_arg, Redirection):
+                redirections.append(evaluated_arg)
+            else:
+                evaluated_args.append(evaluated_arg)
+
+        # handle redirections
+        extra_app_input, output_file = self.handle_redirections(redirections)
+        app_input += extra_app_input
+
+        application_name = evaluated_args[0]
+        args = evaluated_args[1:]
+
+        app = ApplicationFactory().get_application(application_name)
+
+        if output_file:
+            # output redirection to a file
+            output_to_file = deque()
+            app.exec(args, app_input, output_to_file)
+
+            with open(output_file, "w") as file:
+                while output_to_file:
+                    file.write(output_to_file.popleft())
+        else:
+            # output to stdout
+            app.exec(args, app_input, output)
 
 
 class Atom(AbstractShellFeature):
@@ -137,12 +185,11 @@ class Atom(AbstractShellFeature):
     def __eq__(self, other):
         return isinstance(other, Atom) and self.child == other.child
 
-    def eval(self, input, output):
-        # Atoms' children are either redirection or argument
-        return self.child.eval(input, output)
+    def eval(self):
+        # Atoms' child: redirection or argument
+        return self.child.eval()
 
 
-###############################################################################
 class Redirection(AbstractShellFeature):
     """
     Redirection from Sergey's README:
@@ -157,59 +204,49 @@ class Redirection(AbstractShellFeature):
     So >> is not needed
     """
 
-    def __init__(self, type, argument_class):
-        # redirection has two children
-        # left child is redirection type (> or <)
-        # right child is an argument class
-        # check antlr tree to see what I mean
-        self.type = type
-        self.argument_class = argument_class
+    def __init__(self, type, argument):
+        self.type: str = type  # redirection type: < or >
+        self.argument: Argument = argument  # redirection arg
 
     def __str__(self):
-        return f"Redirection({self.type}, {self.argument_class})"
+        return f"Redirection({self.type}, {self.argument})"
 
     def __eq__(self, other):
         return (
             isinstance(other, Redirection)
             and self.type == other.type
-            and self.argument_class == other.argument_class
+            and self.argument == other.argument
         )
 
-    def eval(self, input, output):
-        # eval argument class (right child)
-        argument = self.argument_class.eval(input, output)
-        return (self.type, argument)
+    def eval(self):        
+        self.argument = self.argument.eval()
+        return self
 
 
 # Edge case: Argument can have more than one child
 # e.g. echo "hello"'world'lol - check on ANTLR tree
 # Argument(Quoted(DoubleQuoted("hello")), Quoted(SingleQuoted('world')), lol)
 class Argument(AbstractShellFeature):
-    # child is a list of elements
+    # children is a list of elements
     # arguement can have multiple children
-    def __init__(self, child):
-        self.child = child
+    def __init__(self, *children):
+        self.children = list(children)
 
     def __str__(self):
-        return f"Argument({self.child})"
+        return f"Argument({[str(child) for child in self.children]})"
 
     def __eq__(self, other):
-        return isinstance(other, Argument) and self.child == other.child
+        return isinstance(other, Argument) and self.children == other.children
 
     # child of argument could be Quoted class or text (e.g. "echo")
-    def eval(self, input, output):
-        elements = [
-            c.eval() if isinstance(c, Quoted) else c for c in self.child
-        ]
-
-        return elements
-
-        # # child is quoted class
-        # if isinstance(self.child, Quoted):
-        #     return self.child.eval(input, output)
-        # # child is text
-        # else:
-        #     return self.child
+    def eval(self) -> str:
+        result = ""
+        for child in self.children:
+            if isinstance(child, Quoted):
+                result += child.eval()
+            else:
+                result += child
+        return result
 
 
 class Quoted(AbstractShellFeature):
@@ -222,48 +259,58 @@ class Quoted(AbstractShellFeature):
     def __eq__(self, other):
         return isinstance(other, Quoted) and self.child == other.child
 
-    def eval(self, input, output):
-        # Quoted's child is either single quoted, double quoted, or back quoted
-        return self.child.eval(input, output)
+    def eval(self):
+        # Quoted's child: single quoted or double quoted or back quoted
+        return self.child.eval()
 
 
 class SingleQuoted(AbstractShellFeature):
-    def __init__(self, child):
-        self.child = child
+    def __init__(self, *children):
+        self.children = list(children)
 
     def __str__(self):
-        return f"SingleQuoted({self.child})"
+        return f"SingleQuoted({self.children})"
 
     def __eq__(self, other):
-        return isinstance(other, SingleQuoted) and self.child == other.child
+        return (
+            isinstance(other, SingleQuoted) and self.children == other.children
+        )
 
-    def eval(self, input, output):
-        # "Base case", single quoted contains text only
-        return self.child
+    def eval(self) -> str:
+        # base case: single quoted contains text only
+        result = ""
+        for child in self.children:
+            result += child
+        return result
 
 
 class DoubleQuoted(AbstractShellFeature):
-    # child is a list of elements
+    # children is a list of elements
     # elements could be text or backQuoted
     # see visitDoubleQuoted method in converter.py
     # e.g. elements = [text, text, backQuoted(), text, backQuoted(), text]
-    def __init__(self, child):
-        self.child = child
+    def __init__(self, *children):
+        self.children = list(children)
 
     def __str__(self):
-        return f"DoubleQuoted({self.child})"
+        return f"DoubleQuoted({self.children})"
 
     def __eq__(self, other):
-        return isinstance(other, DoubleQuoted) and self.child == other.child
+        return (
+            isinstance(other, DoubleQuoted) and
+            self.children == other.children
+        )
 
-    def eval(self, input, output):
-        elements = [
-            c.eval() if isinstance(c, BackQuoted) else c for c in self.child
-        ]
-        return elements
+    def eval(self) -> str:
+        result = ""
+        for child in self.children:
+            if isinstance(child, str):
+                result += child
+            else:
+                result += child.eval()
+        return result
 
 
-##############################################################################
 class BackQuoted(AbstractShellFeature):
     def __init__(self, child):
         self.child = child
@@ -276,8 +323,13 @@ class BackQuoted(AbstractShellFeature):
 
     # backQuoted is a sort of base case
     # it does not contain any classes inside it
-    def eval(self, input, output):
-        # This is black magic
-        # Circular import is somehow avoided
+    def eval(self):
         expression = shell.convert(self.child)
-        return expression.eval()
+
+        expression_output = deque()
+        expression.eval(expression_output)
+
+        result = ""
+        while expression_output:
+            result += expression_output.popleft()[:-1]  # remove \n
+        return result

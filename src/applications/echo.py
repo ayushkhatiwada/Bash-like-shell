@@ -14,7 +14,7 @@ class Echo(Application):
         super().__init__()
 
     def exec(self, args: List[str], input: List[str], out: Deque[str]) -> None:
-        output = " ".join(args)
+        output = " ".join(input + args)
         out.append(output + "\n")
 
 # TODO (maybe): add flag -n to omit the new line

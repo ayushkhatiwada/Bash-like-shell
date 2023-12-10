@@ -133,7 +133,10 @@ class Converter(ShellGrammarVisitor):
     # Alternative implementation of visitArgument
     # Because Arugment can have multiple children
     # e.g. echo "hello"'world'lol - check on ANTLR tree
-    # Argument(Quoted(DoubleQuoted("hello")), Quoted(SingleQuoted('world')), lol)
+    # Argument(
+    #   Quoted(DoubleQuoted("hello")),
+    #   Quoted(SingleQuoted('world')), lol
+    # )
     """
 
     def visitArgument(self, ctx: ShellGrammarParser.ArgumentContext):
@@ -164,10 +167,13 @@ class Converter(ShellGrammarVisitor):
             )
 
     def visitSingleQuoted(self, ctx: ShellGrammarParser.SingleQuotedContext):
-        # Getting 2nd child because the first & last childs are single quotes
-        # Check Antlr lab tree to see why
-        child = ctx.children[1]
-        return SingleQuoted(child.getText())
+        elements = []
+        for child in ctx.getChildren():
+            if child.getText() == "'":
+                continue
+            elements.append(child.getText())
+
+        return SingleQuoted(*elements)
 
     # From HJP/XLow - might need to change
     def visitDoubleQuoted(self, ctx: ShellGrammarParser.DoubleQuotedContext):
@@ -193,7 +199,10 @@ class Converter(ShellGrammarVisitor):
         return DoubleQuoted(*elements)
 
     def visitBackQuoted(self, ctx: ShellGrammarParser.BackQuotedContext):
-        # Getting the 2nd child because the first & last childs are back quotes
-        # Check Antlr lab tree to see why
-        child = ctx.children[1]
-        return BackQuoted(child.getText())
+        child = ""
+        for c in ctx.children:
+            if c.getText() == "`":
+                continue
+            child += c.getText()
+
+        return BackQuoted(child)

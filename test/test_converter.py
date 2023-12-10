@@ -25,3 +25,14 @@ class TestConverter(unittest.TestCase):
             str(expression),
             "Command(Call(Argument(echo), Atom(Argument(hello))))"
         )
+
+    def test_converting_sequence(self):
+        cmd_line = "echo hello ; echo world; echo hello world"
+        expression = self.strToExpression(cmd_line)
+
+        self.assertEqual(
+            str(expression),
+            "Seq(Call(Argument(echo), Atom(Argument(hello))), "
+            "Seq(Call(Argument(echo), Atom(Argument(world))), "
+            "Call(Argument(echo), Atom(Argument(hello world)))))"
+        )

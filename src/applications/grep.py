@@ -7,7 +7,12 @@ from .application import Application, ApplicationError
 class Grep(Application):
     name = "grep"
 
-    def exec(self, args: List[str], input: List[str], output: Deque[str]) -> None:
+    def exec(
+        self,
+        args: List[str],
+        input: List[str],
+        output: Deque[str]
+    ) -> None:
         if not args:
             raise ApplicationError(f"{self.name}: No pattern provided.")
 
@@ -17,7 +22,9 @@ class Grep(Application):
         try:
             regex = re.compile(pattern)
         except re.error as e:
-            raise ApplicationError(f"{self.name}: Invalid regular expression - {e}")
+            raise ApplicationError(
+                f"{self.name}: Invalid regular expression - {e}"
+            )
 
         if files:
             # Process each file
@@ -28,7 +35,9 @@ class Grep(Application):
                             if regex.search(line):
                                 output.append(f"{file_name}:{line}")
                 except FileNotFoundError:
-                    raise ApplicationError(f"{self.name}: File not found: {file_name}")
+                    raise ApplicationError(
+                        f"{self.name}: File not found: {file_name}"
+                    )
         else:
             for line in input:
                 if regex.search(line):

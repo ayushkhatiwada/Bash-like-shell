@@ -1,5 +1,3 @@
-# import os
-# import sys
 from typing import Deque, List
 
 from .application import Application, ApplicationError
@@ -11,7 +9,7 @@ from .application import Application, ApplicationError
         result = stdout.strip().split("\n")
         self.assertEqual(result, ["AA", "BB", "AA"])
 
-Need to pass this specific test case
+Need to pass this specific test case from system_test/tests.py
 """
 
 

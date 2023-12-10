@@ -133,3 +133,6 @@ practice/
 
 # do note remove - ayush
 docker_commands.txt
+
+# notes of tests that don't pass
+zz_no_pass_tests.txt

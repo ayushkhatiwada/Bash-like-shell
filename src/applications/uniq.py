@@ -5,16 +5,18 @@ from .application import Application, ApplicationError
 
 class Uniq(Application):
     name = "uniq"
+    allowed_flags = {"-i"}
 
     def exec(self, args: List[str], input: List[str], out: Deque[str]) -> None:
-        ignore_case = "-i" in args
+        flags, args = self.parse_flags(args, self.allowed_flags)
+
+        ignore_case = "-i" in flags
         file_path = None
 
         # Check for file argument
         for arg in args:
-            if not arg.startswith("-"):
-                file_path = arg
-                break
+            file_path = arg
+            break
 
         lines = []
         try:
@@ -23,7 +25,7 @@ class Uniq(Application):
                 with open(file_path, "r") as file:
                     lines = file.readlines()
             else:
-                lines = input
+                lines = [line + '\n' for line in input]
 
             self.process_lines(lines, ignore_case, out)
         except FileNotFoundError:

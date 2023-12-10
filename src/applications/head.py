@@ -48,7 +48,7 @@ class Head(Application):
                 with open(file_path, 'r') as file:
                     lines = file.readlines()
             else:
-                lines = input
+                lines = [line + '\n' for line in input]
             lines = lines[:lines_to_print]
 
             formatted_output = ''.join(lines)

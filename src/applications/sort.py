@@ -5,17 +5,17 @@ from .application import Application, ApplicationError
 
 class Sort(Application):
     name = "sort"
+    allowed_flags = {"-r"}
 
     def exec(self, args: List[str], input: List[str], out: Deque[str]) -> None:
-        reverse = "-r" in args
+        flags, args = self.parse_flags(args, self.allowed_flags)
 
         # Separate options from potential file path
         file_path = None
 
         for arg in args:
-            if arg != "-r":
-                file_path = arg
-                break
+            file_path = arg
+            break
 
         # Determine the source of data (file or stdin)
         if file_path:
@@ -28,8 +28,9 @@ class Sort(Application):
                 )
         else:
             # Use stdin if no file is specified
-            lines = input
+            lines = [line + '\n' for line in input]
 
+        reverse = "-r" in flags
         sorted_lines = sorted(lines, reverse=reverse)
-        formatted_output = "".join(sorted_lines)
-        out.append(formatted_output)
+        for line in sorted_lines:
+            out.append(line)

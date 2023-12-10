@@ -36,4 +36,4 @@ class Cat(Application):
         else:
             # If there are no args, process the input list
             for line in input:
-                out.append(line)
+                out.append(line + '\n')

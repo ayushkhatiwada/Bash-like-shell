@@ -44,7 +44,6 @@ class Grep(Application):
                     continue
 
                 if self.flags["-c"]:
-                    # Apply colouring to sections which matched the regex
                     line = re.sub(
                         f"({pattern.pattern})",
                         f"{self.highlight_colour}\\g<1>{self.reset_colour}",

@@ -5,6 +5,7 @@ from .application import Application, ApplicationError
 
 class Head(Application):
     name = 'head'
+    allowed_flags = {'-n'}
 
     def exec(
         self,
@@ -12,19 +13,32 @@ class Head(Application):
         input: List[str],
         output: Deque[str]
     ) -> None:
+        flags, args = self.parse_flags(
+            args=args, allowed_flags=self.allowed_flags
+        )
+
         lines_to_print = 10
 
-        # Process arguments
-        for arg in args:
-            if arg.startswith('-n'):
-                try:
-                    lines_to_print = int(arg[2:])
-                except ValueError:
-                    raise ApplicationError(
-                        f"{self.name}: invalid number of lines: {arg[2:]}"
-                    )
-                args.remove(arg)
-                break
+        if '-n' in flags:
+            try:
+                lines_to_print = int(args[0])
+            except ValueError:
+                raise ApplicationError(
+                    f"{self.name}: invalid number of lines: {args[0]}"
+                )
+            args.remove(args[0])
+
+        # # Process arguments
+        # for arg in args:
+        #     if arg.startswith('-n'):
+        #         try:
+        #             lines_to_print = int(arg[2:])
+        #         except ValueError:
+        #             raise ApplicationError(
+        #                 f"{self.name}: invalid number of lines: {arg[2:]}"
+        #             )
+        #         args.remove(arg)
+        #         break
 
         # Determine the file or stdin
         file_path = args[0] if args else None

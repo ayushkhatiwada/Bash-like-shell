@@ -218,7 +218,7 @@ class Redirection(AbstractShellFeature):
             and self.argument == other.argument
         )
 
-    def eval(self):        
+    def eval(self):
         self.argument = self.argument.eval()
         return self
 

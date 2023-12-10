@@ -41,4 +41,4 @@ class Grep(Application):
         else:
             for line in input:
                 if regex.search(line):
-                    output.append(line)
+                    output.append(line + '\n')

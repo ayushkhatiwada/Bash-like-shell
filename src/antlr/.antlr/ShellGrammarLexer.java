@@ -1,4 +1,4 @@
-// Generated from /Users/janp/Documents/UCL/COMP0010/comp0010-shell-python-p22/src/antlr/ShellGrammar.g4 by ANTLR 4.13.1
+// Generated from /home/ayush/comp0010-shell-python-p22/src/antlr/ShellGrammar.g4 by ANTLR 4.13.1
 import org.antlr.v4.runtime.Lexer;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.Token;
@@ -16,8 +16,8 @@ public class ShellGrammarLexer extends Lexer {
 	protected static final PredictionContextCache _sharedContextCache =
 		new PredictionContextCache();
 	public static final int
-		PIPE=1, SINGLE_QUOTE=2, DOUBLE_QUOTE=3, SEMI_COLON=4, LESS_THAN=5, GREATER_THAN=6, 
-		BACKQUOTE=7, NEWLINE=8, WHITESPACE=9, NON_KEYWORD=10, UNQUOTED=11;
+		UNQUOTED=1, PIPE=2, SINGLE_QUOTE=3, DOUBLE_QUOTE=4, SEMI_COLON=5, LESS_THAN=6, 
+		GREATER_THAN=7, BACKQUOTE=8, NEWLINE=9, WHITESPACE=10;
 	public static String[] channelNames = {
 		"DEFAULT_TOKEN_CHANNEL", "HIDDEN"
 	};
@@ -28,23 +28,22 @@ public class ShellGrammarLexer extends Lexer {
 
 	private static String[] makeRuleNames() {
 		return new String[] {
-			"PIPE", "SINGLE_QUOTE", "DOUBLE_QUOTE", "SEMI_COLON", "LESS_THAN", "GREATER_THAN", 
-			"BACKQUOTE", "NEWLINE", "WHITESPACE", "NON_KEYWORD", "UNQUOTED"
+			"UNQUOTED", "PIPE", "SINGLE_QUOTE", "DOUBLE_QUOTE", "SEMI_COLON", "LESS_THAN", 
+			"GREATER_THAN", "BACKQUOTE", "NEWLINE", "WHITESPACE"
 		};
 	}
 	public static final String[] ruleNames = makeRuleNames();
 
 	private static String[] makeLiteralNames() {
 		return new String[] {
-			null, "'|'", "'''", "'\"'", "';'", "'<'", "'>'", "'`'", "'\\n'"
+			null, null, "'|'", "'''", "'\"'", "';'", "'<'", "'>'", "'`'", "'\\n'"
 		};
 	}
 	private static final String[] _LITERAL_NAMES = makeLiteralNames();
 	private static String[] makeSymbolicNames() {
 		return new String[] {
-			null, "PIPE", "SINGLE_QUOTE", "DOUBLE_QUOTE", "SEMI_COLON", "LESS_THAN", 
-			"GREATER_THAN", "BACKQUOTE", "NEWLINE", "WHITESPACE", "NON_KEYWORD", 
-			"UNQUOTED"
+			null, "UNQUOTED", "PIPE", "SINGLE_QUOTE", "DOUBLE_QUOTE", "SEMI_COLON", 
+			"LESS_THAN", "GREATER_THAN", "BACKQUOTE", "NEWLINE", "WHITESPACE"
 		};
 	}
 	private static final String[] _SYMBOLIC_NAMES = makeSymbolicNames();
@@ -106,40 +105,38 @@ public class ShellGrammarLexer extends Lexer {
 	public ATN getATN() { return _ATN; }
 
 	public static final String _serializedATN =
-		"\u0004\u0000\u000b3\u0006\uffff\uffff\u0002\u0000\u0007\u0000\u0002\u0001"+
+		"\u0004\u0000\n/\u0006\uffff\uffff\u0002\u0000\u0007\u0000\u0002\u0001"+
 		"\u0007\u0001\u0002\u0002\u0007\u0002\u0002\u0003\u0007\u0003\u0002\u0004"+
 		"\u0007\u0004\u0002\u0005\u0007\u0005\u0002\u0006\u0007\u0006\u0002\u0007"+
-		"\u0007\u0007\u0002\b\u0007\b\u0002\t\u0007\t\u0002\n\u0007\n\u0001\u0000"+
-		"\u0001\u0000\u0001\u0001\u0001\u0001\u0001\u0002\u0001\u0002\u0001\u0003"+
-		"\u0001\u0003\u0001\u0004\u0001\u0004\u0001\u0005\u0001\u0005\u0001\u0006"+
-		"\u0001\u0006\u0001\u0007\u0001\u0007\u0001\b\u0004\b)\b\b\u000b\b\f\b"+
-		"*\u0001\t\u0001\t\u0001\n\u0004\n0\b\n\u000b\n\f\n1\u0000\u0000\u000b"+
-		"\u0001\u0001\u0003\u0002\u0005\u0003\u0007\u0004\t\u0005\u000b\u0006\r"+
-		"\u0007\u000f\b\u0011\t\u0013\n\u0015\u000b\u0001\u0000\u0003\u0003\u0000"+
-		"\t\t\r\r  \u0006\u0000\n\n\"\"\'\';;``||\b\u0000\t\n  \"\"\'\';<>>``|"+
-		"|4\u0000\u0001\u0001\u0000\u0000\u0000\u0000\u0003\u0001\u0000\u0000\u0000"+
-		"\u0000\u0005\u0001\u0000\u0000\u0000\u0000\u0007\u0001\u0000\u0000\u0000"+
-		"\u0000\t\u0001\u0000\u0000\u0000\u0000\u000b\u0001\u0000\u0000\u0000\u0000"+
-		"\r\u0001\u0000\u0000\u0000\u0000\u000f\u0001\u0000\u0000\u0000\u0000\u0011"+
-		"\u0001\u0000\u0000\u0000\u0000\u0013\u0001\u0000\u0000\u0000\u0000\u0015"+
-		"\u0001\u0000\u0000\u0000\u0001\u0017\u0001\u0000\u0000\u0000\u0003\u0019"+
-		"\u0001\u0000\u0000\u0000\u0005\u001b\u0001\u0000\u0000\u0000\u0007\u001d"+
-		"\u0001\u0000\u0000\u0000\t\u001f\u0001\u0000\u0000\u0000\u000b!\u0001"+
-		"\u0000\u0000\u0000\r#\u0001\u0000\u0000\u0000\u000f%\u0001\u0000\u0000"+
-		"\u0000\u0011(\u0001\u0000\u0000\u0000\u0013,\u0001\u0000\u0000\u0000\u0015"+
-		"/\u0001\u0000\u0000\u0000\u0017\u0018\u0005|\u0000\u0000\u0018\u0002\u0001"+
-		"\u0000\u0000\u0000\u0019\u001a\u0005\'\u0000\u0000\u001a\u0004\u0001\u0000"+
-		"\u0000\u0000\u001b\u001c\u0005\"\u0000\u0000\u001c\u0006\u0001\u0000\u0000"+
-		"\u0000\u001d\u001e\u0005;\u0000\u0000\u001e\b\u0001\u0000\u0000\u0000"+
-		"\u001f \u0005<\u0000\u0000 \n\u0001\u0000\u0000\u0000!\"\u0005>\u0000"+
-		"\u0000\"\f\u0001\u0000\u0000\u0000#$\u0005`\u0000\u0000$\u000e\u0001\u0000"+
-		"\u0000\u0000%&\u0005\n\u0000\u0000&\u0010\u0001\u0000\u0000\u0000\')\u0007"+
-		"\u0000\u0000\u0000(\'\u0001\u0000\u0000\u0000)*\u0001\u0000\u0000\u0000"+
-		"*(\u0001\u0000\u0000\u0000*+\u0001\u0000\u0000\u0000+\u0012\u0001\u0000"+
-		"\u0000\u0000,-\b\u0001\u0000\u0000-\u0014\u0001\u0000\u0000\u0000.0\b"+
-		"\u0002\u0000\u0000/.\u0001\u0000\u0000\u000001\u0001\u0000\u0000\u0000"+
-		"1/\u0001\u0000\u0000\u000012\u0001\u0000\u0000\u00002\u0016\u0001\u0000"+
-		"\u0000\u0000\u0003\u0000*1\u0000";
+		"\u0007\u0007\u0002\b\u0007\b\u0002\t\u0007\t\u0001\u0000\u0004\u0000\u0017"+
+		"\b\u0000\u000b\u0000\f\u0000\u0018\u0001\u0001\u0001\u0001\u0001\u0002"+
+		"\u0001\u0002\u0001\u0003\u0001\u0003\u0001\u0004\u0001\u0004\u0001\u0005"+
+		"\u0001\u0005\u0001\u0006\u0001\u0006\u0001\u0007\u0001\u0007\u0001\b\u0001"+
+		"\b\u0001\t\u0004\t,\b\t\u000b\t\f\t-\u0000\u0000\n\u0001\u0001\u0003\u0002"+
+		"\u0005\u0003\u0007\u0004\t\u0005\u000b\u0006\r\u0007\u000f\b\u0011\t\u0013"+
+		"\n\u0001\u0000\u0002\b\u0000\t\n  \"\"\'\';<>>``||\u0003\u0000\t\t\r\r"+
+		"  0\u0000\u0001\u0001\u0000\u0000\u0000\u0000\u0003\u0001\u0000\u0000"+
+		"\u0000\u0000\u0005\u0001\u0000\u0000\u0000\u0000\u0007\u0001\u0000\u0000"+
+		"\u0000\u0000\t\u0001\u0000\u0000\u0000\u0000\u000b\u0001\u0000\u0000\u0000"+
+		"\u0000\r\u0001\u0000\u0000\u0000\u0000\u000f\u0001\u0000\u0000\u0000\u0000"+
+		"\u0011\u0001\u0000\u0000\u0000\u0000\u0013\u0001\u0000\u0000\u0000\u0001"+
+		"\u0016\u0001\u0000\u0000\u0000\u0003\u001a\u0001\u0000\u0000\u0000\u0005"+
+		"\u001c\u0001\u0000\u0000\u0000\u0007\u001e\u0001\u0000\u0000\u0000\t "+
+		"\u0001\u0000\u0000\u0000\u000b\"\u0001\u0000\u0000\u0000\r$\u0001\u0000"+
+		"\u0000\u0000\u000f&\u0001\u0000\u0000\u0000\u0011(\u0001\u0000\u0000\u0000"+
+		"\u0013+\u0001\u0000\u0000\u0000\u0015\u0017\b\u0000\u0000\u0000\u0016"+
+		"\u0015\u0001\u0000\u0000\u0000\u0017\u0018\u0001\u0000\u0000\u0000\u0018"+
+		"\u0016\u0001\u0000\u0000\u0000\u0018\u0019\u0001\u0000\u0000\u0000\u0019"+
+		"\u0002\u0001\u0000\u0000\u0000\u001a\u001b\u0005|\u0000\u0000\u001b\u0004"+
+		"\u0001\u0000\u0000\u0000\u001c\u001d\u0005\'\u0000\u0000\u001d\u0006\u0001"+
+		"\u0000\u0000\u0000\u001e\u001f\u0005\"\u0000\u0000\u001f\b\u0001\u0000"+
+		"\u0000\u0000 !\u0005;\u0000\u0000!\n\u0001\u0000\u0000\u0000\"#\u0005"+
+		"<\u0000\u0000#\f\u0001\u0000\u0000\u0000$%\u0005>\u0000\u0000%\u000e\u0001"+
+		"\u0000\u0000\u0000&\'\u0005`\u0000\u0000\'\u0010\u0001\u0000\u0000\u0000"+
+		"()\u0005\n\u0000\u0000)\u0012\u0001\u0000\u0000\u0000*,\u0007\u0001\u0000"+
+		"\u0000+*\u0001\u0000\u0000\u0000,-\u0001\u0000\u0000\u0000-+\u0001\u0000"+
+		"\u0000\u0000-.\u0001\u0000\u0000\u0000.\u0014\u0001\u0000\u0000\u0000"+
+		"\u0003\u0000\u0018-\u0000";
 	public static final ATN _ATN =
 		new ATNDeserializer().deserialize(_serializedATN.toCharArray());
 	static {

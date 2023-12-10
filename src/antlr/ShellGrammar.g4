@@ -18,8 +18,8 @@ doubleQuoted: DOUBLE_QUOTE (backQuoted | ~(NEWLINE | BACKQUOTE))* DOUBLE_QUOTE;
 backQuoted: BACKQUOTE ~(NEWLINE | BACKQUOTE)* BACKQUOTE;
 
 
-
 /* Lexer Rules */
+
 UNQUOTED: ~[\t\n "';<>`|]+;
 
 PIPE: '|';

@@ -36,7 +36,6 @@ class Tail(Application):
             else:
                 lines = input
 
-            # Extract the last 'lines_to_print' lines
             lines = lines[-lines_to_print:]
 
             formatted_output = ''.join(lines)

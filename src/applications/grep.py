@@ -18,6 +18,7 @@ class Grep(Application):
 
         pattern = args[0]
         files = args[1:]
+        num_files = len(files)
 
         try:
             regex = re.compile(pattern)
@@ -33,7 +34,10 @@ class Grep(Application):
                     with open(file_name, 'r') as file:
                         for line in file:
                             if regex.search(line):
-                                output.append(f"{file_name}:{line}")
+                                if num_files > 1:
+                                    output.append(f"{file_name}:{line}")
+                                else:
+                                    output.append(line)
                 except FileNotFoundError:
                     raise ApplicationError(
                         f"{self.name}: File not found: {file_name}"

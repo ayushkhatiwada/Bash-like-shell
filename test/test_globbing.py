@@ -32,6 +32,3 @@ class TestExpandGlob(unittest.TestCase):
         cmd_str = 'ls *.txt'
         result = expand_glob_command(cmd_str)
         self.assertNotEqual(result, cmd_str)  # Should expand the glob pattern
-
-if __name__ == '__main__':
-    unittest.main()

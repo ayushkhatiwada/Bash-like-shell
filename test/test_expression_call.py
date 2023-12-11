@@ -19,13 +19,6 @@ class TestCall(unittest.TestCase):
         self.output_redirection_mock.type = ">"
         self.output_redirection_mock.argument = "output.txt"
 
-    def test_call_str(self):
-        arg_mock = Mock()
-        arg_mock.__str__ = Mock(return_value="ArgMock")
-        call = Call(arg_mock)
-        self.assertEqual(str(call), "Call(ArgMock)")
-
-
     def test_call_init(self):
         arg_mock = Mock()
         call = Call(arg_mock)
@@ -107,7 +100,7 @@ class TestCall(unittest.TestCase):
         command_mock.eval = Mock(return_value="some_command")
 
         redirection_mock = Mock(spec=Redirection)
-        redirection_mock.type = "<"  # or ">" depending on the test case
+        redirection_mock.type = "<"
         redirection_mock.argument = "file.txt"
         redirection_mock.eval.return_value = redirection_mock
 

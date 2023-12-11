@@ -1,7 +1,6 @@
 import unittest
 from unittest.mock import Mock, patch
 from collections import deque
-import shell
 from expressions import BackQuoted
 
 

@@ -1,6 +1,5 @@
 import unittest
 from unittest.mock import Mock
-import shell
 from expressions import DoubleQuoted
 
 

@@ -4,6 +4,7 @@ from collections import deque
 import shell
 from expressions import Command  # Replace with your actual module import
 
+
 class TestCommand(unittest.TestCase):
     def test_command_init(self):
         child_mock = Mock()

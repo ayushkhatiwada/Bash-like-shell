@@ -80,7 +80,7 @@ class Cut(Application):
             stop = position.stop if position.stop is not None else len(line)
             byte_indices.update(range(start, stop))
 
-        selected_bytes = [line[i] for i in sorted(byte_indices) if i < len(line)]
+        selected_bytes = [
+            line[i] for i in sorted(byte_indices) if i < len(line)
+        ]
         return ''.join(selected_bytes).rstrip('\n')
-
-

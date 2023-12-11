@@ -6,7 +6,6 @@ from applications.uniq import Uniq
 from unittest.mock import mock_open, patch
 
 
-
 class TestUniq(unittest.TestCase):
     uniq_app = Uniq()
 
@@ -53,7 +52,8 @@ class TestUniq(unittest.TestCase):
             self.assertEqual(result, expected_output)
 
     def test_uniq_generic_exception_handling(self):
-        with patch('applications.uniq.open', side_effect=Exception("Test Exception")):
+        with patch('applications.uniq.open', side_effect=Exception(
+                "Test Exception")):
             with self.assertRaises(ApplicationError):
                 self.uniq_app.exec(['test_file.txt'], [], deque())
 
@@ -61,4 +61,3 @@ class TestUniq(unittest.TestCase):
         output = deque()
         self.uniq_app.exec([], [], output)
         self.assertEqual(len(output), 0)
-

@@ -4,6 +4,7 @@ from collections import deque
 import shell
 from expressions import Call, Redirection, ApplicationError, ApplicationFactory
 
+
 class TestCall(unittest.TestCase):
     def setUp(self):
         self.input_redirection_mock = Mock(spec=Redirection)
@@ -11,24 +12,34 @@ class TestCall(unittest.TestCase):
         self.input_redirection_mock.argument = "input.txt"
 
         call = Call()
-        with patch('builtins.open', unittest.mock.mock_open(read_data='data')):
+        with patch("builtins.open", unittest.mock.mock_open(read_data="data")):
             with self.assertRaises(ApplicationError):
-                call.handle_redirections([self.input_redirection_mock, self.input_redirection_mock])
+                call.handle_redirections(
+                    [self.input_redirection_mock, self.input_redirection_mock]
+                )
 
         self.output_redirection_mock = Mock(spec=Redirection)
         self.output_redirection_mock.type = ">"
         self.output_redirection_mock.argument = "output.txt"
-
-    def test_call_init(self):
-        arg_mock = Mock()
-        call = Call(arg_mock)
-        self.assertEqual(call.args, (arg_mock,))
 
     def test_call_str(self):
         arg_mock = Mock()
         arg_mock.__str__ = Mock(return_value="ArgMock")
         call = Call(arg_mock)
         self.assertEqual(str(call), "Call(ArgMock)")
+
+    def test_call_init(self):
+        arg_mock = Mock()
+        call = Call(arg_mock)
+        self.assertEqual(call.args, (arg_mock,))
+
+    # Redefinion of test_call_str from line 25
+    # Max??
+    # def test_call_str(self):
+    #     arg_mock = Mock()
+    #     arg_mock.__str__ = Mock(return_value="ArgMock")
+    #     call = Call(arg_mock)
+    #     self.assertEqual(str(call), "Call(ArgMock)")
 
     def test_call_eq(self):
         arg_mock1 = Mock()
@@ -39,14 +50,15 @@ class TestCall(unittest.TestCase):
         self.assertEqual(call1, call2)
         self.assertNotEqual(call1, call3)
 
-
     def test_handle_output_redirection(self):
         output_redirection_mock = Mock(spec=Redirection)
         output_redirection_mock.type = ">"
         output_redirection_mock.argument = "output.txt"
 
         call = Call()
-        input, output_file = call.handle_redirections([output_redirection_mock])
+        input, output_file = call.handle_redirections(
+            [output_redirection_mock]
+        )
 
         self.assertEqual(output_file, "output.txt")
         self.assertEqual(input, [])
@@ -54,7 +66,9 @@ class TestCall(unittest.TestCase):
     def test_handle_multiple_output_redirections_error(self):
         call = Call()
         with self.assertRaises(ApplicationError):
-            call.handle_redirections([self.output_redirection_mock, self.output_redirection_mock])
+            call.handle_redirections(
+                [self.output_redirection_mock, self.output_redirection_mock]
+            )
 
     def test_eval(self):
         app_mock = Mock()
@@ -62,7 +76,9 @@ class TestCall(unittest.TestCase):
         arg_mock = Mock()
         arg_mock.eval.return_value = "arg"
 
-        with patch.object(ApplicationFactory, 'get_application', app_factory_mock):
+        with patch.object(
+                ApplicationFactory, "get_application", app_factory_mock):
+
             call = Call(arg_mock)
             output = deque()
             call.eval(output)
@@ -74,7 +90,9 @@ class TestCall(unittest.TestCase):
         arg_mock = Mock()
         arg_mock.eval.return_value = "arg"
 
-        with patch.object(ApplicationFactory, 'get_application', app_factory_mock):
+        with patch.object(
+                ApplicationFactory, "get_application", app_factory_mock):
+
             call = Call(arg_mock)
             output = deque()
             call.eval(output, input=deque())  # Removed output_file argument
@@ -86,7 +104,8 @@ class TestCall(unittest.TestCase):
         command_mock = Mock()
         command_mock.eval.return_value = "some_command"
 
-        with patch.object(ApplicationFactory, 'get_application', app_factory_mock):
+        with patch.object(
+                ApplicationFactory, "get_application", app_factory_mock):
             call = Call(command_mock)
             output = deque()
             input_data = deque(["line1\n", "line2\n"])
@@ -104,8 +123,9 @@ class TestCall(unittest.TestCase):
         redirection_mock.argument = "file.txt"
         redirection_mock.eval.return_value = redirection_mock
 
-        with patch.object(ApplicationFactory, 'get_application', app_factory_mock):
-            with patch('builtins.open', unittest.mock.mock_open()):
+        with patch.object(
+                ApplicationFactory, "get_application", app_factory_mock):
+            with patch("builtins.open", unittest.mock.mock_open()):
                 call = Call(command_mock, redirection_mock)
                 output = deque()
                 call.eval(output)
@@ -124,18 +144,33 @@ class TestCall(unittest.TestCase):
 
         app_output = deque(["output line 1\n", "output line 2\n"])
 
-        with patch.object(ApplicationFactory, 'get_application', app_factory_mock):
-            with patch('builtins.open', unittest.mock.mock_open()) as mock_file:
+        with patch.object(
+                ApplicationFactory, "get_application", app_factory_mock):
+            with patch(
+                    "builtins.open", unittest.mock.mock_open()) as mock_file:
                 call = Call(command_mock, redirection_mock)
                 output = deque()
-                app_mock.exec.side_effect = lambda *args, **kwargs: args[2].extend(app_output)
+
+        # app_mock.exec.side_effect = lambda *args, **kwargs: args[2].extend(
+        #     app_output
+        # )
+
+                # shortened line from above - hopefully it doesn't break
+                app_mock.exec.side_effect = lambda *args, **kwargs: (
+                    args[2].extend(app_output)
+                )
+
                 call.eval(output)
 
                 mock_file.assert_called_once_with("output.txt", "w")
 
                 handle = mock_file()
                 handle.write.assert_has_calls(
-                    [unittest.mock.call("output line 1\n"), unittest.mock.call("output line 2\n")])
+                    [
+                        unittest.mock.call("output line 1\n"),
+                        unittest.mock.call("output line 2\n"),
+                    ]
+                )
 
     def test_eval_with_output_redirection_to_file(self):
         app_mock = Mock()
@@ -149,10 +184,12 @@ class TestCall(unittest.TestCase):
         redirection_mock.eval.return_value = redirection_mock
         redirection_mock.argument = "output.txt"
 
-        with patch.object(ApplicationFactory, 'get_application', app_factory_mock):
+        with patch.object(
+                ApplicationFactory, "get_application", app_factory_mock):
             call = Call(command_mock, redirection_mock)
             output = deque()
 
-            with patch('builtins.open', unittest.mock.mock_open()) as mock_file:
+            with patch(
+                    "builtins.open", unittest.mock.mock_open()) as mock_file:
                 call.eval(output)
                 mock_file.assert_called_once_with("output.txt", "w")

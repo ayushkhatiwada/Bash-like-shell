@@ -80,7 +80,9 @@ class TestGrep(unittest.TestCase):
         found = any(
             expected_line in line and 'file1:' in line for line in output
         )
-        self.assertFalse(found, f"Pattern '{pattern}' was not found in 'file1'")
+        self.assertFalse(
+            found, f"Pattern '{pattern}' was not found in 'file1'"
+        )
 
     def test_grep_file_not_found(self):
         output = deque()

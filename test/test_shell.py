@@ -39,7 +39,9 @@ class TestShell(unittest.TestCase):
         mock_eval.side_effect = ArgumentError("Test ArgumentError")
         with patch('sys.stderr', new_callable=StringIO) as mock_stderr:
             process_input("some_command")
-        self.assertIn("argument error: Test ArgumentError", mock_stderr.getvalue())
+        self.assertIn(
+            "argument error: Test ArgumentError", mock_stderr.getvalue()
+        )
 
     @patch('shell.eval')
     def test_process_input_flag_error(self, mock_eval):
@@ -53,7 +55,9 @@ class TestShell(unittest.TestCase):
         mock_eval.side_effect = ApplicationError("Test ApplicationError")
         with patch('sys.stderr', new_callable=StringIO) as mock_stderr:
             process_input("some_command")
-        self.assertIn("application error: Test ApplicationError", mock_stderr.getvalue())
+        self.assertIn(
+            "application error: Test ApplicationError", mock_stderr.getvalue()
+        )
 
     @patch('builtins.input', side_effect=["echo test", KeyboardInterrupt])
     @patch('sys.stdout', new_callable=StringIO)

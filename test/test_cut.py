@@ -83,7 +83,3 @@ class TestCut(unittest.TestCase):
                 context.exception
             )
         )
-
-
-if __name__ == '__main__':
-    unittest.main()

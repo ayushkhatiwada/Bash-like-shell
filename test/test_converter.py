@@ -32,14 +32,16 @@ class TestShellCommands(unittest.TestCase):
 
     def test_echo_hello(self):
         self.check_command(
-            "echo hello", Command(Call((Argument("echo")), Atom(Argument("hello"))))
+            "echo hello", Command(Call((Argument("echo")), Atom(
+                Argument("hello"))))
         )
 
     def test_ls_l_home(self):
         self.check_command(
             "ls -l /home",
             Command(
-                Call((Argument("ls")), Atom(Argument("-l")), Atom(Argument("/home")))
+                Call((Argument("ls")), Atom(Argument("-l")), Atom(
+                    Argument("/home")))
             ),
         )
 
@@ -104,6 +106,7 @@ class TestShellCommands(unittest.TestCase):
         self.check_command(
             "echo `date`",
             Command(
-                Call((Argument("echo")), Atom(Argument(Quoted(BackQuoted("date")))))
+                Call((Argument("echo")), Atom(Argument(Quoted(
+                    BackQuoted("date")))))
             ),
         )

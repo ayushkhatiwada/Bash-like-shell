@@ -65,5 +65,3 @@ class TestTail(unittest.TestCase):
 
         with self.assertRaises(ApplicationError):
             self.tail_app.exec([], bad_input, deque())
-
-

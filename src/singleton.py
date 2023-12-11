@@ -2,9 +2,7 @@
 Singleton class from official python documentation:
 https://www.python.org/download/releases/2.2/descrintro/#__new__
 
-To create a singleton class, you subclass from Singleton;
-each subclass will have a single instance,
-no matter how many times its constructor is called.
+Subclass from Singleton to create a singleton class
 
 To further initialize the subclass instance,
 subclasses should override 'init' instead of

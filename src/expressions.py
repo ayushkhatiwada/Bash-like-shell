@@ -1,3 +1,26 @@
+"""
+Shell Commands Implementation
+
+This module defines classes representing various shell commands and features.
+Each class corresponds to a specific command or feature in the shell.
+
+Classes representing shell commands:
+- Command
+- Pipe
+- Seq
+- Call
+- Atom
+- Redirection
+- Argument
+- Quoted
+- SingleQuoted
+- DoubleQuoted
+- BackQuoted
+
+These classes are used to build and execute shell commands
+within the provided shell implementation.
+"""
+
 from typing import Deque
 from abc import ABC, abstractmethod
 from collections import deque
@@ -6,18 +29,12 @@ import shell
 from application_factory import ApplicationFactory
 from applications.application import ApplicationError
 
-"""
-Implementation of commands (Pipe, Seq, Call) will be done here
-Each class will have an eval method that will evaluate the command
-This is clear in the UML diagram from Sergey
-"""
-"""
-echo hello
-Command(Call(Argument(echo), Atom(Argument(hello)))).eval()
-"""
-
 
 class AbstractShellFeature(ABC):
+    """
+    Abstract base class for shell features.
+    """
+
     @abstractmethod
     def __init__(self) -> None:
         pass
@@ -69,9 +86,6 @@ class Pipe(AbstractShellFeature):
         self.left.eval(left_output, input)
         self.right.eval(output, input=left_output)
 
-        # std_out_left_side = self.left.eval(output)
-        # self.right.eval(std_out_left_side, output)
-
 
 class Seq:
     def __init__(self, left, right):
@@ -95,8 +109,7 @@ class Seq:
 
 class Call(AbstractShellFeature):
     def __init__(self, *args):
-        # self.args is a tuple
-        # it contains redirection, argument, or atom classes
+        # tuple of redirections, arguments, or atom classes
         self.args = args
 
     def __str__(self):
@@ -116,7 +129,6 @@ class Call(AbstractShellFeature):
         for redirection in redirections:
             if redirection.type == "<":
                 if redirection_input:
-                    # TODO: Change this to custom exception
                     raise ApplicationError("Multiple input redirections")
                 redirection_input = True
 
@@ -126,7 +138,6 @@ class Call(AbstractShellFeature):
 
             elif redirection.type == ">":
                 if redirection_output:
-                    # TODO: Change this to custom exception
                     raise ApplicationError("Multiple output redirections")
                 redirection_output = True
 
@@ -135,13 +146,11 @@ class Call(AbstractShellFeature):
         return input, output_file
 
     def eval(self, output, input=deque()):
-        # self.args could be (Redirection(), Argument(), Atom(), Atom(), ...)
-        # eval each class in self.args and store in evaluated_args list
         app_input = []
         while input:
             app_input.append(input.popleft()[:-1])  # remove \n
 
-        # filter arguments and redirections
+        # evaluate arguments and filter out redirections
         evaluated_args = []
         redirections = []
 
@@ -191,19 +200,6 @@ class Atom(AbstractShellFeature):
 
 
 class Redirection(AbstractShellFeature):
-    """
-    Redirection from Sergey's README:
-    1. Opens the file following the < symbol for input redirection;
-    2. Opens the file following the > symbol for output redirection;
-    3. If several files are specified for input or output redirection
-        - (e.g. > a.txt > b.txt), throws an exception;
-    4. If the file specified for input redirection does not exist,
-        - throws an exception;
-    5. If the file specified for output redirection does not exist, creates it.
-
-    So >> is not needed
-    """
-
     def __init__(self, type, argument):
         self.type: str = type  # redirection type: < or >
         self.argument: Argument = argument  # redirection arg
@@ -223,13 +219,9 @@ class Redirection(AbstractShellFeature):
         return self
 
 
-# Edge case: Argument can have more than one child
-# e.g. echo "hello"'world'lol - check on ANTLR tree
-# Argument(Quoted(DoubleQuoted("hello")), Quoted(SingleQuoted('world')), lol)
 class Argument(AbstractShellFeature):
-    # children is a list of elements
-    # arguement can have multiple children
     def __init__(self, *children):
+        # can have multiple children
         self.children = list(children)
 
     def __str__(self):
@@ -277,7 +269,6 @@ class SingleQuoted(AbstractShellFeature):
         )
 
     def eval(self) -> str:
-        # base case: single quoted contains text only
         result = ""
         for child in self.children:
             result += child
@@ -287,8 +278,6 @@ class SingleQuoted(AbstractShellFeature):
 class DoubleQuoted(AbstractShellFeature):
     # children is a list of elements
     # elements could be text or backQuoted
-    # see visitDoubleQuoted method in converter.py
-    # e.g. elements = [text, text, backQuoted(), text, backQuoted(), text]
     def __init__(self, *children):
         self.children = list(children)
 
@@ -321,8 +310,6 @@ class BackQuoted(AbstractShellFeature):
     def __eq__(self, other):
         return isinstance(other, BackQuoted) and self.child == other.child
 
-    # backQuoted is a sort of base case
-    # it does not contain any classes inside it
     def eval(self):
         expression = shell.convert(self.child)
 

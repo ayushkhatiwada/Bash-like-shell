@@ -13,12 +13,26 @@ from globbing import expand_glob_command
 
 
 def exec_shell() -> None:
-    num_of_args = len(sys.argv) - 1
+    """
+    Execute the shell in either non-interactive or interactive mode.
+
+    Non-Interactive Mode:
+    - Evaluates a single command passed as a command-line argument
+      (e.g., `py shell.py -c "echo foo"`).
+
+    Interactive Mode (REPL):
+    - Prompts the user for input continuously until interrupted.
+
+    Raises:
+        ValueError: If the number of command-line arguments is incorrect
+                    in non-interactive mode.
+    """
+
+    num_args = len(sys.argv) - 1
 
     # non interactive mode
-    # evaluating a single command once e.g. py shell.py -c "echo foo"
-    if num_of_args > 0:
-        if not (num_of_args == 2 and sys.argv[1] == "-c"):
+    if num_args > 0:
+        if not (num_args == 2 and sys.argv[1] == "-c"):
             raise ValueError(
                 """
                 Incorrect number of arguments passed
@@ -29,7 +43,7 @@ def exec_shell() -> None:
         cmd_line = sys.argv[2]
         process_input(cmd_line)
 
-    # interactive mode - REPL
+    # interactive mode (REPL)
     else:
         while True:
             print(os.getcwd() + "> ", end="")
@@ -38,13 +52,16 @@ def exec_shell() -> None:
 
 
 def process_input(cmd_line: str) -> None:
-    # removes whitespace from beginning and end of string
-    cmd_line = cmd_line.strip()
+    """
+    Process the user input, expanding globbing, and executing the command.
 
-    # expand globbing
-    cmd_line = expand_glob_command(cmd_line)
+    Args:
+        cmd_line (str): The user input command.
+    """
 
-    # if no command was entered, do nothing
+    cmd_line = cmd_line.strip()  # remove leading and trailing whitespaces
+    cmd_line = expand_glob_command(cmd_line)  # expand globbing
+
     if not cmd_line:
         return
 
@@ -58,17 +75,35 @@ def process_input(cmd_line: str) -> None:
     except ApplicationError as err:
         sys.stderr.write(f"application error: {err}\n")
 
-    # final output of shell after everything has been done
+    # output to stdout after command execution
     while std_out:
         print(std_out.popleft(), end="")
 
 
 def eval(cmd_line: str, std_out: Deque[str]) -> None:
+    """
+    Evaluate the command by converting it into an expression and executing it.
+
+    Args:
+        cmd_line (str): The user input command.
+        std_out (Deque[str]): The deque representing standard output.
+    """
+
     expression = convert(cmd_line)
     expression.eval(output=std_out)
 
 
 def convert(cmd_line: str):
+    """
+    Convert the command string into an expression.
+
+    Args:
+        cmd_line (str): The user input command.
+
+    Returns:
+        Expression: The converted expression.
+    """
+
     lexer = ShellGrammarLexer(InputStream(cmd_line))
     tokens = CommonTokenStream(lexer)
     parser = ShellGrammarParser(tokens)

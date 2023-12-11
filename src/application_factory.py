@@ -1,5 +1,3 @@
-from typing import List
-
 from singleton import Singleton
 from applications.application_unsafe import ApplicationUnsafe
 from applications.application import Application
@@ -37,13 +35,32 @@ APPLICATIONS = {
 
 class ApplicationFactory(Singleton):
     """
-    Singleton Application Factory
+    Singleton Application Factory.
 
-    Singleton because we only care about using exec function in each class
-    Possibly saves memory
+    This factory class provides a centralized way to create instances of
+    various applications. It ensures that only one instance of each
+    application is created, making it more memory-efficient.
+
+    Attributes:
+        APPLICATIONS (dict): A dictionary mapping application names to their
+        corresponding classes.
     """
 
     def get_application(self, application_name: str) -> Application:
+        """
+        Get an instance of the specified application.
+
+        Args:
+            application_name (str): The name of the application.
+
+        Returns:
+            Application: An instance of the specified application,
+            either safe or unsafe depending on application name.
+
+        Raises:
+            ApplicationError: If the specified application is not found.
+        """
+
         unsafe = False
 
         if application_name.startswith("_"):

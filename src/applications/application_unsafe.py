@@ -11,7 +11,13 @@ class ApplicationUnsafe(Application):
     """
 
     def __init__(self, safe_application: Application) -> None:
-        """Initialize the unsafe application with a safe application."""
+        """
+        Initialize the unsafe application with a safe application.
+
+        Args:
+            safe_application (Application): The safe application to be wrapped.
+        """
+
         self.safe_application = safe_application
 
     def exec(
@@ -20,6 +26,15 @@ class ApplicationUnsafe(Application):
         input: List[str],
         output: Deque[str]
     ) -> None:
+        """
+        Execute the application command with error printing.
+
+        Args:
+            args (List[str]): List of command-line arguments.
+            input (List[str]): List representing standard input.
+            output (Deque[str]): Deque representing standard output.
+        """
+
         try:
             self.safe_application.exec(args, input, output)
         except Exception as e:

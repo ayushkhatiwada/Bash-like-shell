@@ -9,6 +9,7 @@
 - What is the accept method in expressions.py class Argument
 - NON_KEYWORD useless in antlr grammar
 - Output lines shouldn't have '\n'  at the end, this should be added in the shell.py
+- converter.py: change AssertionErrors to something more specific
 
 Applications
 - Ls

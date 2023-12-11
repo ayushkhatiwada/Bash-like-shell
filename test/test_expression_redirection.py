@@ -3,6 +3,7 @@ from unittest.mock import Mock
 import shell
 from expressions import Redirection
 
+
 class TestRedirection(unittest.TestCase):
     def test_redirection_init(self):
         argument_mock = Mock()

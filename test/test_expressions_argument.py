@@ -3,6 +3,7 @@ from unittest.mock import Mock
 import shell
 from expressions import Argument, Quoted
 
+
 class TestArgument(unittest.TestCase):
     def test_argument_eval_with_quoted_child(self):
         quoted_child_mock = Mock(spec=Quoted)

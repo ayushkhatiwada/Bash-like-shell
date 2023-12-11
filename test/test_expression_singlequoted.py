@@ -2,6 +2,7 @@ import unittest
 import shell
 from expressions import SingleQuoted
 
+
 class TestSingleQuoted(unittest.TestCase):
     def test_singlequoted_init(self):
         children = ["child1", "child2"]

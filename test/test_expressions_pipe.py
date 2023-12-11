@@ -35,7 +35,7 @@ class TestPipe(unittest.TestCase):
         right_mock = Mock()
         pipe = Pipe(left_mock, right_mock)
         output = deque()
-        input = deque(['input_data'])
+        input = deque(["input_data"])
         pipe.eval(output, input)
         left_mock.eval.assert_called_once_with(deque(), input)
         right_mock.eval.assert_called_once_with(output, input=deque())

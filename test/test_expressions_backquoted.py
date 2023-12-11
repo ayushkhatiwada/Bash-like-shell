@@ -4,6 +4,7 @@ from collections import deque
 import shell
 from expressions import BackQuoted
 
+
 class TestBackQuoted(unittest.TestCase):
     def test_backquoted_init(self):
         child_mock = Mock()
@@ -25,7 +26,7 @@ class TestBackQuoted(unittest.TestCase):
         self.assertEqual(bq1, bq2)
         self.assertNotEqual(bq1, bq3)
 
-    @patch('expressions.shell')
+    @patch("expressions.shell")
     def test_backquoted_eval(self, mock_shell):
         child_mock = Mock()
         converted_expression_mock = Mock()
@@ -33,7 +34,15 @@ class TestBackQuoted(unittest.TestCase):
 
         converted_expression_mock.eval = Mock()
         output_data = deque(["line1\n", "line2\n"])
-        converted_expression_mock.eval.side_effect = lambda output: output.extend(output_data)
+
+# converted_expression_mock.eval.side_effect = lambda output: output.extend(
+#     output_data
+# )
+
+        # shortened version of the above, hoopefully it doesn't break anything
+        converted_expression_mock.eval.side_effect = lambda output: (
+            output.extend(output_data)
+        )
 
         bq = BackQuoted(child_mock)
         result = bq.eval()

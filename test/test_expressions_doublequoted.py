@@ -3,6 +3,7 @@ from unittest.mock import Mock
 import shell
 from expressions import DoubleQuoted
 
+
 class TestDoubleQuoted(unittest.TestCase):
     def test_doublequoted_init(self):
         children = [Mock(), "text", Mock()]

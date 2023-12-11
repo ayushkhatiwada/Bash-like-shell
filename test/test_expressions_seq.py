@@ -4,6 +4,7 @@ from collections import deque
 import shell
 from expressions import Seq
 
+
 class TestSeq(unittest.TestCase):
     def test_seq_init(self):
         left_mock = Mock()

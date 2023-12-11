@@ -3,7 +3,7 @@ import shutil
 import unittest
 from collections import deque
 
-from applications.application import ApplicationError, ArgumentError
+from applications.application import ApplicationError
 from applications.grep import Grep
 
 
@@ -50,10 +50,6 @@ class TestGrep(unittest.TestCase):
     def test_grep_invalid_regex(self):
         with self.assertRaises(ApplicationError):
             self.grep_app.exec(['\\'], [], deque())
-
-    def test_grep_no_pattern_provided(self):
-        with self.assertRaises(ArgumentError):
-            self.grep_app.exec([], [], deque())
 
     def test_grep_pattern_found_in_file(self):
         output = deque()

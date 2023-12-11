@@ -2,6 +2,7 @@ import os
 import unittest
 import shutil
 from collections import deque
+from unittest.mock import patch
 
 from applications.cd import Cd
 from applications.application import ApplicationError
@@ -65,15 +66,15 @@ class TestCd(unittest.TestCase):
         with self.assertRaises(ApplicationError):
             self.cd_app.exec(["file.txt"], [], self.std_out)
 
-    # NOTE: causes eror whne running on docker unittest #######################
-    # def test_cd_permission_denied_error(self):
-    #     # make permission_denied_dir
-    #     os.mkdir("permission_denied_dir")
-    #     # set permissions to deny access
-    #     os.chmod("permission_denied_dir", 0o000)
+    def test_cd_permission_denied_error(self):
+        """
+        Test to ensure an ApplicationError is raised when encountering
+        a PermissionError.
+        """
+        with patch('os.chdir', side_effect=PermissionError):
+            with self.assertRaises(ApplicationError) as cm:
+                self.cd_app.exec(["any_directory"], [], self.std_out)
 
-    #     with self.assertRaises(ApplicationError):
-    #         self.cd_app.exec(["permission_denied_dir"], [], self.std_out)
-
-    #     # reset permissions
-    #     os.chmod("permission_denied_dir", 0o777)
+            self.assertEqual(
+                str(cm.exception), "cd: any_directory: Permission denied."
+            )

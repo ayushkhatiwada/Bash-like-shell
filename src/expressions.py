@@ -67,7 +67,7 @@ class Pipe(AbstractShellFeature):
     def eval(self, output, input=deque()):
         left_output = deque()
         self.left.eval(left_output, input)
-        self.right.eval(output, left_output)
+        self.right.eval(output, input=left_output)
 
         # std_out_left_side = self.left.eval(output)
         # self.right.eval(std_out_left_side, output)
@@ -122,7 +122,7 @@ class Call(AbstractShellFeature):
 
                 with open(redirection.argument, "r") as file:
                     for line in file:
-                        input.append(line)
+                        input.append(line[:-1])  # remove \n
 
             elif redirection.type == ">":
                 if redirection_output:
@@ -331,5 +331,5 @@ class BackQuoted(AbstractShellFeature):
 
         result = ""
         while expression_output:
-            result += expression_output.popleft()[:-1]  # remove \n
-        return result
+            result += expression_output.popleft()  # remove \n
+        return result[:-1]

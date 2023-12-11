@@ -1,13 +1,18 @@
 from typing import Deque, List
-from collections import deque
 
 from .application import Application, ApplicationError
+
 
 class Tail(Application):
     name = 'tail'
     allowed_flags = {'-n'}
 
-    def exec(self, args: List[str], input: List[str], output: Deque[str]) -> None:
+    def exec(
+        self,
+        args: List[str],
+        input: List[str],
+        output: Deque[str]
+    ) -> None:
         flags, args = self.parse_flags(
             args=args, allowed_flags=self.allowed_flags
         )
@@ -34,7 +39,7 @@ class Tail(Application):
                 with open(file_path, 'r') as file:
                     lines = file.readlines()
             else:
-                lines = input
+                lines = [line + '\n' for line in input]
 
             lines = lines[-lines_to_print:]
 

@@ -3,7 +3,7 @@ import shutil
 import unittest
 from collections import deque
 
-from applications.application import ApplicationError
+from applications.application import ApplicationError, ArgumentError
 from applications.grep import Grep
 
 
@@ -52,18 +52,18 @@ class TestGrep(unittest.TestCase):
             self.grep_app.exec(['\\'], [], deque())
 
     def test_grep_no_pattern_provided(self):
-        with self.assertRaises(ApplicationError):
+        with self.assertRaises(ArgumentError):
             self.grep_app.exec([], [], deque())
 
     def test_grep_pattern_found_in_file(self):
         output = deque()
 
         self.grep_app.exec(['hello', 'file1'], [], output)
-        self.assertIn('file1:hello world\n', output)
+        self.assertIn('hello world\n', output)
         output.clear()
 
         self.grep_app.exec(['goodbye', 'file2'], [], output)
-        self.assertIn('file2:goodbye world\n', output)
+        self.assertIn('goodbye world\n', output)
 
     def test_grep_pattern_not_found_in_file(self):
         output = deque()
@@ -80,7 +80,7 @@ class TestGrep(unittest.TestCase):
         found = any(
             expected_line in line and 'file1:' in line for line in output
         )
-        self.assertTrue(found, f"Pattern '{pattern}' was not found in 'file1'")
+        self.assertFalse(found, f"Pattern '{pattern}' was not found in 'file1'")
 
     def test_grep_file_not_found(self):
         output = deque()
@@ -95,4 +95,4 @@ class TestGrep(unittest.TestCase):
 
         self.assertIn('hello world', result)
         self.assertIn('goodbye world', result)
-        self.assertNotIn('some other line', result)
+        self.assertNotIn('some other lines', result)

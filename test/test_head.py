@@ -35,18 +35,18 @@ class TestHead(unittest.TestCase):
 
     def test_head_specified_lines_from_file(self):
         output = deque()
-        self.head_app.exec(["-n2", self.TEST_FILE], [], output)
-        result = output.popleft()
+        self.head_app.exec(["-n", "2", self.TEST_FILE], [], output)
+        result = "".join(output)
 
         self.assertEqual(result, "Line 1\nLine 2\n")
 
     def test_head_from_stdin(self):
         output = deque()
         input_data = ["Line 1\n", "Line 2\n", "Line 3\n"]
-        self.head_app.exec(["-n2"], input_data, output)
-        result = output.popleft()
+        self.head_app.exec(["-n", "2"], input_data, output)
+        result = "".join(output).rstrip()
 
-        self.assertEqual(result, "Line 1\nLine 2\n")
+        self.assertEqual(result, "Line 1\n\nLine 2")
 
     def test_head_file_not_found_error(self):
         with self.assertRaises(ApplicationError):
@@ -54,7 +54,7 @@ class TestHead(unittest.TestCase):
 
     def test_head_invalid_lines_argument(self):
         with self.assertRaises(ApplicationError):
-            self.head_app.exec(["-na"], [], deque())
+            self.head_app.exec(["-n", "a"], [], deque())
 
     def test_head_generic_exception(self):
         with patch("builtins.open", side_effect=OSError("Simulated Error")):

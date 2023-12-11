@@ -119,7 +119,7 @@ class TestCall(unittest.TestCase):
         command_mock.eval = Mock(return_value="some_command")
 
         redirection_mock = Mock(spec=Redirection)
-        redirection_mock.type = "<"  # or ">" depending on the test case
+        redirection_mock.type = "<"
         redirection_mock.argument = "file.txt"
         redirection_mock.eval.return_value = redirection_mock
 

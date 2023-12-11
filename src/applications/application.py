@@ -46,13 +46,14 @@ class Application(ABC):
     ) -> Tuple[Set[str], List[str]]:
         """
         Parse flags, and clean arguments.
-        e.g.
-            args: ['-a', 'temp']
-            returns: (set('-a'), ['temp'])
 
         Args:
-            args: List of command-line arguments.
-            allowed_flags: Set of allowed flags.
+            args (List[str]): List of command-line arguments.
+            allowed_flags (Set[str]): Set of allowed flags.
+
+        Returns:
+            Tuple[Set[str], List[str]]: A tuple containing the parsed flags and
+            cleaned arguments.
 
         Raises:
             FlagError: Raised if a flag error occurs.

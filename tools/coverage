@@ -27,9 +27,8 @@ if args.value:
         percent_covered = coverage_data["totals"]["percent_covered_display"]
 
     print(percent_covered)
-    
+
 else:
     subprocess.run("coverage run --branch -m nose2 test", shell=True)
     subprocess.run("coverage html", shell=True)
     subprocess.run("cd htmlcov/ && python -m http.server", shell=True)
-

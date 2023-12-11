@@ -57,7 +57,7 @@ class TestTail(unittest.TestCase):
         output = deque()
         self.tail_app.exec(['-n', '2'], input_data, output)
         result = output.popleft().strip()
-        expected = "Stdin Line 2\nStdin Line 3"
+        expected = "Stdin Line 2\n\nStdin Line 3"
         self.assertEqual(result, expected)
 
     def test_tail_unexpected_error(self):

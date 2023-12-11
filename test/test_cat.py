@@ -52,9 +52,10 @@ class TestCat(unittest.TestCase):
         self.assertListEqual(list(self.std_out), [line + "\n" for line in ans])
 
     def test_cat_std_in(self):
-        std_in = "Sergey is very handsome ;)".split()
+        std_in = ["Sergey", "is", "a", "cool", "teacher"]
         self.cat_app.exec([], std_in, self.std_out)
-        self.assertListEqual(list(self.std_out), [line for line in std_in])
+        expected_output = [line + "\n" for line in std_in]
+        self.assertListEqual(list(self.std_out), expected_output)
 
     def test_cat_two_files(self):
         args = ["file1.txt", "file2.txt"]

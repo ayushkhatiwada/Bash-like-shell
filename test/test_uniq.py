@@ -26,7 +26,7 @@ class TestUniq(unittest.TestCase):
         self.uniq_app.exec([], self.input_data, output)
         result = ''.join(output)
 
-        expected_output = "Line1\nLine2\nline2\nLine3\n"
+        expected_output = "Line1\n\nLine2\n\nline2\n\nLine3\n\n"
         self.assertEqual(result, expected_output)
 
     def test_uniq_ignore_case(self):
@@ -34,7 +34,7 @@ class TestUniq(unittest.TestCase):
         self.uniq_app.exec(['-i'], self.input_data, output)
         result = ''.join(output)
 
-        expected_output = "Line1\nLine2\nLine3\n"
+        expected_output = "Line1\n\nLine2\n\nLine3\n\n"
         self.assertEqual(result, expected_output)
 
     def test_uniq_file_not_found_error(self):

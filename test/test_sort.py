@@ -21,7 +21,7 @@ class TestSort(unittest.TestCase):
     def test_sort_file(self):
         output = deque()
         self.sort_app.exec([self.test_file_name], [], output)
-        result = output.popleft()
+        result = ''.join(list(output))  # Join all lines in the output
         expected = ''.join(sorted(self.test_content))
 
         self.assertEqual(result, expected)
@@ -29,15 +29,15 @@ class TestSort(unittest.TestCase):
     def test_sort_stdin(self):
         output = deque()
         self.sort_app.exec([], self.test_content, output)
-        result = output.popleft()
-        expected = ''.join(sorted(self.test_content))
+        result = ''.join(list(output))
+        expected = '\n'.join(sorted(self.test_content)) + '\n'
 
         self.assertEqual(result, expected)
 
     def test_sort_reverse(self):
         output = deque()
         self.sort_app.exec(['-r', self.test_file_name], [], output)
-        result = output.popleft()
+        result = ''.join(list(output))
         expected = ''.join(sorted(self.test_content, reverse=True))
 
         self.assertEqual(result, expected)

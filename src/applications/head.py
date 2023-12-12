@@ -32,18 +32,6 @@ class Head(Application):
                 )
             args.remove(args[0])
 
-        # # Process arguments
-        # for arg in args:
-        #     if arg.startswith('-n'):
-        #         try:
-        #             lines_to_print = int(arg[2:])
-        #         except ValueError:
-        #             raise ApplicationError(
-        #                 f"{self.name}: invalid number of lines: {arg[2:]}"
-        #             )
-        #         args.remove(arg)
-        #         break
-
         # Determine the file or stdin
         file_path = args[0] if args else None
 

@@ -15,7 +15,12 @@ class Find(Application):
     def __init__(self) -> None:
         super().__init__()
 
-    def exec(self, args: List[str], input: List[str], out: Deque[str]) -> None:
+    def exec(
+        self,
+        args: List[str],
+        input: List[str],
+        output: Deque[str]
+    ) -> None:
         if len(args) not in [2, 3] or \
                 args[0 if len(args) == 2 else 1] != "-name":
             raise ArgumentError(type(self), "find command must follow format: "
@@ -28,4 +33,4 @@ class Find(Application):
         for root, dirs, files in os.walk(path):
             for name in files:
                 if fnmatch.fnmatch(name, pattern):
-                    out.append(os.path.join(root, name) + "\n")
+                    output.append(os.path.join(root, name) + "\n")

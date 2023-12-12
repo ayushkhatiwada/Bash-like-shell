@@ -11,7 +11,12 @@ class Uniq(Application):
     name = "uniq"
     allowed_flags = {"-i"}
 
-    def exec(self, args: List[str], input: List[str], out: Deque[str]) -> None:
+    def exec(
+        self,
+        args: List[str],
+        input: List[str],
+        output: Deque[str]
+    ) -> None:
         flags, args = self.parse_flags(args, self.allowed_flags)
 
         ignore_case = "-i" in flags
@@ -31,7 +36,7 @@ class Uniq(Application):
             else:
                 lines = [line + '\n' for line in input]
 
-            self.process_lines(lines, ignore_case, out)
+            self.process_lines(lines, ignore_case, output)
         except FileNotFoundError:
             raise ApplicationError(
                 f"{self.name}: {file_path}: No such file or directory."

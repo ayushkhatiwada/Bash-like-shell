@@ -14,7 +14,12 @@ class Cd(Application):
     def __init__(self) -> None:
         super().__init__()
 
-    def exec(self, args: List[str], input: List[str], out: Deque[str]) -> None:
+    def exec(
+        self,
+        args: List[str],
+        input: List[str],
+        output: Deque[str]
+    ) -> None:
         if len(args) == 0:
             # if no args, do nothing
             return

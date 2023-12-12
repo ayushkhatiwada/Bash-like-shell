@@ -11,7 +11,12 @@ class Sort(Application):
     name = "sort"
     allowed_flags = {"-r"}
 
-    def exec(self, args: List[str], input: List[str], out: Deque[str]) -> None:
+    def exec(
+        self,
+        args: List[str],
+        input: List[str],
+        output: Deque[str]
+    ) -> None:
         flags, args = self.parse_flags(args, self.allowed_flags)
 
         # Separate options from potential file path
@@ -37,4 +42,4 @@ class Sort(Application):
         reverse = "-r" in flags
         sorted_lines = sorted(lines, reverse=reverse)
         for line in sorted_lines:
-            out.append(line)
+            output.append(line)

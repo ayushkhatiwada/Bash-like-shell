@@ -11,7 +11,12 @@ class Pwd(Application):
 
     name = 'pwd'
 
-    def exec(self, args: List[str], input: List[str], out: Deque[str]) -> None:
+    def exec(
+        self,
+        args: List[str],
+        input: List[str],
+        output: Deque[str]
+    ) -> None:
         # Get the current working directory
         current_directory = os.getcwd()
 
@@ -19,4 +24,4 @@ class Pwd(Application):
         formatted_output = current_directory + '\n'
 
         # Add the formatted output to the deque
-        out.append(formatted_output)
+        output.append(formatted_output)

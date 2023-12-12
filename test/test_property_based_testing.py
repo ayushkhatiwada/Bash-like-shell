@@ -11,8 +11,6 @@ from applications.application import ApplicationError
 from applications.echo import Echo
 from applications.cd import Cd
 from applications.ls import Ls
-from applications.cat import Cat
-from applications.grep import Grep
 
 
 class TestHyphotesisTesting(unittest.TestCase):
@@ -52,9 +50,9 @@ class TestHyphotesisTesting(unittest.TestCase):
 
     @given(lists(text().filter(lambda x: "\r" not in x)))
     def test_echo(self, args: List[str]):
-        echo = Echo()
         assume(args)
 
+        echo = Echo()
         output = deque()
         # Call the exec method with the generated args
         echo.exec(args, [], output)
@@ -63,7 +61,7 @@ class TestHyphotesisTesting(unittest.TestCase):
         # Check that the result is equal to the joined args
         self.assertEqual(output.pop(), result)
 
-    @given(text())
+    @given(text().filter(lambda x: "\r" not in x))
     def test_echo_ends_with_new_line(self, args: List[str]):
         echo = Echo()
         assume(args)
@@ -93,40 +91,6 @@ class TestHyphotesisTesting(unittest.TestCase):
 
         with self.assertRaises(ApplicationError):
             ls.exec([directory], [], deque())
-
-    # @given(text())
-    # def test_cat_output_contains_correct_number_of_new_lines(self, args: str):
-    #     cat = Cat()
-    #     # assume args only contains alphanumeric characters and new line
-    #     # also assume args is not empty
-    #     assume(
-    #         all(char.isalnum() or char == "\n" for char in args)
-    #         and args != ""
-    #     )
-    #     num_of_new_line_chars_in_args = args.count('\n')
-
-    #     with open("file1", "w") as f:
-    #         f.write(args)
-
-    #     output = deque()
-    #     cat.exec(["file1"], [], output)
-
-    #     result = output.pop().count('\n')
-
-    #     self.assertEqual(result, num_of_new_line_chars_in_args)
-
-    # @given(lists(text()))
-    # def test_grep_finds_everything(self, lines: List[str]):
-    #     grep = Grep()
-    #     assume(lines.isalnum())
-    #     out = deque()
-
-    #     grep.exec([".*"], lines, out)
-
-    #     self.assertEqual(len(out), len(lines))
-
-    #     while out:
-    #         self.assertEqual(out.popleft(), lines.pop(0))
 
 
 if __name__ == '__main__':

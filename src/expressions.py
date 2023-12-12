@@ -318,5 +318,5 @@ class BackQuoted(AbstractShellFeature):
 
         result = ""
         while expression_output:
-            result += expression_output.popleft()  # remove \n
-        return result[:-1]
+            result += expression_output.popleft()
+        return result[:-1]  # remove \n

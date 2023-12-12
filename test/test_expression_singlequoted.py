@@ -1,3 +1,5 @@
+# flake8: noqa
+import shell  # import "unused" but needed to avoid circular import
 import unittest
 from expressions import SingleQuoted
 

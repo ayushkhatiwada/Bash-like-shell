@@ -1,4 +1,4 @@
-// Generated from /home/ayush/comp0010-shell-python-p22/src/antlr/ShellGrammar.g4 by ANTLR 4.13.1
+// Generated from /Users/janp/Documents/UCL/COMP0010/comp0010-shell-python-p22/src/antlr/ShellGrammar.g4 by ANTLR 4.13.1
 import org.antlr.v4.runtime.tree.ParseTreeListener;
 
 /**
@@ -47,46 +47,6 @@ public interface ShellGrammarListener extends ParseTreeListener {
 	 */
 	void exitCall(ShellGrammarParser.CallContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link ShellGrammarParser#quoted}.
-	 * @param ctx the parse tree
-	 */
-	void enterQuoted(ShellGrammarParser.QuotedContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link ShellGrammarParser#quoted}.
-	 * @param ctx the parse tree
-	 */
-	void exitQuoted(ShellGrammarParser.QuotedContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link ShellGrammarParser#singleQuoted}.
-	 * @param ctx the parse tree
-	 */
-	void enterSingleQuoted(ShellGrammarParser.SingleQuotedContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link ShellGrammarParser#singleQuoted}.
-	 * @param ctx the parse tree
-	 */
-	void exitSingleQuoted(ShellGrammarParser.SingleQuotedContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link ShellGrammarParser#backQuoted}.
-	 * @param ctx the parse tree
-	 */
-	void enterBackQuoted(ShellGrammarParser.BackQuotedContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link ShellGrammarParser#backQuoted}.
-	 * @param ctx the parse tree
-	 */
-	void exitBackQuoted(ShellGrammarParser.BackQuotedContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link ShellGrammarParser#doubleQuoted}.
-	 * @param ctx the parse tree
-	 */
-	void enterDoubleQuoted(ShellGrammarParser.DoubleQuotedContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link ShellGrammarParser#doubleQuoted}.
-	 * @param ctx the parse tree
-	 */
-	void exitDoubleQuoted(ShellGrammarParser.DoubleQuotedContext ctx);
-	/**
 	 * Enter a parse tree produced by {@link ShellGrammarParser#atom}.
 	 * @param ctx the parse tree
 	 */
@@ -116,4 +76,44 @@ public interface ShellGrammarListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitRedirection(ShellGrammarParser.RedirectionContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link ShellGrammarParser#quoted}.
+	 * @param ctx the parse tree
+	 */
+	void enterQuoted(ShellGrammarParser.QuotedContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link ShellGrammarParser#quoted}.
+	 * @param ctx the parse tree
+	 */
+	void exitQuoted(ShellGrammarParser.QuotedContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link ShellGrammarParser#singleQuoted}.
+	 * @param ctx the parse tree
+	 */
+	void enterSingleQuoted(ShellGrammarParser.SingleQuotedContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link ShellGrammarParser#singleQuoted}.
+	 * @param ctx the parse tree
+	 */
+	void exitSingleQuoted(ShellGrammarParser.SingleQuotedContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link ShellGrammarParser#doubleQuoted}.
+	 * @param ctx the parse tree
+	 */
+	void enterDoubleQuoted(ShellGrammarParser.DoubleQuotedContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link ShellGrammarParser#doubleQuoted}.
+	 * @param ctx the parse tree
+	 */
+	void exitDoubleQuoted(ShellGrammarParser.DoubleQuotedContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link ShellGrammarParser#backQuoted}.
+	 * @param ctx the parse tree
+	 */
+	void enterBackQuoted(ShellGrammarParser.BackQuotedContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link ShellGrammarParser#backQuoted}.
+	 * @param ctx the parse tree
+	 */
+	void exitBackQuoted(ShellGrammarParser.BackQuotedContext ctx);
 }

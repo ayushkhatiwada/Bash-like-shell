@@ -4,6 +4,10 @@ from .application import Application, ApplicationError
 
 
 class Head(Application):
+    """
+    head - output the first part of files
+    """
+
     name = 'head'
     allowed_flags = {'-n'}
 

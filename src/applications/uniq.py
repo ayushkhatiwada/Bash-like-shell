@@ -4,6 +4,10 @@ from .application import Application, ApplicationError
 
 
 class Uniq(Application):
+    """
+    uniq - report or omit repeated lines
+    """
+
     name = "uniq"
     allowed_flags = {"-i"}
 

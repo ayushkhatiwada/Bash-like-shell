@@ -2,18 +2,12 @@ from typing import Deque, List
 
 from .application import Application, ApplicationError
 
-"""
-    def test_cut_overlapping(self):
-        cmdline = "cut -b 2-,3- dir1/file1.txt"
-        stdout = self.eval(cmdline)
-        result = stdout.strip().split("\n")
-        self.assertEqual(result, ["AA", "BB", "AA"])
-
-Need to pass this specific test case from system_test/tests.py
-"""
-
 
 class Cut(Application):
+    """
+    cut - remove sections from each line of files
+    """
+
     name = 'cut'
 
     def exec(

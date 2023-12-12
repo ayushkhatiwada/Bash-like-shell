@@ -5,6 +5,10 @@ from .application import Application
 
 
 class Pwd(Application):
+    """
+    pwd - print name of current/working directory
+    """
+
     name = 'pwd'
 
     def exec(self, args: List[str], input: List[str], out: Deque[str]) -> None:

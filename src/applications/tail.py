@@ -4,6 +4,10 @@ from .application import Application, ApplicationError
 
 
 class Tail(Application):
+    """
+    tail - output the last part of files
+    """
+
     name = 'tail'
     allowed_flags = {'-n'}
 

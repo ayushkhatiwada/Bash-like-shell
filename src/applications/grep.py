@@ -5,6 +5,10 @@ from .application import Application, ApplicationError
 
 
 class Grep(Application):
+    """
+    grep - print lines that match patterns
+    """
+
     name = "grep"
 
     def exec(

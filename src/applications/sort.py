@@ -4,6 +4,10 @@ from .application import Application, ApplicationError
 
 
 class Sort(Application):
+    """
+    sort - sort lines of text files
+    """
+
     name = "sort"
     allowed_flags = {"-r"}
 

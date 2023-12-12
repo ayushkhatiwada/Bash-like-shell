@@ -156,7 +156,9 @@ class TestShellCommands(unittest.TestCase):
             converter.visitQuoted(mock_quoted_context)
 
     def test_visitRedirection_with_invalid_context(self):
-        mock_redirection_context = Mock(spec=ShellGrammarParser.RedirectionContext)
+        mock_redirection_context = Mock(
+            spec=ShellGrammarParser.RedirectionContext
+        )
         mock_redirection_context.children = [Mock()]
 
         converter = Converter()
@@ -243,8 +245,6 @@ class TestShellCommands(unittest.TestCase):
                 )
             )
         )
-
-
 
     def test_seq_with_invalid_right(self):
         with self.assertRaises(AssertionError):

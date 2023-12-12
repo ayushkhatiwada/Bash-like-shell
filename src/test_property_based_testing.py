@@ -64,14 +64,23 @@ class TestHyphotesisTesting(unittest.TestCase):
         self.assertEqual(output.pop(), result)
 
     @given(text())
+    def test_echo_ends_with_new_line(self, args: List[str]):
+        echo = Echo()
+        assume(args)
+
+        output = deque()
+        echo.exec([args], [], output)
+        self.assertTrue(output.pop().endswith('\n'))
+
+    @given(text())
     def test_cd_raises_no_such_file_or_directory_error(self, directory: str):
         cd = Cd()
+        # assuming directory is alphanumeric removes the possibility of
+        # having a directory with characters that are not allowed in
+        # directory names e.g.
+        # / (forward slash)
+        # The NULL character (\0)
         assume(
-            # assuming directory is alphanumeric removes the possibility of
-            # having a directory with characters that are not allowed in
-            # directory names e.g.
-            # / (forward slash)
-            # The NULL character (\0)
             directory.isalnum() and not os.path.isdir(directory))
 
         with self.assertRaises(ApplicationError):
